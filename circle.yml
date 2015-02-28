@@ -26,7 +26,7 @@ test:
     - ls
     - pwd
     - bzcat  ~/assets/california-latest.osm.bz2 | ./bin/navit/maptool/maptool  ~/assets/binmaps/california-latest.bin
-    - bzcat  ~/planet-150202.osm.bz2 | ./bin/navit/maptool/maptool  ~/binmaps/planet-150202.bin
+    - bash maptool.sh
 general:
   artifacts:
     - "~/assets/binmaps/"
