@@ -1,0 +1,4 @@
+#!/bin/bash
+set -vx
+sb-conf select FREMANTLE_X86
+dch -v 0.5.0+dfsg.1-1maemo1~$1
