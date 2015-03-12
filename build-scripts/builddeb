@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sb-conf select $1
+fakeroot dpkg-buildpackage -uc -us
