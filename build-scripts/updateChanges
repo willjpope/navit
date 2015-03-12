@@ -1,0 +1,5 @@
+#!/bin/bash
+VERSION=$1
+
+sb-conf select FREMANTLE_ARMEL
+(dpkg-genchanges -uc -us;echo "") | gpg --clearsign --armor --textmode > ../navit_0.2.0+dfsg.1-1maemo1~${VERSION}_armel.changes
