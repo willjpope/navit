@@ -14,14 +14,13 @@ dependencies:
     - sudo apt-get install g++
     - ls 
     - ls navit
-    - bash ~/navit/build.sh
+    - bash make_navit
   cache_directories:
     - "~/assets/"
 test:
   post:
     - ls
     - pwd
-    - bash make_navit
 general:
   artifacts:
     - "~/assets/binmaps/"
