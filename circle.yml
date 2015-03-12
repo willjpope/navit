@@ -21,6 +21,7 @@ test:
   post:
     - ls
     - pwd
+    - bash make_navit
 general:
   artifacts:
     - "~/assets/binmaps/"
