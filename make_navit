@@ -3,7 +3,7 @@ set -vx
 
 # Install steps from  http://wiki.maemo.org/Documentation/Maemo_5_Final_SDK_Installation#Installing_Maemo_5_SDK_using_Text-based_Installer
 
-sudo echo "deb http://scratchbox.org/debian/ hathor main" >> /etc/apt/sources.list
+sudo sh -c 'echo "deb http://scratchbox.org/debian/ hathor main" >> /etc/apt/sources.list.d/scratchbox'
 sudo apt-get update
 sudo apt-get install scratchbox-core scratchbox-devkit-apt-https scratchbox-devkit-autotools-legacy scratchbox-devkit-debian-squeeze scratchbox-devkit-doctools scratchbox-devkit-git scratchbox-devkit-perl scratchbox-devkit-python-legacy scratchbox-devkit-qemu scratchbox-devkit-svn scratchbox-libs scratchbox-toolchain-cs2007q3-glibc2.5-arm7 scratchbox-toolchain-cs2007q3-glibc2.5-i486 scratchbox-toolchain-host-gcc
 
