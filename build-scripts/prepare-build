@@ -1,0 +1,5 @@
+#!/bin/bash
+
+rm -rf navit* maptool*
+svn co https://svn.code.sf.net/p/navit/code/trunk/navit
+cp -ra debian navit
