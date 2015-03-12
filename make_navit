@@ -8,9 +8,9 @@ set -vx
 #fi
 
 #cleanup and checkout navit
-cd navit-svn
+cd navit
 echo "preparing build..."
-if ../navit-build-scripts/prepare-build > prepare-build.log 2> prepare-build.err; then
+if ../build-scripts/prepare-build > prepare-build.log 2> prepare-build.err; then
   echo ...succeded
 else
   echo ...failed
@@ -30,7 +30,7 @@ fi
 
 cd ..
 echo "update changelog..."
-if /scratchbox/login -d navit-svn/navit ../../navit-build-scripts/updateChangelog $VERSION  2>&1; then
+if /scratchbox/login -d navit/navit ../../build-scripts/updateChangelog $VERSION  2>&1; then
   echo ...succeded
 else
   echo ...failed
@@ -44,7 +44,7 @@ cp -ra navit/debian debian
 
 #build x86 target
 echo "building x86..."
-if /scratchbox/login -d navit-svn/navit ../../navit-build-scripts/builddeb FREMANTLE_X86 > builddeb_x86.log.log 2>&1; then
+if /scratchbox/login -d navit/navit ../../build-scripts/builddeb FREMANTLE_X86 > builddeb_x86.log.log 2>&1; then
   echo ...succeded
 else
   echo ...failed
@@ -71,7 +71,7 @@ mv navit.save navit
 cp -ra debian navit
 
 #build armel target
-if /scratchbox/login -d navit-svn/navit ../../navit-build-scripts/builddeb FREMANTLE_ARMEL > builddeb_arm.log.log 2>&1; then
+if /scratchbox/login -d navit/navit ../../build-scripts/builddeb FREMANTLE_ARMEL > builddeb_arm.log.log 2>&1; then
   echo ...succeded
 else
   echo ...failed
