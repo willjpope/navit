@@ -1,0 +1,98 @@
+#!/bin/bash
+set -vx
+
+# check for ssh-key
+#if ! ssh-add -l|grep bb:05; then
+#  echo "Make sure to have a valid ssh key in ssh agent, otherwise the upload might break"
+#  exit 99
+#fi
+
+#cleanup and checkout navit
+cd navit-svn
+echo "preparing build..."
+if ../navit-build-scripts/prepare-build > prepare-build.log 2> prepare-build.err; then
+  echo ...succeded
+else
+  echo ...failed
+  exit 1
+fi
+
+# copy clean sources aside for armel build later
+rm -rf navit.save
+cp -ra navit navit.save
+
+# Update changelog
+cd navit
+VERSION=`svnversion`
+if [ -n "$ITERATION" ]; then
+  VERSION=$VERSION.$ITERATION
+fi
+
+cd ..
+echo "update changelog..."
+if /scratchbox/login -d navit-svn/navit ../../navit-build-scripts/updateChangelog $VERSION  2>&1; then
+  echo ...succeded
+else
+  echo ...failed
+  exit 2
+fi
+
+
+# Save debian dir
+mv debian debian.`date +%Y%m%d%H%M`
+cp -ra navit/debian debian
+
+#build x86 target
+echo "building x86..."
+if /scratchbox/login -d navit-svn/navit ../../navit-build-scripts/builddeb FREMANTLE_X86 > builddeb_x86.log.log 2>&1; then
+  echo ...succeded
+else
+  echo ...failed
+  exit 3
+fi
+
+# Upload x86 builds to bokomoko
+#if dput bokomoko.de navit_0.2.0+dfsg.1-1maemo1~${VERSION}_i386.changes; then
+#  echo ...succeded
+#else
+#  echo ...failed
+#  exit 4
+#fi
+
+#save navit-data, since it does not build on armel
+cp navit_0.5.0+dfsg.1-1maemo1~${VERSION}_i386.changes tmp
+cp navit-data_0.5.0+dfsg.1-1maemo1~${VERSION}_all.deb tmp
+
+
+
+# get clean sources again now ARMEL build
+rm -rf navit
+mv navit.save navit
+cp -ra debian navit
+
+#build armel target
+if /scratchbox/login -d navit-svn/navit ../../navit-build-scripts/builddeb FREMANTLE_ARMEL > builddeb_arm.log.log 2>&1; then
+  echo ...succeded
+else
+  echo ...failed
+  exit 5
+fi
+
+# copy back navit-data from X86 build
+cp tmp/navit-data_0.5.0+dfsg.1-1maemo1~${VERSION}_all.deb .
+
+# update armel changes file
+#if /scratchbox/login -d navit-svn/navit ../../navit-build-scripts/updateChanges ${VERSION}; then
+#  echo ...succeded
+#else
+#  echo ...failed
+#  exit 6
+#fi
+
+# Upload armel build to bokomoko
+#if dput bokomoko.de navit_0.2.0+dfsg.1-1maemo1~${VERSION}_armel.changes; then
+#  echo ...succeded
+#else
+#  echo ...failed
+#  exit 7
+#fi
