@@ -10,7 +10,7 @@ sudo apt-get install scratchbox-core scratchbox-devkit-apt-https scratchbox-devk
 
 wget http://repository.maemo.org/stable/5.0/maemo-sdk-install_5.0.sh
 sed -i -e 's/etch/squeeze/g' maemo-sdk-install_5.0.sh
-sudo /scratchbox/sbin/sbox_adduser ubuntu
+sudo /scratchbox/sbin/sbox_adduser ubuntu yes
 # bash maemo-sdk-install_5.0.sh
 cat > /scratchbox/users/ubuntu/home/ubuntu/setup.sh << EOF
 apt-get install devscripts
