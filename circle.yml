@@ -1,9 +1,9 @@
 machine:
   environment:
-  lat: 37.559892
-  lng: -119.933931
-  dlat: 37.533591
-  dlng: -119.920106
+    lat: 37.559892
+    lng: -119.933931
+    dlat: 37.533591
+    dlng: -119.920106
 dependencies:
   cache_directories:
     - ~/.android
