@@ -24,8 +24,9 @@ dependencies:
     - bash ci/build.sh
 test:
   post:
-    - bin/navit/maptool/maptool -P  -6 -i ~/california-latest.osm.pbf $CIRCLE_ARTIFACTS/california.bin:
+    - bin/navit/maptool/maptool -P  -6 -i ~/california-latest.osm.pbf ~/california.bin:
         timeout: 7200
+    - mv ~/california.bin $CIRCLE_ARTIFACTS/
     - sed -i -e 's@name="Local GPS" profilename="car" enabled="yes" active="1"@name="Local GPS" profilename="car" enabled="no" active="0"@' navit.xml:
         pwd: bin/navit/
     - sed -i -e 's@name="Demo" profilename="car" enabled="no" active="yes"@name="Demo" profilename="car" enabled="yes" active="yes" follow="1" refresh="1"@' navit.xml:
