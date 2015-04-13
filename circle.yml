@@ -1,12 +1,9 @@
 machine:
   environment:
-    ANDROID_HOME: /home/ubuntu/android
-    ANDROID_NDK_HOME: /home/ubuntu/android/android-ndk
-    ANDROID_SDK_CDN: https://dl.google.com/android
-    ANDROID_SDK_FILE: android-sdk_r24.0.2-linux.tgz
-    ANDROID_NDK_CDN: http://dl.google.com/android/ndk
-    ANDROID_NDK_FILE: android-ndk-r10d-linux-x86_64.bin
-    CMAKE_FILE: ../Toolchain/arm-eabi.cmake
+  lat: 37.559892
+  lng: -119.933931
+  dlat: 37.533591
+  dlng: -119.920106
 dependencies:
   cache_directories:
     - ~/.android
@@ -23,32 +20,12 @@ dependencies:
     - sudo apt-get install libfreetype6-dev
     - sudo apt-get install libdbus-glib-1-dev
     - sudo apt-get install g++
+    - wget "http://download.geofabrik.de/north-america/us/california-latest.osm.pbf" -O ~/california-latest.osm.pbf
     - bash ci/build.sh
-    - sed -i '/INTEGER/d' bin/po/navit.pot
-    - cp bin/po/navit.pot $CIRCLE_ARTIFACTS/
-    - "curl 'https://translations.launchpad.net/navit/trunk/+translations-upload' -H \"$lp_cookie\" -H 'Referer: https://translations.launchpad.net/navit/trunk/+translations-upload' -F file=@bin/po/navit.pot"
-# Android build    
-    - wget -c -N -q $ANDROID_SDK_CDN/$ANDROID_SDK_FILE -O $ANDROID_HOME/$ANDROID_SDK_FILE
-    - wget -c -N -q $ANDROID_NDK_CDN/$ANDROID_NDK_FILE -O $ANDROID_HOME/$ANDROID_NDK_FILE
-    - sudo apt-get install gettext
-    - sudo apt-get install openjdk-7-jdk
-    - sudo apt-get install ant
-    - sudo apt-get install libsaxonb-java
-# for aapt
-    - sudo apt-get install lib32stdc++6
-    - sudo apt-get install lib32z1
-    - bash ci/build_android.sh
-# Windows build
-    - sudo apt-get install mingw32 mingw32-binutils mingw32-runtime
-    - sudo apt-get install default-jdk nsis
-# for sys/select.h
-#    - sudo apt-get install -y libc6-dev
-    - mkdir win32
-    - cmake -Dbinding/python:BOOL=FALSE -DCMAKE_TOOLCHAIN_FILE=../Toolchain/mingw32.cmake ../ && make && make package:
-        pwd: win32/
-    - cp win32/*.exe $CIRCLE_ARTIFACTS/
 test:
   post:
+    - bin/navit/maptool/maptool -P  -6 -i ~/california-latest.osm.pbf $CIRCLE_ARTIFACTS/california.bin:
+        timeout: 7200
     - sed -i -e 's@name="Local GPS" profilename="car" enabled="yes" active="1"@name="Local GPS" profilename="car" enabled="no" active="0"@' navit.xml:
         pwd: bin/navit/
     - sed -i -e 's@name="Demo" profilename="car" enabled="no" active="yes"@name="Demo" profilename="car" enabled="yes" active="yes" follow="1" refresh="1"@' navit.xml:
@@ -57,9 +34,18 @@ test:
         pwd: bin/navit/
     - sed -i -e 's@libbinding_dbus.so" active="no"@libbinding_dbus.so" active="yes"@' navit.xml:
         pwd: bin/navit/
+    - echo '<map type="binfile" data="~/california.bin" />' > maps/california.xml:
+        pwd: bin/navit/
     - ./navit:
         pwd: bin/navit/
         background: true
+    - sleep 5
+    - >
+      dbus-send --print-reply --session --dest=org.navit_project.navit /org/navit_project/navit/default_navit org.navit_project.navit.navit.set_position string:"geo: $lng $lat";
+    - import -window root $CIRCLE_ARTIFACTS/position.png
+    - >
+      dbus-send --print-reply --session --dest=org.navit_project.navit /org/navit_project/navit/default_navit org.navit_project.navit.navit.set_destination string:"geo: $dlng $dlat" string:"dbus";
+
     - sleep 5
     - import -window root $CIRCLE_ARTIFACTS/default.png
     - dbus-send  --print-reply --session --dest=org.navit_project.navit /org/navit_project/navit/default_navit org.navit_project.navit.navit.quit
