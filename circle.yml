@@ -41,11 +41,17 @@ test:
         background: true
     - sleep 5
     - >
+      dbus-send --print-reply --session --dest=org.navit_project.navit /org/navit_project/navit/default_navit org.navit_project.navit.navit.set_center_by_string string:"geo: $lng $lat";
+    - >
       dbus-send --print-reply --session --dest=org.navit_project.navit /org/navit_project/navit/default_navit org.navit_project.navit.navit.set_position string:"geo: $lng $lat";
     - import -window root $CIRCLE_ARTIFACTS/position.png
     - >
       dbus-send --print-reply --session --dest=org.navit_project.navit /org/navit_project/navit/default_navit org.navit_project.navit.navit.set_destination string:"geo: $dlng $dlat" string:"dbus";
 
-    - sleep 5
+    - sleep 20
+    - >
+      dbus-send --session --type=method_call --print-reply --dest=org.navit_project.navit /org/navit_project/navit/default_navit org.navit_project.navit.navit.export_as_gpx string:$CIRCLE_ARTIFACTS/trac-1296.gpx;
+    ->
+      dbus-send --session --type=method_call --print-reply --dest=org.navit_project.navit /org/navit_project/navit/default_navit org.navit_project.navit.navit.export_as_geojson string:$CIRCLE_ARTIFACTS/trac-1296.geojson;
     - import -window root $CIRCLE_ARTIFACTS/default.png
     - dbus-send  --print-reply --session --dest=org.navit_project.navit /org/navit_project/navit/default_navit org.navit_project.navit.navit.quit
