@@ -51,7 +51,7 @@ test:
     - sleep 20
     - >
       dbus-send --session --type=method_call --print-reply --dest=org.navit_project.navit /org/navit_project/navit/default_navit org.navit_project.navit.navit.export_as_gpx string:$CIRCLE_ARTIFACTS/trac-1296.gpx;
-    ->
+    - >
       dbus-send --session --type=method_call --print-reply --dest=org.navit_project.navit /org/navit_project/navit/default_navit org.navit_project.navit.navit.export_as_geojson string:$CIRCLE_ARTIFACTS/trac-1296.geojson;
     - import -window root $CIRCLE_ARTIFACTS/default.png
     - dbus-send  --print-reply --session --dest=org.navit_project.navit /org/navit_project/navit/default_navit org.navit_project.navit.navit.quit
