@@ -101,7 +101,7 @@ public class Navit extends Activity
 	public static Navit 			 navit;
 	
 
-	public NavitManagerThread manThread = null;
+	//public NavitManagerThread manThread = null;
 
 
 	public void removeFileIfExists(String source) {
@@ -256,8 +256,8 @@ public class Navit extends Activity
 		dialogs = new NavitDialogs(this);
 
 		// this thread handles most of all tasks (Timeout, Draw, Route, ..)
-		manThread = new NavitManagerThread();
-		manThread.navit = this;
+		//manThread = new NavitManagerThread();
+		//manThread.navit = this;
 
 		NavitResources = getResources();
 
@@ -388,7 +388,7 @@ public class Navit extends Activity
 		
 		
 
-		manThread.start();
+		//manThread.start();
 	}
 
 	@Override

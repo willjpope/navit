@@ -65,7 +65,7 @@ public class NavitGraphics
 	NavitCamera                      camera;
 	Activity                         activity;
 
-	public NavitManagerThread 		 		manThread;
+	//public NavitManagerThread 		 		manThread;
 	private static NavitDrawObjectsPool	 	drawThreadPool;
 	
 	public static int 						THREAD_NUM = 1;
@@ -842,7 +842,7 @@ public class NavitGraphics
 		}
 		parent_graphics = parent;
 
-		manThread = NavitManagerThread.manThread;
+		//manThread = NavitManagerThread.manThread;
 
 	}
 
