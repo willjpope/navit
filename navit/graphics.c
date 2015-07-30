@@ -809,6 +809,9 @@ struct graphics_image * graphics_image_new_scaled_rotated(struct graphics *gra, 
 {
 	struct graphics_image *this_;
 	char* hash_key = g_strdup_printf("%s*%d*%d*%d",path,w,h,rotate);
+	struct file_wordexp *we;
+	int i;
+	char **paths;
 
 	if ( g_hash_table_lookup_extended( gra->image_cache_hash, hash_key, NULL, (gpointer)&this_) ) {
 		g_free(hash_key);
@@ -820,15 +823,19 @@ struct graphics_image * graphics_image_new_scaled_rotated(struct graphics *gra, 
 	this_->height=h;
 	this_->width=w;
 
-	if(!this_->priv) {
+	we=file_wordexp_new(path);
+	paths=file_wordexp_get_array(we);
+	
+	for(i=0;i<file_wordexp_get_count(we) && !this_->priv;i++) {
 		char *ext;
 		char *s, *name;
-		int len=strlen(path);
+		char *pathi=paths[i];
+		int len=strlen(pathi);
 		int i,k;
 		int newwidth=-1, newheight=-1;
 
-		ext=g_utf8_strrchr(path,-1,'.');
-		i=path-ext+len;
+		ext=g_utf8_strrchr(pathi,-1,'.');
+		i=pathi-ext+len;
 		
 		/* Dont allow too long or too short file name extensions*/
 		if(ext && ((i>5) || (i<1)))
@@ -838,10 +845,10 @@ struct graphics_image * graphics_image_new_scaled_rotated(struct graphics *gra, 
 		if(ext)
 			s=ext-1;
 		else
-			s=path+len;
+			s=pathi+len;
 		
 		k=1;
-		while(s>path && g_ascii_isdigit(*s)) {
+		while(s>pathi && g_ascii_isdigit(*s)) {
 			if(newheight<0)
 				newheight=0;
 			newheight+=(*s-'0')*k;
@@ -849,10 +856,10 @@ struct graphics_image * graphics_image_new_scaled_rotated(struct graphics *gra, 
 			s--;
 		}
 		
-		if(k>1 && s>path && *s=='_') {
+		if(k>1 && s>pathi && *s=='_') {
 			k=1;
 			s--;
-			while(s>path && g_ascii_isdigit(*s)) {
+			while(s>pathi && g_ascii_isdigit(*s)) {
 				if(newwidth<0)
 					newwidth=0;
 				newwidth+=(*s-'0')*k;;
@@ -861,13 +868,13 @@ struct graphics_image * graphics_image_new_scaled_rotated(struct graphics *gra, 
 			}
 		}
 		
-		if(k==1 || s<=path || *s!='_') {
+		if(k==1 || s<=pathi || *s!='_') {
 			newwidth=-1;
 			newheight=-1;
 			if(ext)
 				s=ext;
 			else
-				s=path+len;
+				s=pathi+len;
 				
 		}
 		
@@ -877,15 +884,17 @@ struct graphics_image * graphics_image_new_scaled_rotated(struct graphics *gra, 
 		if(h!=-1)
 			newheight=h;
 			
-		name=g_strndup(path,s-path);
+		name=g_strndup(pathi,s-pathi);
 #if 0
 		if (!strstr(name,"test.zip"))
 #endif
-		image_new_helper(gra, this_, path, name, newwidth, newheight, rotate, 0);
-		if (!this_->priv && strstr(path, ".zip/"))
-			image_new_helper(gra, this_, path, name, newwidth, newheight, rotate, 1);
+		image_new_helper(gra, this_, pathi, name, newwidth, newheight, rotate, 0);
+		if (!this_->priv && strstr(pathi, ".zip/"))
+			image_new_helper(gra, this_, pathi, name, newwidth, newheight, rotate, 1);
 		g_free(name);
 	}
+
+	file_wordexp_destroy(we);
 
 	if (! this_->priv) {
 		dbg(lvl_error,"No image for '%s'\n", path);
@@ -2262,31 +2271,39 @@ displayitem_draw(struct displayitem *di, void *dummy, struct display_context *dc
         count=di->count;
         mindist=dc->mindist;
 
-        di->z_order=++(gra->current_z_order);
-
-        if (! gc) {
-            gc=graphics_gc_new(gra);
-            graphics_gc_set_foreground(gc, &e->color);
-            dc->gc=gc;
-        }
-        if (item_type_is_area(dc->type) && (dc->e->type == element_polyline || dc->e->type == element_text))
-            count=limit_count(di->c, count);
-        if (dc->type == type_poly_water_tiled)
-            mindist=0;
-        c=di->c;
-
-
-
-        if (dc->e->type == element_polyline)
-            count=transform(dc->trans, dc->pro, c, pa, count, mindist, e->u.polyline.width, width);
-        else
-            count=transform(dc->trans, dc->pro, c, pa, count, mindist, 0, NULL);
-        switch (e->type) {
-        case element_polygon:
-                graphics_draw_polygon_clipped(gra, gc, pa, count);
-				
-            break;
-        case element_polyline:
+	di->z_order=++(gra->current_z_order);
+	
+	if (! gc) {
+		gc=graphics_gc_new(gra);
+		graphics_gc_set_foreground(gc, &e->color);
+		dc->gc=gc;
+	}
+	if (item_type_is_area(dc->type) && (dc->e->type == element_polyline || dc->e->type == element_text))
+		count=limit_count(di->c, count);
+	if (dc->type == type_poly_water_tiled)
+		mindist=0;
+	c=di->c;
+#if 0
+	if (dc->e->type == element_polygon) {
+		int max=1000;
+		int offset=5600;
+		c+=offset;
+		count-=offset;
+		if (count < 0)
+			count=0;
+		if (count > max)
+			count=max;
+	}
+#endif
+	if (dc->e->type == element_polyline)
+		count=transform(dc->trans, dc->pro, c, pa, count, mindist, e->u.polyline.width, width);
+	else
+		count=transform(dc->trans, dc->pro, c, pa, count, mindist, 0, NULL);
+	switch (e->type) {
+	case element_polygon:
+		graphics_draw_polygon_clipped(gra, gc, pa, count);
+		break;
+	 case element_polyline:
             {	
 				
              #ifdef HAVE_API_ANDROID
@@ -2315,92 +2332,92 @@ displayitem_draw(struct displayitem *di, void *dummy, struct display_context *dc
 
             }
             break;
-        case element_circle:
-            if (count) {
-                if (e->u.circle.width > 1)
-                    gc->meth.gc_set_linewidth(gc->priv, e->u.polyline.width);
-                graphics_draw_circle(gra, gc, pa, e->u.circle.radius);
-                if (di->label && e->text_size) {
-                    struct graphics_font *font=get_font(gra, e->text_size);
-                    struct graphics_gc *gc_background=dc->gc_background;
-                    if (! gc_background && e->u.circle.background_color.a) {
-                        gc_background=graphics_gc_new(gra);
-                        graphics_gc_set_foreground(gc_background, &e->u.circle.background_color);
-                        dc->gc_background=gc_background;
-                    }
-                    p.x=pa[0].x+3;
-                    p.y=pa[0].y+10;
-                    if (font)
-                        gra->meth.draw_text(gra->priv, gc->priv, gc_background?gc_background->priv:NULL, font->priv, di->label, &p, 0x10000, 0);
-                    else
-                        dbg(lvl_error,"Failed to get font with size %d\n",e->text_size);
-                }
-            }
-            break;
-        case element_text:
-            if (count && di->label) {
-                struct graphics_font *font=get_font(gra, e->text_size);
-                struct graphics_gc *gc_background=dc->gc_background;
-                if (! gc_background && e->u.text.background_color.a) {
-                    gc_background=graphics_gc_new(gra);
-                    graphics_gc_set_foreground(gc_background, &e->u.text.background_color);
-                    dc->gc_background=gc_background;
-                }
-                if (font)
-                    label_line(gra, gc, gc_background, font, pa, count, di->label);
-                else
-                    dbg(lvl_error,"Failed to get font with size %d\n",e->text_size);
-            }
-            break;
-        case element_icon:
-            if (count) {
-                if (!img || item_is_custom_poi(di->item)) {
-                    if (item_is_custom_poi(di->item)) {
-                        char *icon;
-                        char *src;
-                        if (img)
-                            graphics_image_free(dc->gra, img);
-                        src=e->u.icon.src;
-                        if (!src || !src[0])
-                            src="%s";
-                        icon=g_strdup_printf(src,di->label+strlen(di->label)+1);
-                        path=graphics_icon_path(icon);
-                        g_free(icon);
-                    } else
-                        path=graphics_icon_path(e->u.icon.src);
-                    img=graphics_image_new_scaled_rotated(gra, path, e->u.icon.width, e->u.icon.height, e->u.icon.rotation);
-                    if (img)
-                        dc->img=img;
-                    else
-                        dbg(lvl_error,"failed to load icon '%s'\n", path);
-                    g_free(path);
-                }
-                if (img) {
-                    if (e->u.icon.x != -1 || e->u.icon.y != -1) {
-                        p.x=pa[0].x - e->u.icon.x;
-                        p.y=pa[0].y - e->u.icon.y;
-                    } else {
-                        p.x=pa[0].x - img->hot.x;
-                        p.y=pa[0].y - img->hot.y;
-                    }
-                    gra->meth.draw_image(gra->priv, gra->gc[0]->priv, &p, img->priv);
-                }
-            }
-            break;
-        case element_image:
-            dbg(lvl_debug,"image: '%s'\n", di->label);
-            if (gra->meth.draw_image_warp) {
-                img=graphics_image_new_scaled_rotated(gra, di->label, -1, -1, 0);
-                if (img)
-                    gra->meth.draw_image_warp(gra->priv, gra->gc[0]->priv, pa, count, img->priv);
-            } else
-                dbg(lvl_error,"draw_image_warp not supported by graphics driver drawing '%s'\n", di->label);
-            break;
-        case element_arrows:
-            display_draw_arrows(gra,gc,pa,count);
-            break;
-        default:
-            dbg(lvl_error, "Unhandled element type %d\n", e->type);
+	case element_circle:
+		if (count) {
+			if (e->u.circle.width > 1)
+				gc->meth.gc_set_linewidth(gc->priv, e->u.polyline.width);
+			graphics_draw_circle(gra, gc, pa, e->u.circle.radius);
+			if (di->label && e->text_size) {
+				struct graphics_font *font=get_font(gra, e->text_size);
+				struct graphics_gc *gc_background=dc->gc_background;
+				if (! gc_background && e->u.circle.background_color.a) {
+					gc_background=graphics_gc_new(gra);
+					graphics_gc_set_foreground(gc_background, &e->u.circle.background_color);
+					dc->gc_background=gc_background;
+				}
+				p.x=pa[0].x+3;
+				p.y=pa[0].y+10;
+				if (font)
+					gra->meth.draw_text(gra->priv, gc->priv, gc_background?gc_background->priv:NULL, font->priv, di->label, &p, 0x10000, 0);
+				else
+					dbg(lvl_error,"Failed to get font with size %d\n",e->text_size);
+			}
+		}
+		break;
+	case element_text:
+		if (count && di->label) {
+			struct graphics_font *font=get_font(gra, e->text_size);
+			struct graphics_gc *gc_background=dc->gc_background;
+			if (! gc_background && e->u.text.background_color.a) {
+				gc_background=graphics_gc_new(gra);
+				graphics_gc_set_foreground(gc_background, &e->u.text.background_color);
+				dc->gc_background=gc_background;
+			}
+			if (font)
+				label_line(gra, gc, gc_background, font, pa, count, di->label);
+			else
+				dbg(lvl_error,"Failed to get font with size %d\n",e->text_size);
+		}
+		break;
+	case element_icon:
+		if (count) {
+			if (!img || item_is_custom_poi(di->item)) {
+				if (item_is_custom_poi(di->item)) {
+					char *icon;
+					char *src;
+					if (img)
+						graphics_image_free(dc->gra, img);
+					src=e->u.icon.src;
+					if (!src || !src[0])
+						src="%s";
+					icon=g_strdup_printf(src,di->label+strlen(di->label)+1);
+					path=graphics_icon_path(icon);
+					g_free(icon);
+				} else
+					path=graphics_icon_path(e->u.icon.src);
+				img=graphics_image_new_scaled_rotated(gra, path, e->u.icon.width, e->u.icon.height, e->u.icon.rotation);
+				if (img)
+					dc->img=img;
+				else
+					dbg(lvl_debug,"failed to load icon '%s'\n", path);
+				g_free(path);
+			}
+			if (img) {
+				if (e->u.icon.x != -1 || e->u.icon.y != -1) {
+					p.x=pa[0].x - e->u.icon.x;
+					p.y=pa[0].y - e->u.icon.y;
+				} else {
+					p.x=pa[0].x - img->hot.x;
+					p.y=pa[0].y - img->hot.y;
+				}
+				gra->meth.draw_image(gra->priv, gra->gc[0]->priv, &p, img->priv);
+			}
+		}
+		break;
+	case element_image:
+		dbg(lvl_debug,"image: '%s'\n", di->label);
+		if (gra->meth.draw_image_warp) {
+			img=graphics_image_new_scaled_rotated(gra, di->label, -1, -1, 0);
+			if (img)
+				gra->meth.draw_image_warp(gra->priv, gra->gc[0]->priv, pa, count, img->priv);
+		} else
+			dbg(lvl_error,"draw_image_warp not supported by graphics driver drawing '%s'\n", di->label);
+		break;
+	case element_arrows:
+		display_draw_arrows(gra,gc,pa,count);
+		break;
+	default:
+		dbg(lvl_error, "Unhandled element type %d\n", e->type);
 
         }
         di=di->next;
