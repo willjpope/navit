@@ -429,6 +429,10 @@ draw_image_warp (struct graphics_priv *gr, struct graphics_gc_priv *fg, struct p
 	 * if coord count==3 then top.left top.right bottom.left
 	 *
 	 */
+	
+	
+	JNIEnv *jnienv;
+	(*javavm)->GetEnv(javavm,(void**)&jnienv, JNI_VERSION_1_4);
 
 	if (count==3)
 	{
