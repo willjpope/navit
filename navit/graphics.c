@@ -158,12 +158,15 @@ struct displaylist {
 	unsigned int seq;
 	struct hash_entry hash_entries[HASH_SIZE];
 	struct hash_entry hash_entries_load[HASH_SIZE]; // hash_entry for simultaniously map loading and drawing of last items
+#ifdef HAVE_API_ANDROID
 	pthread_t drawing_thread;
 	pthread_t drawing_thread_old;
+#endif
 	int cancel_map_draw;
 	int cancel_map_load;
 	int flags;
 	int waiting_for_mutex;
+
 };
 
 
@@ -2559,7 +2562,7 @@ static void xdisplay_draw_layer_steps(struct displaylist *display_list, struct g
 					}
 				}
 
-				dbg(0, "t = %d", t);
+				//dbg(0, "t = %d", t);
 				//if(!display_list->cancel_map_draw) {
 					gra->meth.draw_mode(gra->priv, draw_mode_end);
 
@@ -2726,7 +2729,7 @@ do_draw(struct displaylist *displaylist, int cancel, int flags)
 	struct attr attr,attr2;
 	enum projection pro;
 	
-	dbg(0, "do_draw");
+	//dbg(0, "do_draw");
 
 	if (displaylist->order != displaylist->order_hashed || displaylist->layout != displaylist->layout_hashed) {
 		
@@ -2820,7 +2823,7 @@ do_draw(struct displaylist *displaylist, int cancel, int flags)
 		displaylist->m=NULL;
 	}
 	
-	double s = now_ms();
+	//double s = now_ms();
 	
 	profile(1,"process_selection\n");
 	if (displaylist->idle_ev)
@@ -2846,7 +2849,7 @@ do_draw(struct displaylist *displaylist, int cancel, int flags)
 	profile(0,"end\n");
 	
 	
-	dbg(lvl_error, "draw time: %f", now_ms() - s);
+	//dbg(lvl_error, "draw time: %f", now_ms() - s);
 }
 
 /**
@@ -2897,20 +2900,21 @@ void graphics_displaylist_draw(struct graphics *gra, struct displaylist *display
 
 void* do_draw_thread(void *ptr) {
 		
+#ifdef HAVE_API_ANDROID
 	struct displaylist *displaylist;
 	displaylist = (struct displaylist*) ptr;
 	
-	dbg(lvl_error, "thread: displaylist->order: %d", displaylist->order);
+	//dbg(lvl_error, "thread: displaylist->order: %d", displaylist->order);
 	
 	
 	
 	displaylist->busy=1;
 	
-	double s = now_ms();
+	//double s = now_ms();
 	load_map(displaylist);
-	double t = now_ms() - s;
+	//double t = now_ms() - s;
 	
-	dbg(lvl_error, "pthread map load: %f", t);
+	//dbg(lvl_error, "pthread map load: %f", t);
 	
 	displaylist->cancel_map_draw = 1;
 	displaylist->busy=1;
@@ -2944,7 +2948,7 @@ void* do_draw_thread(void *ptr) {
 		event_register_thread(1, android_drawing_thread_n);
 
 		
-		s = now_ms();
+		//s = now_ms();
 		
 		dbg(lvl_error, "draw map started");
 		
@@ -2952,14 +2956,14 @@ void* do_draw_thread(void *ptr) {
 		draw_map(displaylist, displaylist->flags);
 
 
-		t = now_ms() - s;
-		dbg(lvl_error, "pthread for points: %f", t);
+		//t = now_ms() - s;
+		//dbg(lvl_error, "pthread for points: %f", t);
 		
 		//unregister pthread from javavm
 		event_register_thread(1, 0);
 	}
 	
-	
+#endif
 	
 	return NULL;
 }
@@ -3549,7 +3553,7 @@ void draw_map(struct displaylist *displaylist, int flags)
 
 	struct graphics *gra = displaylist->dc.gra;
 	
-	dbg(0, "draw_map, transform destroy etc");
+	//dbg(0, "draw_map, transform destroy etc");
 	
 	int order=transform_get_order(displaylist->dc_load.trans);
 	if(displaylist->dc.trans && displaylist->dc.trans!=displaylist->dc_load.trans)
@@ -3662,7 +3666,7 @@ void load_map(struct displaylist *displaylist)
 				if (displaylist->dc_load.pro != pro)
 					transform_from_to_count(ca, displaylist->dc_load.pro, ca, pro, count); 
 				if (count == max) {
-					dbg(lvl_error,"point count overflow %d for %s "ITEM_ID_FMT"\n", count,item_to_name(item->type),ITEM_ID_ARGS(*item));
+					dbg(lvl_debug,"point count overflow %d for %s "ITEM_ID_FMT"\n", count,item_to_name(item->type),ITEM_ID_ARGS(*item));
 					displaylist->dc_load.maxlen=max*2;
 				}
 				if (item_is_custom_poi(*item)) {
