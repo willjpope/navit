@@ -36,6 +36,10 @@
 #include "map.h"
 #include "xmlconfig.h"
 
+#include <pthread.h>
+
+static pthread_mutex_t lock;
+
 /**
  * @brief A mapset
  *
@@ -180,6 +184,10 @@ struct mapset_handle {
 struct mapset_handle *
 mapset_open(struct mapset *ms)
 {
+	dbg(0, "try to lock");
+	pthread_mutex_lock(&lock);
+	dbg(0, "locked");
+	
 	struct mapset_handle *ret=NULL;
 	if(ms)
 	{
@@ -269,6 +277,8 @@ void
 mapset_close(struct mapset_handle *msh)
 {
 	g_free(msh);
+	dbg(0, "unlock");
+	pthread_mutex_unlock(&lock);
 }
 
 /**
