@@ -1067,6 +1067,24 @@ public class NavitGraphics
 			draw_canvas.drawCircle(x, y, r / 2, paint);
 		}
 	}
+
+
+	/** draws a text on the screen
+	 *
+	 *
+	 *
+	 * @param x		specifying the x text position
+	 * @param y		specifying the y text position
+	 * @param text		Text to draw
+	 * @param size		specifying the size of the text
+	 * @param dx		specifying the dx position, if text is drawn to a line
+	 * @param dy		specifying the dy position, if text is drawn to a line
+	 * @param bgcolor	specifying the background color
+	 * @param lw		specifying the stroke width
+	 * @param fgcolor	specifying the color of the text
+	 *
+	 * @author ?? edit by Sascha Oedekoven (08/2015)
+	 **/
 	protected void draw_text(int x, int y, String text, int size, int dx, int dy, int bgcolor, int lw, int fgcolor)
 	{
 		if(parent_graphics == null && in_map && draw_in_thread)
@@ -1111,6 +1129,19 @@ public class NavitGraphics
 			
 		}
 	}
+
+
+	/** draws an image on the screen
+	 *
+	 *
+	 *
+	 * @param paint		Paint object used to draw the image
+	 * @param x		specifying the x position the image is drawn to
+	 * @param y		specifying the y position the image is drawn to
+	 * @param bitmap	Bitmap object holding the image to draw
+	 *
+	 * @author ?? edit by Sascha Oedekoven (08/2015)
+	 **/
 	protected void draw_image(Paint paint, int x, int y, Bitmap bitmap)
 	{
 		if(parent_graphics == null && in_map && draw_in_thread)
