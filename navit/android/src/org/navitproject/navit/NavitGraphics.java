@@ -280,6 +280,11 @@ public class NavitGraphics
 			draw_canvas = new Canvas(draw_bitmap);
 			
 			
+			//create bitmap to cache the map
+			cached_bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+			draw_canvas = new Canvas(draw_bitmap);
+			cached_canvas = new Canvas(cached_bitmap);
+			
 			drawThreadPool.init(draw_canvas, w, h);
 
 			
@@ -921,6 +926,8 @@ public class NavitGraphics
 	public static native String[][] GetAllCountries();
 	public Canvas	draw_canvas;
 	public Bitmap	draw_bitmap;
+	public Bitmap	cached_bitmap;
+	public Canvas	cached_canvas;
 	private int		SizeChangedCallbackID, ButtonCallbackID, MotionCallbackID, KeypressCallbackID;
 	// private int count;
 
@@ -1197,22 +1204,59 @@ public class NavitGraphics
 	public static final int draw_mode_begin = 0;
 	public static final int draw_mode_end = 1;
 	
-
+	public static final int draw_mode_cachebitmap = 2;
+	public static final int draw_mode_drawcache = 3;
+	public static final int draw_mode_coords = 4;
+	
+	public int pos_xxx;	// x Position of the cached bitmap
+	public int pos_yyy; // y Position of the cached bitmap
+	
+	public int no_mode = 0;
+	
+	/* This function will be called at the start and end of the drawing process.
+	 * This functions handles when to draw the bitmap (map) to the screen and when the cached image will be drawn.
+	 * 
+	 * @param mode	The mode definies which functions will be called:
+	 *				mode = draw_mode_begin : The old drawing process will be canceled (if any is still running) and new threads will be started
+	 *				mode = draw_mode_end : The bitmap (map) will be shown at the screen
+	 *				mode = draw_mode_cachebitmap : The bitmap (map) will be cached
+	 *				mode = draw_mode_drawcache : The cached map will be drawn to the correct position
+	 *				mode = draw_mode_coords : The following two calls of draw_mode will be the coords of the cached map.
+	 * 
+	 * @author		edit by Sascha Oedekoven (08/2015)
+	 */
+	
 	protected void draw_mode(int mode)
 	{
-
 		
-		if(parent_graphics == null && in_map && draw_in_thread) {
-			//mode == 2 -> change thread
-			//mode == 3 -> sync threads
-			if (mode == draw_mode_end || mode == 2 || mode == 3) {
+		if(no_mode > 0) {
+			
+			if(no_mode == 2)
+				pos_xxx = mode;	
+			else if(no_mode == 1)
+				pos_yyy = mode;
+			
+			no_mode--;
+			
+		} else if(mode == draw_mode_coords) {
+			//next two draw_mode calls are the coords where the buffered image has to be drawn to
+			no_mode = 2;
+		} else if(mode == draw_mode_cachebitmap) {
+			//will be called before post-drawing, to save the map without any buttons
+
+			drawThreadPool.draw_to_screen(mode);
+		}else if(mode == draw_mode_drawcache) { 
+			
+			draw_image(paint, pos_xxx, pos_yyy , cached_bitmap);
+			
+			
+		} else if(parent_graphics == null && in_map && draw_in_thread) {
+			
+			if (mode == draw_mode_end) {
 				drawThreadPool.draw_to_screen(mode);
 			} else if(mode == draw_mode_begin && parent_graphics == null) {
 				drawThreadPool.cancel_draw();
 			}
-			/*if (mode == draw_mode_begin && parent_graphics != null) {
-				draw_bitmap.eraseColor(0);
-			}*/
 			
 		} else {
 			
@@ -1225,9 +1269,8 @@ public class NavitGraphics
 			}
 		}
 
-		
-
 	}
+	
 	protected void draw_drag(int x, int y)
 	{
 		//Log.e("NavitGraphics","draw_drag");

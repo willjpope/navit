@@ -146,12 +146,12 @@ struct displaylist {
 	struct layout *layout, *layout_hashed;
 	struct display_context dc;
 	struct display_context dc_load;	// display context for simultaniously map loading and drawing of last items
-	int order, order_hashed, max_offset;
+	int order, order_buffered, order_hashed, max_offset;
 	struct mapset *ms;
 	struct mapset_handle *msh;
 	struct map *m;
 	int conv;
-	struct map_selection *sel;
+	struct map_selection *sel, *sel_buffered;
 	struct map_rect *mr;
 	struct callback *idle_cb;
 	struct event_idle *idle_ev;
@@ -166,7 +166,10 @@ struct displaylist {
 	int cancel_map_load;
 	int flags;
 	int waiting_for_mutex;
-
+	int use_cache;
+	int cached;
+	struct point *cache_screenPos;
+	int yaw_buffered;
 };
 
 
@@ -2684,12 +2687,15 @@ displaylist_update_hash(struct displaylist *displaylist)
 }
 
 
+
 /**
  * @brief Returns selection structure based on displaylist transform, projection and order.
  * Use this function to get map selection if you are going to fetch complete item data from the map based on displayitem reference.
  * @param displaylist 
  * @param load Default: 0. If set to 1, the display_context from threaded loading is used (atm only on android)
  * @returns Pointer to selection structure
+ 
+ * @author ?? edit by Sascha Oedekoven (07/2015)
  */
 struct map_selection *displaylist_get_selection(struct displaylist *displaylist, int load)
 {
@@ -2698,6 +2704,101 @@ struct map_selection *displaylist_get_selection(struct displaylist *displaylist,
 	else
 		return transform_get_selection(displaylist->dc.trans, displaylist->dc.pro, displaylist->order);	
 }
+
+
+
+
+/**
+ * @brief Alters the selection structure to only the new part of the map.
+ *        While navigaion: the new part can only be used if the buffered map has the same angle.
+ *        Also only use the buffered map if the present map covers any part of the buffered map.
+ *        If any of those conditions fails, the full selection will be returned.
+ * @param displaylist 
+ * @returns Pointer to selection structure
+ * @author	Sascha Oedekoven (08/2015)
+ */
+struct map_selection *displaylist_update_selection(struct displaylist *displaylist)
+{
+	if(displaylist->order == displaylist->order_buffered) {
+		
+		dbg(0, "yaw: %d", transform_get_yaw(displaylist->dc_load.trans));
+		
+		if(displaylist->sel_buffered && (transform_get_yaw(displaylist->dc_load.trans) == displaylist->yaw_buffered) ) {
+			//calc the screen position (needed for navigation)			
+			struct coord *input = g_new(struct coord, 1);
+			input->x = displaylist->sel_buffered->u.c_rect.lu.x;
+			input->y = displaylist->sel_buffered->u.c_rect.lu.y;
+			
+			struct point *result = g_new(struct point, 1);
+			
+			transform(displaylist->dc_load.trans, displaylist->dc_load.pro, input, result, 1, 0, 0, NULL);
+
+			//dbg(0, "crazy transformation-> buff screen position: x=%d, y=%d", result->x, result->y);
+			
+			displaylist->cache_screenPos = result;
+			
+			//get the position of the actual trans. only needed for navigation, otherwise its 0/0
+			
+			struct point *result2 = g_new(struct point, 1);
+			
+			input->x = displaylist->sel->u.c_rect.lu.x;
+			input->y = displaylist->sel->u.c_rect.lu.y;
+			
+			transform(displaylist->dc_load.trans, displaylist->dc_load.pro, input, result2, 1, 0, 0, NULL);
+			
+			
+			result->x = result->x - result2->x;
+			result->y = result->y - result2->y;
+			
+			//dbg(0, "crazy transformation-> new screen position: x=%d, y=%d", result2->x, result2->y);
+
+			displaylist->cache_screenPos = result;
+			
+			
+			
+			//dbg(0, "crazy transformation-> adjusted screen position: x=%d, y=%d", result->x, result->y);
+
+			g_free(result2);
+			g_free(input);
+		} else {
+			displaylist->cache_screenPos = NULL;
+			displaylist->sel_buffered = NULL; 
+			displaylist->yaw_buffered = transform_get_yaw(displaylist->dc_load.trans);
+		}
+		
+		
+		
+		//temporary map selection
+		struct map_selection *buff = g_new(struct map_selection, 1);
+		
+		buff = displaylist->sel_buffered;
+		displaylist->sel_buffered = NULL;
+		
+		
+		displaylist->sel_buffered = map_selection_buffer(displaylist->sel, displaylist->sel_buffered);
+	
+		displaylist->sel = g_new(struct map_selection, 1);
+		displaylist->sel->order = displaylist->sel_buffered->order;
+		displaylist->sel->range = item_range_all;
+		displaylist->sel->next = NULL;
+		
+		displaylist->sel->u.c_rect.lu.x = displaylist->sel_buffered->u.c_rect.lu.x;
+		displaylist->sel->u.c_rect.lu.y = displaylist->sel_buffered->u.c_rect.lu.y;
+		displaylist->sel->u.c_rect.rl.x = displaylist->sel_buffered->u.c_rect.rl.x;
+		displaylist->sel->u.c_rect.rl.y = displaylist->sel_buffered->u.c_rect.rl.y;
+		
+		
+		// sel_buffered is now the actual map_selection
+		// buff is the buffered map_selection
+		// the new map_selection will be returned
+		return transform_update_selection(displaylist->sel, buff);	
+	}
+	else {
+		displaylist->order_buffered = displaylist->order;
+		return displaylist->sel;
+	}
+}
+
 
 /**
  * @brief Compare displayitems based on their zorder values. 
@@ -3552,6 +3653,8 @@ graphics_process_selection(struct graphics *gra, struct displaylist *dl)
 
 
 
+
+
 /**
  * @brief Drawing Items from hash_entries to the screen, until the the process is cancelled or all items are drawn.
  * @param displaylist The displaylist which contains the hash_entries to be drawn.
@@ -3593,9 +3696,15 @@ void draw_map(struct displaylist *displaylist, int flags)
 	graphics_background_gc(gra, gra->gc[0]);
 	if (flags & 1)
 		callback_list_call_attr_0(gra->cbl, attr_predraw); 
+	
 	gra->meth.draw_mode(gra->priv, draw_mode_begin);
+	
+	
 	if (!(flags & 2))
 		gra->meth.draw_rectangle(gra->priv, gra->gc[0]->priv, &gra->r.lu, gra->r.rl.x-gra->r.lu.x, gra->r.rl.y-gra->r.lu.y);
+	
+	
+	displaylist->cached = 0;
 	
 	
 	
@@ -3603,13 +3712,35 @@ void draw_map(struct displaylist *displaylist, int flags)
 		order+=displaylist->layout->order_delta;
 		xdisplay_draw(displaylist, gra, displaylist->layout, order>0?order:0);
 	}
+	
+	//only draw cached image, if we are in same order level
+	if(displaylist->use_cache) {
+		if(displaylist->cache_screenPos) {
+			gra->meth.draw_mode(gra->priv, 4); // tell draw_mode function, to handle next two calls as x/y coords
+
+			gra->meth.draw_mode(gra->priv, displaylist->cache_screenPos->x);
+			gra->meth.draw_mode(gra->priv, displaylist->cache_screenPos->y);
+		}
+		
+		gra->meth.draw_mode(gra->priv, 3); //draw cached image
+		
+	}
+	
+
+	//caches image
+	gra->meth.draw_mode(gra->priv, 2);
+
 	if (flags & 1)
 		callback_list_call_attr_0(gra->cbl, attr_postdraw);
-	if (!(flags & 4))
+	if (!(flags & 4)) 
+	{
+
+
 		gra->meth.draw_mode(gra->priv, draw_mode_end);
 
-	
-	
+	}
+
+	displaylist->cached = 1;
 	
 	
 	
@@ -3635,7 +3766,7 @@ void load_map(struct displaylist *displaylist)
 	
 
 	if (displaylist->order != displaylist->order_hashed || displaylist->layout != displaylist->layout_hashed) {
-		//dbg(0, "map load, update hash etc");
+		dbg(0, "map load, update hash etc");
 		displaylist_update_hash(displaylist);
 		displaylist->order_hashed=displaylist->order;
 		displaylist->layout_hashed=displaylist->layout;
@@ -3655,14 +3786,42 @@ void load_map(struct displaylist *displaylist)
 				displaylist->msh=NULL;
 				break;
 			}
-			displaylist->dc_load.pro=map_projection(displaylist->m);
-			displaylist->conv=map_requires_conversion(displaylist->m);
-			if (route_selection)
-				displaylist->sel=route_selection;
-			else
-				displaylist->sel=displaylist_get_selection(displaylist, 1); 
 			
+			if(displaylist->sel == NULL)
+			{
+				//needs to be called only once
+				displaylist->dc_load.pro=map_projection(displaylist->m);
+				displaylist->conv=map_requires_conversion(displaylist->m);
+				if (route_selection)
+					displaylist->sel=route_selection;
+				else {
+					displaylist->sel=displaylist_get_selection(displaylist, 1); 
+					
+					
+					
+					if(!displaylist->cancel_map_load && displaylist->cached) {
+						displaylist->sel=displaylist_update_selection(displaylist);
+						
+						if(displaylist->sel->next == NULL) {
+							displaylist->use_cache = 0;
+							displaylist->cache_screenPos = NULL;
+							
+							dbg(0, "no selection buffered!");
+						} else {
+							displaylist->use_cache = 1;
+						}
+						
+					
+					} else {
+						displaylist->use_cache = 0;
+						displaylist->cache_screenPos = NULL;
+					}
+					
+					
+					displaylist->cached = 0; // if another map will be loaded while drawing the actual one, do not use cache, because the actual one may will be canceled.
+				}
 			
+			}
 			
 			displaylist->mr=map_rect_new(displaylist->m, displaylist->sel);
 		}
@@ -3713,18 +3872,26 @@ void load_map(struct displaylist *displaylist)
 			}
 			map_rect_destroy(displaylist->mr);
 		}
-		if (!route_selection)
-			map_selection_destroy(displaylist->sel);
+		/*if (!route_selection)
+			map_selection_destroy(displaylist->sel);*/
 		displaylist->mr=NULL;
-		displaylist->sel=NULL;
+		//displaylist->sel=NULL;
 		displaylist->m=NULL;
 	}
 
 	
 	
 	map_rect_destroy(displaylist->mr);
-	if (!route_selection)
-		map_selection_destroy(displaylist->sel);
+	if (!route_selection){
+		if(displaylist->use_cache == 0 && !displaylist->cancel_map_load) {
+			displaylist->sel_buffered = map_selection_buffer(displaylist->sel, displaylist->sel_buffered);
+			
+			
+		} else if(displaylist->cancel_map_load) {
+			displaylist->sel_buffered = NULL;
+			displaylist->order_buffered = -1;
+		}
+	}
 	mapset_close(displaylist->msh);
 	displaylist->mr=NULL;
 	displaylist->sel=NULL;
@@ -3792,6 +3959,7 @@ void setDrawingThreadsTo(int n) {
 	
 	event_register_thread(0, android_drawing_thread_n);
 }
+
 
 
 

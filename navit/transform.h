@@ -61,6 +61,7 @@ double transform_pixels_to_map_distance(struct transformation *transformation, i
 enum projection transform_get_projection(struct transformation *this_);
 void transform_set_projection(struct transformation *this_, enum projection pro);
 struct map_selection *transform_get_selection(struct transformation *this_, enum projection pro, int order);
+struct map_selection *transform_update_selection(struct map_selection *sel, struct map_selection *sel_buffered);
 struct coord *transform_center(struct transformation *this_);
 struct coord *transform_get_center(struct transformation *this_);
 void transform_set_center(struct transformation *this_, struct coord *c);

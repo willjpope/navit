@@ -93,11 +93,11 @@ public class NavitDrawObjects extends Thread
 	private Paint paint;
 	
 	
-	private long start;
+	//private long start;
 	
 	public NavitDrawObjects(Canvas canvas, int w, int h, NavitGraphics navitgraphics, int thread_num) {
 		
-		start = android.os.SystemClock.elapsedRealtime();
+		//start = android.os.SystemClock.elapsedRealtime();
 
 		
 		if(ng == null) {
@@ -106,7 +106,7 @@ public class NavitDrawObjects extends Thread
 		
 		local_obj_list = new ArrayList<NavitDrawObject>();
 		paint_polyline = new Paint();
-		////paint_polyline.setStrokeJoin(Paint.Join.ROUND);   
+		
 		paint_polyline.setStrokeCap(Paint.Cap.ROUND);      
 		paint_polyline.setStyle(Paint.Style.STROKE);
 		
@@ -122,7 +122,6 @@ public class NavitDrawObjects extends Thread
 		
 		idx = thread_num-1;
 		
-		//Log.e("NavitDrawObjects", "new drawobjects thread created!");
 		screen_canvas = canvas;
 		
 		if(priv_canvas == null || priv_canvas.length != NavitDrawObjectsPool.thread_n) {
@@ -133,7 +132,7 @@ public class NavitDrawObjects extends Thread
 		
 		if(NavitDrawObjectsPool.thread_n == 1) {
 			
-			//directly draw to the screen bitmap!	
+			//if just one thread is used, directly draw to the screen bitmap!	
 			priv_bitmap[0] = ng.draw_bitmap;
 			priv_canvas[0] = ng.draw_canvas;
 			
@@ -159,25 +158,14 @@ public class NavitDrawObjects extends Thread
 	
 	public void run() {
 		while(run) {
-			
-			//try {
-				
-				
-				 //NavitDrawObject tmp = draw_obj_list.take();
-				//local_obj_list.add(tmp);
-				
+
 				draw_obj_list.drainTo(local_obj_list, 50);
 				
-				
-				//Log.e("NavitDrawObjects", "drained objects: " + local_obj_list.size() + " from thread " + thread_num);
-				
+			
 				for (NavitDrawObject obj : local_obj_list) {
 				
 				
-				
-				
-				//if( run && (obj = draw_obj_list.poll()) != null) { // .take -> blocking call, .poll -> non-blocking call
-
+			
 					switch(obj.type) {
 						case POLYLINE:
 							draw_polyline(obj.paint, obj.c);
@@ -209,19 +197,11 @@ public class NavitDrawObjects extends Thread
 				}
 				local_obj_list.clear(); 
 
-				//}
-				
-				
-			/*} catch(Exception e) {
-				Log.e("NavitDrawObjects", "no object to catch, run == " + run);
-			}*/
-			
+
 		}
 	}
 	
 	public void cancel_draw() {
-		
-		//Log.e("NavitDrawObjects", "cancel draw has beed called. run == " + run);
 		
 		//this will be called before drawing a new selection, if old selection is still drawing, it is canceled
 
@@ -231,7 +211,6 @@ public class NavitDrawObjects extends Thread
 	}
 	
 	
-	//no real layer sync implemented atm
 	public void draw_to_screen(int mode) {
 		
 
@@ -247,11 +226,9 @@ public class NavitDrawObjects extends Thread
 					
 			run = false;
 			
-			//long duration =  android.os.SystemClock.currentThreadTimeMillis();
+			//long duration =  android.os.SystemClock.elapsedRealtime() - start;
 			
-			long duration =  android.os.SystemClock.elapsedRealtime() - start;
-			
-			Log.e("NavitDrawObjects", "Drawing time (java): "  + duration + " ms (Thread " + thread_num + ")");
+			//Log.e("NavitDrawObjects", "Drawing time (java): "  + duration + " ms (Thread " + thread_num + ")");
 			
 			
 			//draw_obj_list.clear(); 
@@ -260,27 +237,10 @@ public class NavitDrawObjects extends Thread
 
 			
 		} else if(mode == 2) {
-			//item done	
+			//save rendered map
+			ng.cached_canvas.drawBitmap(ng.draw_bitmap, 0, 0, paint);
 			
 			
-			
-		} else if(mode == 3) {
-			// layer done
-			/*
-			if(obj_since_drawn > 0) {
-				//synchronized(this) {
-					if(ng.in_map)
-						ng.draw_canvas.drawBitmap(priv_bitmap[idx], 0, 0, paint);
-
-					//clear image to ensure that we do not cover the lower layer from another thread
-					priv_bitmap[idx].eraseColor(0);
-
-					obj_since_drawn = -1;
-
-
-				//}
-				
-			}*/
 		}
 
 	}

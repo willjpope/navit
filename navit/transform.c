@@ -757,6 +757,179 @@ transform_get_selection(struct transformation *this_, enum projection pro, int o
 	return ret;
 }
 
+
+/**
+ * @brief The selection structure will be altered to just contain the difference between the new selection and the buffered selection.
+ *        If there is no buffered selection or the buffered selection does not cover any part of the new selection or it was zoomed in/out: The new selection will not be altered.
+ * @param sel			new map_selection
+ * @param sel_buffered	buffered map_selection
+ * @returns 			Pointer to selection structure
+ * @author				Sascha Oedekoven (08/2015)
+ */
+struct map_selection *
+transform_update_selection(struct map_selection *sel, struct map_selection *sel_buffered)
+{
+
+	int overlap_x, overlap_y;
+	
+	if(sel_buffered == NULL) {
+		//first map, nothing buffered
+		
+		dbg(0, "first map, nothing buffered");
+		
+		return sel;
+	} else {
+		
+		//check if it was zoomed in / out (not an order level, but a little bit)
+		
+		if(sel_buffered->u.c_rect.lu.x <= sel->u.c_rect.lu.x
+		   && sel_buffered->u.c_rect.lu.y >= sel->u.c_rect.lu.y
+		   && sel_buffered->u.c_rect.rl.x >= sel->u.c_rect.rl.x
+		   && sel_buffered->u.c_rect.rl.y <= sel->u.c_rect.rl.y) {
+			dbg(0, "zoomed in!");
+		} else if(sel_buffered->u.c_rect.lu.x >= sel->u.c_rect.lu.x
+		   && sel_buffered->u.c_rect.lu.y <= sel->u.c_rect.lu.y
+		   && sel_buffered->u.c_rect.rl.x <= sel->u.c_rect.rl.x
+		   && sel_buffered->u.c_rect.rl.y >= sel->u.c_rect.rl.y) {
+			dbg(0, "zoomed out!");
+		} else if(sel_buffered->u.c_rect.lu.x == sel->u.c_rect.lu.x
+		   && sel_buffered->u.c_rect.lu.y == sel->u.c_rect.lu.y
+		   && sel_buffered->u.c_rect.rl.x == sel->u.c_rect.rl.x
+		   && sel_buffered->u.c_rect.rl.y == sel->u.c_rect.rl.y) {
+			dbg(0, "same sel as buffered!!");
+		} else if(sel_buffered->u.c_rect.lu.x > sel->u.c_rect.rl.x
+		   && sel_buffered->u.c_rect.rl.x < sel->u.c_rect.lu.x
+		   && sel_buffered->u.c_rect.lu.y < sel->u.c_rect.rl.y
+		   && sel_buffered->u.c_rect.rl.y > sel->u.c_rect.lu.y) {
+			dbg(0, "no overlapping, no caching possible!");		
+		} else if((sel_buffered->u.c_rect.rl.x - sel_buffered->u.c_rect.lu.x) != (sel->u.c_rect.rl.x - sel->u.c_rect.lu.x)) {
+			dbg(0, "map angle has been changed!");
+			
+		} else {
+			
+			
+			overlap_x = (sel->u.c_rect.rl.x - sel->u.c_rect.lu.x) / 6;
+			overlap_y = (sel->u.c_rect.lu.y - sel->u.c_rect.rl.y) / 6;
+
+			
+			
+	
+			
+			struct map_selection *sel_tmp = g_new(struct map_selection, 1);
+
+
+
+			sel_tmp->u.c_rect.lu.x = sel->u.c_rect.lu.x;
+			sel_tmp->u.c_rect.lu.y = sel->u.c_rect.lu.y;
+			sel_tmp->u.c_rect.rl.x = sel->u.c_rect.rl.x;
+			sel_tmp->u.c_rect.rl.y = sel->u.c_rect.rl.y;	
+			
+			if(sel_buffered->u.c_rect.lu.x <= sel->u.c_rect.lu.x && sel_buffered->u.c_rect.lu.y <= sel->u.c_rect.lu.y) {
+				//new map selection is in the upper right from buffered selection
+				
+				sel->u.c_rect.lu.x = sel->u.c_rect.lu.x - overlap_x;
+				sel->u.c_rect.lu.y = sel->u.c_rect.lu.y + overlap_y;
+				sel->u.c_rect.rl.x = sel->u.c_rect.rl.x;// + overlap_x;
+				sel->u.c_rect.rl.y = sel_buffered->u.c_rect.lu.y - overlap_y;
+				
+				struct map_selection *next = g_new(struct map_selection, 1);
+				next->order = sel->order;
+				next->range = item_range_all;
+				next->next = NULL;
+				
+				next->u.c_rect.lu.x = sel_buffered->u.c_rect.rl.x - overlap_x;
+				next->u.c_rect.lu.y = sel_buffered->u.c_rect.lu.y;// + overlap_y;
+				next->u.c_rect.rl.x = sel_tmp->u.c_rect.rl.x ;//+ overlap_x;
+				next->u.c_rect.rl.y = sel_tmp->u.c_rect.rl.y - overlap_y;
+				
+				sel->next = next;
+				
+				//dbg(0, "upper right");
+			
+				
+			} else if(sel_buffered->u.c_rect.lu.x >= sel->u.c_rect.lu.x && sel_buffered->u.c_rect.lu.y <= sel->u.c_rect.lu.y) {
+				//new map selection is in the upper left from buffered selection
+				
+				sel->u.c_rect.lu.x = sel->u.c_rect.lu.x - overlap_x;
+				sel->u.c_rect.lu.y = sel->u.c_rect.lu.y + overlap_y;
+				sel->u.c_rect.rl.x = sel->u.c_rect.rl.x;// + overlap_x;
+				sel->u.c_rect.rl.y = sel_buffered->u.c_rect.lu.y - overlap_y;
+				
+				struct map_selection *next = g_new(struct map_selection, 1);
+				next->order = sel->order;
+				next->range = item_range_all;
+				next->next = NULL;
+				
+				next->u.c_rect.lu.x = sel_tmp->u.c_rect.lu.x - overlap_x;
+				next->u.c_rect.lu.y = sel_buffered->u.c_rect.lu.y;// + overlap_y;
+				next->u.c_rect.rl.x = sel_buffered->u.c_rect.lu.x;// + overlap_x;
+				next->u.c_rect.rl.y = sel_tmp->u.c_rect.rl.y - overlap_y;
+				
+				sel->next = next;
+				//dbg(0, "upper left");
+				
+				
+				
+			} else if(sel_buffered->u.c_rect.lu.x >= sel->u.c_rect.lu.x && sel_buffered->u.c_rect.lu.y >= sel->u.c_rect.lu.y) {
+				//new map selection is in the bottom left from buffered selection
+				
+				sel->u.c_rect.lu.x = sel->u.c_rect.lu.x - overlap_x;
+				sel->u.c_rect.lu.y = sel->u.c_rect.lu.y + overlap_y;
+				sel->u.c_rect.rl.y = sel->u.c_rect.rl.y - overlap_y;
+				sel->u.c_rect.rl.x = sel_buffered->u.c_rect.lu.x;// + overlap_x;
+				
+				struct map_selection *next = g_new(struct map_selection, 1);
+				next->order = sel->order;
+				next->range = item_range_all;
+				next->next = NULL;
+				
+				next->u.c_rect.lu.x = sel_buffered->u.c_rect.lu.x - overlap_x;
+				next->u.c_rect.lu.y = sel_buffered->u.c_rect.rl.y;// + overlap_y;
+				next->u.c_rect.rl.x = sel_tmp->u.c_rect.rl.x;// + overlap_x;
+				next->u.c_rect.rl.y = sel_tmp->u.c_rect.rl.y - overlap_y;
+				
+				sel->next = next;
+				
+				//dbg(0, "bottom left");
+				
+				
+			} else if(sel_buffered->u.c_rect.lu.x <= sel->u.c_rect.lu.x && sel_buffered->u.c_rect.lu.y >= sel->u.c_rect.lu.y) {
+				//new map selection is in the bottom right from buffered selection
+				
+				sel->u.c_rect.lu.x = sel->u.c_rect.lu.x - overlap_x;
+				sel->u.c_rect.rl.x = sel->u.c_rect.rl.x;// + overlap_x;
+				sel->u.c_rect.rl.y = sel->u.c_rect.rl.y - overlap_y;
+				sel->u.c_rect.lu.y = sel_buffered->u.c_rect.rl.y + overlap_y;
+				
+				
+				
+				struct map_selection *next = g_new(struct map_selection, 1);
+				next->order = sel->order;
+				next->range = item_range_all;
+				next->next = NULL;
+				
+				next->u.c_rect.lu.x = sel_buffered->u.c_rect.rl.x - overlap_x;
+				next->u.c_rect.lu.y = sel_tmp->u.c_rect.lu.y + overlap_y;
+				next->u.c_rect.rl.x = sel_tmp->u.c_rect.rl.x;// + overlap_x;
+				next->u.c_rect.rl.y = sel_buffered->u.c_rect.rl.y;// - overlap_y;
+				
+				
+				sel->next = next;
+			
+				
+				//dbg(0, "bottom right");
+				
+			}
+			
+		
+		}
+		
+	}
+	return sel;
+}
+
+
+
 struct coord *
 transform_center(struct transformation *this_)
 {
