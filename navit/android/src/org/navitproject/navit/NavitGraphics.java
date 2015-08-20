@@ -1036,10 +1036,6 @@ public class NavitGraphics
 		if(parent_graphics == null && in_map && draw_in_thread) {
 			drawThreadPool.setThread_n(THREAD_NUM);
 			
-			//add if only 1 thread is active
-			
-			//drawThreadPool.add_rectangle(paint, x, y, w, h);
-
 			Rect r = new Rect(x, y, x + w, y + h);
 			paint.setStyle(Paint.Style.FILL);
 			paint.setAntiAlias(true);

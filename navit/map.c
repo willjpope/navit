@@ -596,14 +596,12 @@ map_selection_destroy(struct map_selection *sel)
  *
  * @param sel The map selection to be buffered
  * @param sel_buffered The map selection to be destroyed
- *
  * @author Sascha Oedekoven (08/2015)
  */
 struct map_selection *
 map_selection_buffer(struct map_selection *sel, struct map_selection *sel_buffered)
 {
 	
-	dbg(0, "selection buffer created");
 	map_selection_destroy(sel_buffered);
 	
 	sel_buffered = sel;

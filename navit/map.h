@@ -266,6 +266,7 @@ struct map_selection *map_selection_rect_new(struct pcoord *center, int distance
 struct map_selection *map_selection_dup_pro(struct map_selection *sel, enum projection from, enum projection to);
 struct map_selection *map_selection_dup(struct map_selection *sel);
 void map_selection_destroy(struct map_selection *sel);
+	
 struct map_selection *map_selection_buffer(struct map_selection *sel, struct map_selection *sel_buffered);
 int map_selection_contains_item_rect(struct map_selection *sel, struct item *item);
 int map_selection_contains_item_range(struct map_selection *sel, int follow, struct item_range *range, int count);
