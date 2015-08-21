@@ -263,6 +263,7 @@ public class NavitDrawObjectsPool
 		obj.lw = lw;
 		obj.fgcolor = fgcolor;
 		
+		//drawThreads.get(next_thread).add_object(obj);
 		drawThreads.get(next_thread++ % thread_n).add_object(obj);
 	}
 	
@@ -281,6 +282,7 @@ public class NavitDrawObjectsPool
 		obj.y = y;
 		obj.bitmap = bitmap;
 		
+		//drawThreads.get(next_thread).add_object(obj);
 		drawThreads.get(next_thread++ % thread_n).add_object(obj);
 	}
 	
