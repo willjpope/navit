@@ -63,9 +63,6 @@ public class NavitDrawObjectsPool
 	//Canvas which will be shown at the screen
 	private Canvas	screen_canvas;
 	
-	private static Bitmap bufferBitmap;
-	private static Canvas bufferCanvas;
-	
 	private List<NavitDrawObjects> drawThreads;
 	
 	public static int thread_n;
@@ -73,9 +70,11 @@ public class NavitDrawObjectsPool
 	private int w;
 	private int h;
 	
+	
 	public NavitDrawObjectsPool(NavitGraphics navitgraphics, int thread_count) {
 		
 		next_thread = 0;
+		
 		
 		ng = navitgraphics;
 		thread_n = thread_count;
@@ -146,6 +145,8 @@ public class NavitDrawObjectsPool
 		
 		drawThreads.clear();
 		next_thread = 0;
+		
+		
 	}
 	
 	public void draw_to_screen(int mode) {
@@ -153,19 +154,15 @@ public class NavitDrawObjectsPool
 		if(drawThreads.size() == 0)
 			return;
 		
-		if(mode == 2) {
-			//next_thread = (next_thread + 1) % thread_n;
-			
-		} else {
+
 		
-			NavitDrawObject obj = new NavitDrawObject();
-			obj.type = NavitObjectType.TOSCREEN;
-			obj.mode = mode;
-			for(int i =thread_n-1; i >= 0 ; i--) {
-				drawThreads.get(i).add_object(obj);
-			}
-			
+		NavitDrawObject obj = new NavitDrawObject();
+		obj.type = NavitObjectType.TOSCREEN;
+		obj.mode = mode;
+		for(int i =thread_n-1; i >= 0 ; i--) {
+			drawThreads.get(i).add_object(obj);
 		}
+		
 		
 	}
 	
@@ -173,6 +170,7 @@ public class NavitDrawObjectsPool
 		
 		if(drawThreads.size() == 0)
 			return;
+		
 
 		NavitDrawObject obj = new NavitDrawObject();
 		
@@ -206,7 +204,7 @@ public class NavitDrawObjectsPool
 		
 		if(drawThreads.size() == 0)
 			return;
-
+		
 		NavitDrawObject obj = new NavitDrawObject();
 		
 		obj.type = NavitObjectType.RECTANGLE;
@@ -233,6 +231,7 @@ public class NavitDrawObjectsPool
 		if(drawThreads.size() == 0)
 			return;
 		
+		
 		NavitDrawObject obj = new NavitDrawObject();
 		
 		obj.type = NavitObjectType.CIRCLE;
@@ -249,6 +248,7 @@ public class NavitDrawObjectsPool
 
 		if(drawThreads.size() == 0)
 			return;
+		
 		
 		NavitDrawObject obj = new NavitDrawObject();
 		
@@ -272,6 +272,7 @@ public class NavitDrawObjectsPool
 		
 		if(drawThreads.size() == 0)
 			return;
+		
 		
 		NavitDrawObject obj = new NavitDrawObject();
 		
