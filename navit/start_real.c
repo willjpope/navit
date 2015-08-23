@@ -17,6 +17,14 @@
  * Boston, MA  02110-1301, USA.
  */
 
+/** @file
+ *
+ * @brief Contains code that loads the plugins.
+ *
+ * This file contains code that loads the plugins.
+ * 
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <glib.h>

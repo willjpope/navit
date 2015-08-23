@@ -17,6 +17,14 @@
  * Boston, MA  02110-1301, USA.
  */
 
+/** @file
+ *
+ * @brief Contains code that allows navit to draw objects.
+ *
+ * This file contains code that allows navit to draw objecs.
+ * All the map loading and drawing will be called in this file.
+ */
+
 //##############################################################################################################
 //#
 //# File: graphics.c
@@ -187,9 +195,6 @@ static void graphics_gc_init(struct graphics *this_);
  * @brief Clears the hash_entries from the displaylist
  * @param dl The displaylist which contains the hash_entry.
  * @author Unknown,  edited by Sascha Oedekoven (06/2015)
-*/
-/*
-clears the hash_entries and hash_entries_load
 */
 static void
 clear_hash(struct displaylist *dl)
@@ -1899,13 +1904,12 @@ graphics_draw_polyline_clipped(struct graphics *gra, struct graphics_gc *gc, str
 			if (clip_result != CLIPRES_INVISIBLE) {
 			        dbg(lvl_debug, "....clipped to [%d, %d] - [%d, %d]\n", segment_start.x, segment_start.y, segment_end.x, segment_end.y);
 				if ((i == 1) || (clip_result & CLIPRES_START_CLIPPED)) {
-					//dbg(lvl_error, "start x: %d, y: %d", segment_end.x, segment_end.y);
+					
 					points_to_draw[points_to_draw_cnt].x=segment_start.x;
 					points_to_draw[points_to_draw_cnt].y=segment_start.y;
 					w[points_to_draw_cnt]=segment_start.w;
 					points_to_draw_cnt++;
 				}
-				//dbg(lvl_error, "end x: %d, y: %d", segment_end.x, segment_end.y);
 				points_to_draw[points_to_draw_cnt].x=segment_end.x;
 				points_to_draw[points_to_draw_cnt].y=segment_end.y;
 				w[points_to_draw_cnt]=segment_end.w;
@@ -1919,9 +1923,7 @@ graphics_draw_polyline_clipped(struct graphics *gra, struct graphics_gc *gc, str
 #endif
 						if (poly) {
 							graphics_draw_polyline_as_polygon(gra->priv, gc->priv, points_to_draw, points_to_draw_cnt, w, gra->meth.draw_polygon);
-	#if 0
-							gra->meth.draw_lines(gra->priv, gc->priv, points_to_draw, points_to_draw_cnt);
-	#endif
+
 						} else
 							gra->meth.draw_lines(gra->priv, gc->priv, points_to_draw, points_to_draw_cnt);
 #ifdef HAVE_API_ANDROID				
@@ -1930,7 +1932,7 @@ graphics_draw_polyline_clipped(struct graphics *gra, struct graphics_gc *gc, str
 #endif
 				
 					
-					//dbg(lvl_error, "polyline with %d points drawn", points_to_draw_cnt);
+		
 					points_to_draw_cnt=0;
 				}
 			}
@@ -1945,7 +1947,7 @@ graphics_draw_polyline_clipped(struct graphics *gra, struct graphics_gc *gc, str
 
 
 
-
+/*
 static void
 graphics_draw_polyline_android(struct graphics *gra, struct graphics_gc *gc, struct point *pa, int count, struct point *points_to_draw, int *points_to_draw_cnt)
 {
@@ -1976,7 +1978,7 @@ graphics_draw_polyline_android(struct graphics *gra, struct graphics_gc *gc, str
 		}
         
 	}
-}
+}*/
 
 static int
 is_inside(struct point *p, struct point_rect *r, int edge)
@@ -2506,13 +2508,15 @@ graphics_draw_itemgra(struct graphics *gra, struct itemgra *itm, struct transfor
 	}
 }
 
-/**
- * FIXME
- * @param <>
- * @returns <>
- * @author Martin Schaller (04/2008)
-*/
 
+/**
+ * @brief Draws all objects layer by layer.
+ * @param display_list The displaylist contains the hash_entries which will be drawn.
+ * @param gra The graphics.
+ * @param lay The layout specifies how the items will be drawn.
+ * @param order The order specifies if a item will be drawn or not.
+ * @author Martin Schaller (04/2008), edit by Sascha Oedekoven (06/2015)
+*/
 static void xdisplay_draw_layer(struct displaylist *display_list, struct graphics *gra, struct layer *lay, int order)
 {
 	
@@ -2528,11 +2532,6 @@ static void xdisplay_draw_layer(struct displaylist *display_list, struct graphic
 		   itm=itms->data;
 			if ( order >= itm->order.min && order <= itm->order.max ) {
 			   xdisplay_draw_elements(gra, display_list, itm);
-			
-				/*if(!display_list->cancel_map_draw) {
-					gra->meth.draw_mode(gra->priv, 2); //2 means: change thread, that way each thread draws one full item - for multi drawing threads - VERY SLOW!!
-
-				}*/
 			}
 			
 		   itms=g_list_next(itms);
@@ -2560,7 +2559,7 @@ static void xdisplay_draw_layer_steps(struct displaylist *display_list, struct g
 	GList *itms;
 	struct itemgra *itm;
 	
-	int t2 = 10;
+	int t2 = 8;
 
 	int t;
 	
@@ -2568,7 +2567,7 @@ static void xdisplay_draw_layer_steps(struct displaylist *display_list, struct g
 	if(order <= t2)
 		for(t=1; t < t2; t=t+2) {
 			
-			if(order >= t) { // draws itm->order 1-2, 3-4, 5-6, 7-8, 9-10
+			if(order >= t) { // draws itm->order 1-2, 3-4, 5-6, 7-8
 				itms=lay->itemgras;
 				while (itms) {
 					if(!display_list->cancel_map_draw) {
@@ -2582,17 +2581,15 @@ static void xdisplay_draw_layer_steps(struct displaylist *display_list, struct g
 					}
 				}
 
-				//dbg(0, "t = %d", t);
-				//if(!display_list->cancel_map_draw) {
-					gra->meth.draw_mode(gra->priv, draw_mode_end);
+			
+				gra->meth.draw_mode(gra->priv, draw_mode_end);
 
-				//}
 
 			}
 		}
 
 	
-	//draws itm->order 11-order
+	//draws itm->order 9-order
 	itms=lay->itemgras;
 	
 	while (itms) {
@@ -2632,12 +2629,6 @@ static void xdisplay_draw(struct displaylist *display_list, struct graphics *gra
 				lay=lay->ref;
 			xdisplay_draw_layer(display_list, gra, lay, order);
 			//xdisplay_draw_layer_steps(display_list, gra, lay, order);
-			
-			/*
-			if(!display_list->cancel_map_draw) {
-				gra->meth.draw_mode(gra->priv, 3); //3 means just sync layer in a multi-threaded application
-
-			}*/
 			
 		}
 		lays=g_list_next(lays);
@@ -2732,8 +2723,6 @@ struct map_selection *displaylist_update_selection(struct displaylist *displayli
 			struct point *result = g_new(struct point, 1);
 			
 			transform(displaylist->dc_load.trans, displaylist->dc_load.pro, input, result, 1, 0, 0, NULL);
-
-			//dbg(0, "crazy transformation-> buff screen position: x=%d, y=%d", result->x, result->y);
 			
 			displaylist->cache_screenPos = result;
 			
@@ -2750,13 +2739,10 @@ struct map_selection *displaylist_update_selection(struct displaylist *displayli
 			result->x = result->x - result2->x;
 			result->y = result->y - result2->y;
 			
-			//dbg(0, "crazy transformation-> new screen position: x=%d, y=%d", result2->x, result2->y);
+	
 
 			displaylist->cache_screenPos = result;
 			
-			
-			
-			//dbg(0, "crazy transformation-> adjusted screen position: x=%d, y=%d", result->x, result->y);
 
 			g_free(result2);
 			g_free(input);
@@ -3021,17 +3007,13 @@ void* do_draw_thread(void *ptr) {
 #ifdef HAVE_API_ANDROID
 	struct displaylist *displaylist;
 	displaylist = (struct displaylist*) ptr;
-	
-	//dbg(lvl_error, "thread: displaylist->order: %d", displaylist->order);
-	
-	
-	
+		
 	displaylist->busy=1;
 	
+	//time measurement:
 	//double s = now_ms();
 	load_map(displaylist);
 	//double t = now_ms() - s;
-	
 	//dbg(lvl_error, "pthread map load: %f", t);
 	
 	displaylist->cancel_map_draw = 1;
@@ -3067,13 +3049,9 @@ void* do_draw_thread(void *ptr) {
 
 		
 		//s = now_ms();
-		
-		dbg(lvl_error, "draw map started");
-		
-		
 		draw_map(displaylist, displaylist->flags);
 
-
+		//time measurement:
 		//t = now_ms() - s;
 		//dbg(lvl_error, "pthread for points: %f", t);
 		
@@ -3129,7 +3107,6 @@ int draw_in_pthread(struct graphics *gra, struct displaylist *displaylist, struc
 		
 	} else {
 		
-		//displaylist->cancel_map_draw = 0; 
 		displaylist->cancel_map_load = 0;
 	}
 	
@@ -3178,7 +3155,6 @@ static void graphics_load_mapset(struct graphics *gra, struct displaylist *displ
 	//init displaylist
 	int order=transform_get_order(trans);
 
-	dbg(lvl_debug,"enter");
 	if (displaylist->busy) { 
 		if (async == 1)
 			return;
@@ -3238,7 +3214,6 @@ graphics_draw_cancel(struct graphics *gra, struct displaylist *displaylist)
 	if(DRAW_MAP_THREAD == 1) {
 		displaylist->cancel_map_draw = 1;
 		displaylist->cancel_map_load = 1;
-		//join map drawing thread
 		if(pthread_join(displaylist->drawing_thread, NULL)) {
 
 			dbg(lvl_error, "error joining thread");
@@ -3640,21 +3615,6 @@ graphics_process_selection(struct graphics *gra, struct displaylist *dl)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**
  * @brief Drawing Items from hash_entries to the screen, until the the process is cancelled or all items are drawn.
  * @param displaylist The displaylist which contains the hash_entries to be drawn.
@@ -3673,7 +3633,6 @@ void draw_map(struct displaylist *displaylist, int flags)
 
 	struct graphics *gra = displaylist->dc.gra;
 	
-	//dbg(0, "draw_map, transform destroy etc");
 	
 	int order=transform_get_order(displaylist->dc_load.trans);
 	if(displaylist->dc.trans && displaylist->dc.trans!=displaylist->dc_load.trans)
@@ -3682,8 +3641,8 @@ void draw_map(struct displaylist *displaylist, int flags)
 		displaylist->dc.trans=transform_dup(displaylist->dc_load.trans);	
 	
 	
-	
-	graphics_draw_drag(gra, NULL); // if drawing in thread, drag must be applied here, not in navit.c
+	// if drawing in thread, drag must be applied here, not in navit.c
+	graphics_draw_drag(gra, NULL); 
 	
 	displaylist->dc.mindist=flags&512?15:2;
 	
@@ -3716,7 +3675,8 @@ void draw_map(struct displaylist *displaylist, int flags)
 	//only draw cached image, if we are in same order level
 	if(displaylist->use_cache) {
 		if(displaylist->cache_screenPos) {
-			gra->meth.draw_mode(gra->priv, 4); // tell draw_mode function, to handle next two calls as x/y coords
+ 			// tell draw_mode function, to handle next two calls as x/y coords
+			gra->meth.draw_mode(gra->priv, 4);
 
 			gra->meth.draw_mode(gra->priv, displaylist->cache_screenPos->x);
 			gra->meth.draw_mode(gra->priv, displaylist->cache_screenPos->y);
@@ -3766,7 +3726,6 @@ void load_map(struct displaylist *displaylist)
 	
 
 	if (displaylist->order != displaylist->order_hashed || displaylist->layout != displaylist->layout_hashed) {
-		dbg(0, "map load, update hash etc");
 		displaylist_update_hash(displaylist);
 		displaylist->order_hashed=displaylist->order;
 		displaylist->layout_hashed=displaylist->layout;
@@ -3782,14 +3741,12 @@ void load_map(struct displaylist *displaylist)
 		if (!displaylist->m) {
 			displaylist->m=mapset_next(displaylist->msh, 1);
 			if (!displaylist->m) {
-				//mapset_close(displaylist->msh);
 				displaylist->msh=NULL;
 				break;
 			}
 			
 			if(displaylist->sel == NULL)
 			{
-				//needs to be called only once
 				displaylist->dc_load.pro=map_projection(displaylist->m);
 				displaylist->conv=map_requires_conversion(displaylist->m);
 				if (route_selection)
@@ -3817,8 +3774,8 @@ void load_map(struct displaylist *displaylist)
 						displaylist->cache_screenPos = NULL;
 					}
 					
-					
-					displaylist->cached = 0; // if another map will be loaded while drawing the actual one, do not use cache, because the actual one may will be canceled.
+					// if another map will be loaded while drawing the actual one, do not use cache, because the actual one may will be canceled.
+					displaylist->cached = 0; 
 				}
 			
 			}
@@ -3872,10 +3829,7 @@ void load_map(struct displaylist *displaylist)
 			}
 			map_rect_destroy(displaylist->mr);
 		}
-		/*if (!route_selection)
-			map_selection_destroy(displaylist->sel);*/
 		displaylist->mr=NULL;
-		//displaylist->sel=NULL;
 		displaylist->m=NULL;
 	}
 

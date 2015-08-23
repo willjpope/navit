@@ -22,7 +22,10 @@ package org.navitproject.navit;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-
+import java.util.ArrayList;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import android.os.Bundle;
 
 
 public class NavitTimeout implements Runnable {
@@ -35,6 +38,7 @@ public class NavitTimeout implements Runnable {
 	private int event_callbackid;
 	private int event_timeout;
 	public native void TimeoutCallback(int id);
+	
 
 	NavitTimeout(int timeout, boolean multi, int callbackid)
 	{
@@ -44,7 +48,6 @@ public class NavitTimeout implements Runnable {
 		handler.postDelayed(this, event_timeout);
 	}
 	public void run() {
-		// Log.e("Navit","Handle Event");
 		if (event_multi) {
 			handler.postDelayed(this, event_timeout);
 		}
@@ -55,4 +58,3 @@ public class NavitTimeout implements Runnable {
 		handler.removeCallbacks(this);
 	}
 }
-

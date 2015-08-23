@@ -17,6 +17,14 @@
  * Boston, MA  02110-1301, USA.
  */
 
+/** @file
+ * 
+ * @brief Contains exported functions / structures for transform.c
+ *
+ * This file contains code that works together with transform.c and that is exported
+ * to other modules.
+ */
+
 #ifndef NAVIT_TRANSFORM_H
 #define NAVIT_TRANSFORM_H
 

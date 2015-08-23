@@ -17,6 +17,14 @@
  * Boston, MA  02110-1301, USA.
  */
 
+/** @file
+ *
+ * @brief Contains code that makes navit able to call java functions c-code via jni.
+ *
+ * This file contains the code that makes navit able to call java functions from c via java native interface (jni).
+ * 
+ */
+
 #include <unistd.h>
 #include <glib.h>
 #include <poll.h>
@@ -393,13 +401,11 @@ draw_text(struct graphics_priv *gra, struct graphics_gc_priv *fg, struct graphic
 	(*javavm)->GetEnv(javavm,(void**)&jnienv, JNI_VERSION_1_4);
 
 	
-	//paint needs:
 	int lw = fg->linewidth;
 	int fgcolor= (fg->a<<24)| (fg->r<<16) | (fg->g<<8) | fg->b;
 	
 	int bgcolor=0;
 	
-	//initPaint(gra, fg);
 	if(bg)
 		bgcolor=(bg->a<<24)| (bg->r<<16) | (bg->g<<8) | bg->b;
 	jstring string = (*jnienv)->NewStringUTF(jnienv, text);
@@ -984,33 +990,12 @@ event_android_add_timeout(int timeout, int multi, struct callback *cb)
 static struct event_idle *
 event_android_add_idle(int priority, struct callback *cb)
 {
-#if 0
-	jobject ret;
-        dbg(lvl_debug,"enter\n");
-	ret=(*jnienv)->NewObject(jnienv, NavitIdleClass, NavitIdle_init, (int)cb);
-	dbg(lvl_debug,"result for %p=%p\n",cb,ret);
-	if (ret)
-		ret = (*jnienv)->NewGlobalRef(jnienv, ret);
-	return (struct event_idle *)ret;
-#endif
-	//changed from 1 to priority
-	/*if(priority == 50) //gui
-		return (struct event_idle *)event_android_add_timeout(priority, 1, cb);
-	else*/
-		return (struct event_idle *)event_android_add_timeout(1, 1, cb);
+	return (struct event_idle *)event_android_add_timeout(1, 1, cb);
 }
 
 static void
 event_android_remove_idle(struct event_idle *ev)
 {
-#if 0
-	dbg(lvl_debug,"enter %p\n",ev);
-	if (ev) {
-		jobject obj=(jobject )ev;
-		(*jnienv)->CallVoidMethod(jnienv, obj, NavitIdle_remove);
-		(*jnienv)->DeleteGlobalRef(jnienv, obj);
-	}
-#endif
 	event_android_remove_timeout((struct event_timeout *)ev);
 }
 
@@ -1018,7 +1003,17 @@ event_android_remove_idle(struct event_idle *ev)
 //TLS var attached
 __thread int attached = 0;
 
-
+/**
+ * @brief The function attaches a pthread to java. 
+ * A pthread can not call java functions. It first has to be attached to java.
+ * Before the pthread exits, it has to be detached from java!
+ *
+ * Additionally this function is used to set the number of drawing threads.
+ *
+ * @param thread_n	Set the number of drawing threads.
+ *
+ * @author Sascha Oedekoven (08/2015)
+*/
 static int attachToJava(int thread_n) {
 	
 	JNIEnv *env = NULL;
@@ -1052,6 +1047,14 @@ static int attachToJava(int thread_n) {
         }
 }
 
+/**
+ * @brief The function detaches a pthread from java. 
+ * 
+ * Before the pthread exits, it has to be detached from java!
+ *
+ *
+ * @author Sascha Oedekoven (08/2015)
+*/
 static int detachFromJava() {
 	
 	dbg(lvl_error, "Thread detached");
@@ -1060,7 +1063,18 @@ static int detachFromJava() {
 }
 
 
-/* Register pthread to jni */
+/**
+ * @brief The function can be globally called to attach/detach a thread from java.
+ * 
+ * The corresponding function (attachToJava / detachFromJava) will be called.
+ *
+ * Additionally the number of drawing threads can be set.
+ *
+ * @param reg		If set to 1, the thread will be attached/detached. If set to 0, we assume the thread is attached and we only set the number of drawing threads.
+ * @param thread_n	Set the number of drawing threads.
+ *
+ * @author Sascha Oedekoven (08/2015)
+*/
 static void
 event_android_register_thread(int reg, int thread_n)
 {
@@ -1073,7 +1087,7 @@ event_android_register_thread(int reg, int thread_n)
 		JNIEnv *env;
 		(*javavm)->GetEnv(javavm,(void**)&env, JNI_VERSION_1_4);
 		
-		//set thread_number to java
+		//set thread_number in java
 		jfieldID fid = (*env)->GetStaticFieldID(env, _NavitGraphicsClass, "THREAD_NUM", "I");
 
 		if(fid == 0) {

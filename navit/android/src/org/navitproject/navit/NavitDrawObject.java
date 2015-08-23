@@ -17,6 +17,9 @@
  * Boston, MA  02110-1301, USA.
  */
 
+
+
+
 package org.navitproject.navit;
 
 import java.io.File;
@@ -48,42 +51,49 @@ import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 
-/**
- * @brief This class defines an object which contains all the information for the drawing-process.
+/** 
+ *
+ * @brief This class defines an object which contains all the information for the threaded drawing-process.
  *
  * @author Sascha Oedekoven (07/2015)
  */
 
 public class NavitDrawObject
 {
+	/** \brief Object-type (polygon, polyline, ..)*/
 	public NavitObjectType type;
 	
-	
+	/** \brief The mode of function draw_mode(), used to call function draw_to_screen() */
 	public int		mode;
 	
-	//polyline, polygon
+	/** \brief Paint object, most likely not in use*/
 	public Paint 	paint;
+	/** \brief Array of coords, used for polyline and polygon*/
 	public int 		c[];
 	
-	//rectangle
+	/** \brief x coord*/
 	public int		x;
+	/** \brief y coord*/
 	public int		y;
-	public int 		w;
-	public int 		h;
 	
-	//circle
+	/** \brief Radius of a circle */
 	public int		r;
 	
-	//text
+	/** \brief Text to draw */
 	public String	text;
+	/** \brief Text size */
 	public int		size;
+	/** \brief Text dx */
 	public int 		dx;
+	/** \brief Text dy */
 	public int 		dy;
+	/** \brief Text background color */
 	public int		bgcolor;
 	public int		lw;
+	/** \brief Text foreground color */
 	public int		fgcolor;
 	
-	//image
+	/** \brief Bitmap to draw a image */
 	public Bitmap	bitmap;
 	
 	public NavitDrawObject() {

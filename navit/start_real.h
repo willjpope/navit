@@ -17,6 +17,14 @@
  * Boston, MA  02110-1301, USA.
  */
 
+/** @file
+ * 
+ * @brief Contains exported functions / structures for start_real.c
+ *
+ * This file contains code that works together with start_real.c and that is exported
+ * to other modules.
+ */
+
 #ifndef NAVIT_MAIN_REAL_H 
 #define NAVIT_MAIN_REAL_H 
 

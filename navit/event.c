@@ -17,6 +17,14 @@
  * Boston, MA  02110-1301, USA.
  */
 
+/** @file
+ *
+ * @brief Contains code that makes navit able to use a event-queue.
+ *
+ * This file contains code that makes navit able to use a event-queue.
+ * 
+ */
+
 #include <string.h>
 #include <stdlib.h>
 #include "event.h"
@@ -121,7 +129,6 @@ event_call_callback(struct callback_list *cb)
 void 
 event_register_thread(int reg, int n)
 {
-	//require_method(register_thread);
 	if(event_methods.register_thread)
 		event_methods.register_thread(reg, n);
 }

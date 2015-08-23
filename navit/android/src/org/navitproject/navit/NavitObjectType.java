@@ -48,7 +48,7 @@ import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * @brief Defines the Object-Type which would be drawn.
+ * @brief Defines the type of an object (polyline, polygone, rectangle, ..).
  *
  * @author Sascha Oedekoven (07/2015)
  */

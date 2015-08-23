@@ -17,6 +17,22 @@
  * Boston, MA  02110-1301, USA.
  */
 
+/** @file
+ *
+ * @brief Navit is the object containing most global data structures.
+ *
+ * This is the navit core instance.
+ * Navit is the object containing most global data structures.
+ * 
+ * Among others:
+ * - a set of maps
+ * - one or more vehicles
+ * - a graphics object for rendering the map
+ * - a gui object for displaying the user interface
+ * - a route object
+ * - a navigation object
+ */
+
 #define _USE_MATH_DEFINES 1
 #include "config.h"
 #ifdef HAVE_UNISTD_H
@@ -75,6 +91,7 @@
 #ifdef HAVE_API_WIN32_CE
 #include "libc.h"
 #endif
+
 
 /* 	used to enable/disable the map drawing thread.
 	0 - drawing in main thread
@@ -723,6 +740,8 @@ navit_zoom_out(struct navit *this_, float factor, struct point *p)
  * @param factor The zoom factor with float precision, usually 2
  * @param p The invariant point (if set to NULL, default to center)
  * @returns nothing
+ *
+ * @author Sascha Oedekoven (08/2015)
  */
 void
 navit_zoomf(struct navit *this_, float factor, struct point *p)

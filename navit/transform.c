@@ -17,6 +17,15 @@
  * Boston, MA  02110-1301, USA.
  */
 
+/** @file
+ *
+ * @brief Contains code that allows navit to transform the map coordinates to the screen.
+ *
+ * This file contains code that allows navit to transform the map coordinates to the screen.
+ * The mercator projection is used to transform the map coordinates to screen coordinates.
+ * 
+ */
+
 #define _USE_MATH_DEFINES 1
 #include <assert.h>
 #include <stdio.h>

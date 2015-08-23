@@ -17,6 +17,8 @@
  * Boston, MA  02110-1301, USA.
  */
 
+
+
 package org.navitproject.navit;
 
 import java.io.File;
@@ -46,7 +48,15 @@ import android.view.GestureDetector;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 
-
+/** 
+ *
+ * @brief This file contains code that makes navit able to draw objects via canvas to the screen.
+ * The NavitGraphics class is used to draw the map.
+ * A canvas and a bitmap will be used to display the objects on the screen.
+ * While moving the screen around, the bitmap will be moved, to show the correct spot of the map.
+ * While zooming the canvas will be scaled and on tap release the new map will be loaded.
+ * 
+ */
 
 
 public class NavitGraphics
@@ -66,12 +76,15 @@ public class NavitGraphics
 	NavitCamera                      camera;
 	Activity                         activity;
 
-	//public NavitManagerThread 		 		manThread;
+	/** \brief Access to the drawing threads, if activated */
 	private static NavitDrawObjectsPool	 	drawThreadPool;
 	
+	/** \brief Drawing thread number. 1 = draw in one separate thread (recommended)*/
 	public static int 						THREAD_NUM = 1;
+	/** \brief false = draw in main thread, true = draw in separate thread */
 	public static boolean					draw_in_thread = true;
 	
+	/** \brief Zoom-factor to scale the canvas while zooming. (allows smooth zooming) */
 	public float				 			 zoomFactor = 1;
 
 
@@ -182,7 +195,7 @@ public class NavitGraphics
 			if( overlay_disabled == 0) {
 
 				
-				
+				//the canvas will be scaled to allow smooth zooming
 				if(zoomFactor != 1) {
 
 					Bitmap scaledBitmap = draw_bitmap;
@@ -216,7 +229,6 @@ public class NavitGraphics
 			
 			if (overlay_disabled == 0)
 			{
-				//Log.e("NavitGraphics", "view -> onDraw 1");
 				// assume we ARE in map view mode!
 				in_map = true;
 
@@ -224,12 +236,10 @@ public class NavitGraphics
 				overlays_array = overlays.toArray();
 				for (Object overlay : overlays_array)
 				{
-					//Log.e("NavitGraphics","view -> onDraw 2");
 
 					NavitGraphics overlay_graphics = (NavitGraphics) overlay;
 					if (overlay_graphics.overlay_disabled == 0)
 					{
-						//Log.e("NavitGraphics","view -> onDraw 3");
 						Rect r=overlay_graphics.get_rect();
 						canvas.drawBitmap(overlay_graphics.draw_bitmap, r.left, r.top, null);
 					}
@@ -241,8 +251,6 @@ public class NavitGraphics
 				{
 					if (Navit.mgr != null)
 					{
-						//Log.e("NavitGraphics", "view -> SHOW SoftInput");
-						//Log.e("NavitGraphics", "view mgr=" + String.valueOf(Navit.mgr));
 						Navit.mgr.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT);
 						Navit.show_soft_keyboard_now_showing = true;
 						// clear the variable now, keyboard will stay on screen until backbutton pressed
@@ -251,14 +259,6 @@ public class NavitGraphics
 				}
 			}
 			
-			/*
-			// thats a way to check how many free memory is available
-			final Runtime runtime = Runtime.getRuntime();
-			final long usedMemInMB=(runtime.totalMemory() - runtime.freeMemory()) / 1048576L;
-			final long maxHeapSizeInMB=runtime.maxMemory() / 1048576L;
-			
-			Log.e("Navit", "usedMem: " + usedMemInMB + " MB  maxHeapSize: " + maxHeapSizeInMB + " MB");
-			*/
 			
 		}
 
@@ -273,19 +273,20 @@ public class NavitGraphics
 			super.onSizeChanged(w, h, oldw, oldh); // was before bitmap/canvas init
 
 			
+			//cancel drawing threads is needed if user has changed orientation
+			drawThreadPool.cancel_draw();
 			
-			//each pixel is stored on 4 bytes
-			// http://developer.android.com/reference/android/graphics/Bitmap.Config.html
+			
 			draw_bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
 			draw_canvas = new Canvas(draw_bitmap);
 			
 			
 			//create bitmap to cache the map
 			cached_bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-			draw_canvas = new Canvas(draw_bitmap);
 			cached_canvas = new Canvas(cached_bitmap);
 			
-			drawThreadPool.init(draw_canvas, w, h);
+			//initiate drawing threads with the new size
+			drawThreadPool.init(w, h);
 
 			
 
@@ -322,7 +323,11 @@ public class NavitGraphics
 		}
 		
 		
-		
+		/**
+		 * @brief GestureDetector is used to detect a long press on the screen.
+		 *
+		 * @author Sascha Oedekoven (06/2015)
+		*/
 		public final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.SimpleOnGestureListener() {
 		    public void onLongPress(MotionEvent e) {
 						
@@ -362,7 +367,6 @@ public class NavitGraphics
 				touch_mode = PRESSED;
 				if (!in_map) {
 					ButtonCallback(ButtonCallbackID, 1, 1, x, y); // down
-					//manThread.addButtonEvent(ButtonCallbackID, 1, 1, x, y); // down
 				}
 
 
@@ -376,22 +380,16 @@ public class NavitGraphics
 
 				if ( touch_mode == DRAG )
 				{
-					Log.e("NavitGraphics", "onTouch move");
 
 
 					MotionCallback(MotionCallbackID, x, y);
 					ButtonCallback(ButtonCallbackID, 0, 1, x, y);
 
-					//zoomFactor = 1;
-					//manThread.addMotionEvent(MotionCallbackID, x, y);
-
-					//manThread.addButtonEvent(ButtonCallbackID, 0, 1, x, y); // up
 
 
 				}
 				else if (touch_mode == ZOOM)
 				{
-					Log.e("NavitGraphics", "onTouch zoom");
 
 					float newDist = spacing(getFloatValue(event, 0), getFloatValue(event, 1));
 					float scale = 0;
@@ -402,26 +400,21 @@ public class NavitGraphics
 					{
 						scale = newDist / oldDist;
 						zoomFactor = scale;
-						viewInvalidate(); // hier kann direkt invalidate aufgerufen werden, da es immer aus dem main-thread ausgefuehrt wird.
-						
+						viewInvalidate(); 
 					}
 					
 
 					
 					CallbackZoom(scale);
-					//Log.e("NavitGraphics", "zoom (get new map)");
 					
 
 				}
 				else if (touch_mode == PRESSED)
 				{
-					Log.e("NavitGraphics", "onTouch pressed!!");
 					if (in_map) {
-						//manThread.addButtonEvent(ButtonCallbackID, 1, 1, x, y); // down	
 						ButtonCallback(ButtonCallbackID, 1, 1, x, y); //down
 						
 						ButtonCallback(ButtonCallbackID, 0, 1, x, y); //up
-						//manThread.addButtonEvent(ButtonCallbackID, 0, 1, x, y); // up
 					} else {
 						
 						ButtonCallback(ButtonCallbackID, 0, 1, x, y); //up
@@ -432,7 +425,6 @@ public class NavitGraphics
 			}
 			else if (switch_value == MotionEvent.ACTION_MOVE)
 			{
-				Log.e("NavitGraphics", "ACTION_MOVE");
 
 				if (touch_mode == DRAG)
 				{
@@ -453,7 +445,7 @@ public class NavitGraphics
 				{
 					Log.e("NavitGraphics", "Start drag mode");
 					if ( spacing(mPressedPosition, new PointF(event.getX(),  event.getY()))  > 20f) {
-						//manThread.addButtonEvent(ButtonCallbackID, 1, 1, x, y); // down
+						
 						ButtonCallback(ButtonCallbackID, 1,1 ,x,y); //down
 						touch_mode = DRAG;
 					}
@@ -461,12 +453,10 @@ public class NavitGraphics
 			}
 			else if (switch_value == _ACTION_POINTER_DOWN_)
 			{/* second finger attached to the screen */
-				//Log.e("NavitGraphics", "ACTION_POINTER_DOWN");
 				oldDist = spacing(getFloatValue(event, 0), getFloatValue(event, 1));
 				if (oldDist > 0f)
 				{
 					touch_mode = ZOOM;
-					//Log.e("NavitGraphics", "--> zoom");
 				}
 			}
 			return true;
@@ -504,8 +494,6 @@ public class NavitGraphics
 			String s = null;
 			boolean handled = true;
 			i = event.getUnicodeChar();
-			//Log.e("NavitGraphics", "onKeyDown " + keyCode + " " + i);
-			// Log.e("NavitGraphics","Unicode "+event.getUnicodeChar());
 			if (i == 0)
 			{
 				if (keyCode == android.view.KeyEvent.KEYCODE_DEL)
@@ -812,8 +800,9 @@ public class NavitGraphics
 	public NavitGraphics(final Activity activity, NavitGraphics parent, int x, int y, int w, int h,
 			int alpha, int wraparound, int use_camera)
 	{
-		if (parent == null)
+		if (parent == null) //real map
 		{
+			//create drawing thread pool and set the number of drawing threads
 			drawThreadPool = new NavitDrawObjectsPool(this, THREAD_NUM);
 			
 			this.activity = activity;			
@@ -833,7 +822,7 @@ public class NavitGraphics
 			activity.setContentView(relativelayout);
 			view.requestFocus();
 		}
-		else
+		else //overlay
 		{
 			draw_bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
 			bitmap_w = w;
@@ -847,8 +836,6 @@ public class NavitGraphics
 			parent.overlays.add(this);
 		}
 		parent_graphics = parent;
-
-		//manThread = NavitManagerThread.manThread;
 
 	}
 
@@ -873,7 +860,6 @@ public class NavitGraphics
 					break;
 				case CLB_MOVE:
 					MotionCallback(MotionCallbackID, msg.getData().getInt("x"), msg.getData().getInt("y"));
-					
 					break;
 				case CLB_SET_DESTINATION:
 					String lat = Float.toString(msg.getData().getFloat("lat"));
@@ -892,11 +878,9 @@ public class NavitGraphics
 					break;
 				case CLB_BUTTON_UP:
 					ButtonCallback(ButtonCallbackID, 0, 1, msg.getData().getInt("x"), msg.getData().getInt("y")); // up
-					//manThread.addButtonEvent(ButtonCallbackID, 0, 1, msg.getData().getInt("x"), msg.getData().getInt("y")); // up
 					break;
 				case CLB_BUTTON_DOWN:
 					ButtonCallback(ButtonCallbackID, 1, 1, msg.getData().getInt("x"), msg.getData().getInt("y")); // down
-					//manThread.addButtonEvent(ButtonCallbackID, 1, 1, msg.getData().getInt("x"), msg.getData().getInt("y")); // down
 					break;
 				case CLB_COUNTRY_CHOOSER:
 					break;
@@ -918,15 +902,32 @@ public class NavitGraphics
 	public native void KeypressCallback(int id, String s);
 	public native int CallbackMessageChannel(int i, String s);
 	
+	
+	/** Function to load and draw the zoomed map.
+	 *
+	 * This function calls the native function CallbackZoom to load and draw the new map.
+	 * The zoomfactor is needed to specify which order level and which region is needed.
+	 *
+	 *
+	 * @param zoomfactor	The zoom factor specifies the order level and the coords of the needed region
+	 * 
+	 * @author Sascha Oedekoven (08/2015)
+	 **/
 	public native int CallbackZoom(float zoomfactor);
 
 	public native void ButtonCallback(int id, int pressed, int button, int x, int y);
 	public native void MotionCallback(int id, int x, int y);
 	public native String GetDefaultCountry(int id, String s);
 	public static native String[][] GetAllCountries();
+	
+	/** \brief Canvas for the activ map*/
 	public Canvas	draw_canvas;
+	/** \brief Bitmap for the activ map*/
 	public Bitmap	draw_bitmap;
+	
+	/** \brief Bitmap for the cached map*/
 	public Bitmap	cached_bitmap;
+	/** \brief Canvas for the cached map*/
 	public Canvas	cached_canvas;
 	private int		SizeChangedCallbackID, ButtonCallbackID, MotionCallbackID, KeypressCallbackID;
 	// private int count;
@@ -952,14 +953,43 @@ public class NavitGraphics
 		Navit.setKeypressCallback(id, this);
 	}
 	
+	/** \brief Global paint object, used to draw objects which do not need specific paint properties */
 	private Paint paint = new Paint();
+	
+	/** \brief Path object to draw lines as path. Its once created and just reseted after each use.*/
 	private Path draw_path = new Path();
 
+	
+	
+	
+	
+	/** Function to draw a polyline.
+	 *
+	 * The polyline will be drawn by the main thread or by a separate drawing thread.
+	 * If drawing in a separate thread is enabled, the corresponding function of the thread pool will be called and sends the input data to one of the threads.
+	 * Otherwise the object will be drawn in the main thread.
+	 * Overlays and the menu will always be drawn in the main thread.
+	 *
+	 * Input array structure:
+	 * 
+	 * c[0] = stroke width
+	 * c[1]-c[4] = ARGB color
+	 * c[5] = ndashes
+	 * c[6]-c[6+ndashes-1] = dash interval
+	 * c[6+ndashes] - c[n] = coords for the polyline
+	 *
+	 *
+	 * @param paint		Paint object
+	 * @param c			Input array with some config and coords, see function description for more details.
+	 *
+	 * @author ?? edit by Sascha Oedekoven (08/2015)
+	 **/
 	protected void draw_polyline(Paint paint, int c[])
 	{
+		//draw map in threads (if enabled)
 		if(parent_graphics == null && in_map && draw_in_thread)
 			drawThreadPool.add_polyline(paint, c);
-		else {
+		else { //draw overlays and menu always in main thread
 			
 			int i, ndashes;
 			float [] intervals;
@@ -989,42 +1019,66 @@ public class NavitGraphics
 			{
 				draw_path.lineTo(c[i], c[i + 1]);
 			}
-			//global_path.close();
 			draw_canvas.drawPath(draw_path, paint);
 			
-			paint.setPathEffect(null);	
-			
-			
-			
+			paint.setPathEffect(null);
 		}
 	}
-
+	
+	/** Function to draw a polygon.
+	 *
+	 * The polygon will be drawn by the main thread or by a separate drawing thread.
+	 * If drawing in a separate thread is enabled, the corresponding function of the thread pool will be called and sends the input data to one of the threads.
+	 * Otherwise the object will be drawn in the main thread.
+	 * Overlays and the menu will always be drawn in the main thread.
+	 *
+	 * Input array structure:
+	 * 
+	 * c[0] = stroke width
+	 * c[1]-c[4] = ARGB color
+	 * c[5] - c[n] = coords for the polygon
+	 *
+	 *
+	 * @param paint		Paint object
+	 * @param c			Input array with some config and coords, see function description for more details.
+	 *
+	 * @author ?? edit by Sascha Oedekoven (08/2015)
+	 **/
 	protected void draw_polygon(Paint paint, int c[])
 	{
 		if(parent_graphics == null && in_map && draw_in_thread)
 			drawThreadPool.add_polygon(paint, c);
 		else {
-			
 			paint.setStrokeWidth(c[0]);
 			paint.setARGB(c[1],c[2],c[3],c[4]);
 			paint.setStyle(Paint.Style.FILL);
-			//paint.setAntiAlias(true);
-			//paint.setStrokeWidth(0);
 			draw_path.rewind();
 			draw_path.moveTo(c[5], c[6]);
 			for (int i = 7; i < c.length; i += 2)
 			{
 				draw_path.lineTo(c[i], c[i + 1]);
 			}
-			//global_path.close();
 			draw_canvas.drawPath(draw_path, paint);
-			
-			
 		}
 	}
 	
-
-	//used for background color
+	/** Function to draw a rectangle.
+	 *
+	 * The rectangle will be drawn by the main thread.
+	 *
+	 * This function is also used to draw the background color. 
+	 * Because the setting of the background color is the first map drawing call, 
+	 * there is a check in this function weather to draw all the following objects in a thread or not.
+	 *
+	 *
+	 * @param paint		Paint object
+	 * @param x			first x coord of the rectangle
+	 * @param y			first y coord of the rectangle
+	 * @param w			width of the rectangle (x+w = second x coord)
+	 * @param h			height of the rectangle (y+h = second y coord)
+	 *
+	 * @author ?? edit by Sascha Oedekoven (08/2015)
+	 **/
 	protected void draw_rectangle(Paint paint, int x, int y, int w, int h)
 	{
 		if(THREAD_NUM == 0) {
@@ -1039,17 +1093,13 @@ public class NavitGraphics
 			Rect r = new Rect(x, y, x + w, y + h);
 			paint.setStyle(Paint.Style.FILL);
 			paint.setAntiAlias(true);
-
 			draw_canvas.drawRect(r, paint);
-			
-			
 			
 		} else {
 			
 			Rect r = new Rect(x, y, x + w, y + h);
 			paint.setStyle(Paint.Style.FILL);
 			paint.setAntiAlias(true);
-			//paint.setStrokeWidth(0);
 			draw_canvas.drawRect(r, paint);
 			
 			
@@ -1060,7 +1110,20 @@ public class NavitGraphics
 
 	}
 
-	
+	/** Function to draw a circle.
+	 *
+	 * The circle will be drawn by the main thread or by a separate drawing thread.
+	 * If drawing in a separate thread is enabled, the corresponding function of the thread pool will be called and sends the input data to one of the threads.
+	 * Otherwise the object will be drawn in the main thread.
+	 * Overlays and the menu will always be drawn in the main thread.
+	 *
+	 * @param paint		Paint object
+	 * @param x			first x coord of the rectangle
+	 * @param y			first y coord of the rectangle
+	 * @param r			radius of the circle
+	 *
+	 * @author ?? edit by Sascha Oedekoven (08/2015)
+	 **/
 	protected void draw_circle(Paint paint, int x, int y, int r)
 	{
 		if(parent_graphics == null && in_map && draw_in_thread)
@@ -1072,12 +1135,15 @@ public class NavitGraphics
 	}
 
 
-	/** draws a text on the screen
+	/** Function to draw a text on the screen
 	 *
+	 * The text will be drawn by the main thread or by a separate drawing thread.
+	 * If drawing in a separate thread is enabled, the corresponding function of the thread pool will be called and sends the input data to one of the threads.
+	 * Otherwise the object will be drawn in the main thread.
+	 * Overlays and the menu will always be drawn in the main thread.
 	 *
-	 *
-	 * @param x		specifying the x text position
-	 * @param y		specifying the y text position
+	 * @param x			specifying the x text position
+	 * @param y			specifying the y text position
 	 * @param text		Text to draw
 	 * @param size		specifying the size of the text
 	 * @param dx		specifying the dx position, if text is drawn to a line
@@ -1093,8 +1159,6 @@ public class NavitGraphics
 		if(parent_graphics == null && in_map && draw_in_thread)
 			drawThreadPool.add_text(x,y,text,size,dx,dy,bgcolor, lw, fgcolor);
 		else {
-			
-			//paint.setColor(fgcolor);
 			paint.setStrokeWidth(lw);
 			Path path=null;
 
@@ -1128,15 +1192,16 @@ public class NavitGraphics
 				draw_canvas.drawTextOnPath(text, path, 0, 0, paint);
 			}
 			paint.clearShadowLayer();
-			
-			
 		}
 	}
 
 
-	/** draws an image on the screen
+	/** Function to draw an image on the screen
 	 *
-	 *
+	 * The image will be drawn by the main thread or by a separate drawing thread.
+	 * If drawing in a separate thread is enabled, the corresponding function of the thread pool will be called and sends the input data to one of the threads.
+	 * Otherwise the object will be drawn in the main thread.
+	 * Overlays and the menu will always be drawn in the main thread.
 	 *
 	 * @param paint		Paint object used to draw the image
 	 * @param x		specifying the x position the image is drawn to
@@ -1204,12 +1269,15 @@ public class NavitGraphics
 	public static final int draw_mode_drawcache = 3;
 	public static final int draw_mode_coords = 4;
 	
-	public int pos_xxx;	// x Position of the cached bitmap
-	public int pos_yyy; // y Position of the cached bitmap
+	/** \brief x position of the cached bitmap*/
+	public int pos_xxx;	
+	/** \brief y position of the cached bitmap*/
+	public int pos_yyy; 
 	
+	/** \brief This var is used in the function draw_mode(). It allows the function to handle the position of the cached bitmap.*/
 	public int no_mode = 0;
 	
-	/* This function will be called at the start and end of the drawing process.
+	/** Function will be called at the start and end of the drawing process.
 	 * This functions handles when to draw the bitmap (map) to the screen and when the cached image will be drawn.
 	 * 
 	 * @param mode	The mode definies which functions will be called:
@@ -1219,9 +1287,8 @@ public class NavitGraphics
 	 *				mode = draw_mode_drawcache : The cached map will be drawn to the correct position
 	 *				mode = draw_mode_coords : The following two calls of draw_mode will be the coords of the cached map.
 	 * 
-	 * @author		edit by Sascha Oedekoven (08/2015)
-	 */
-	
+	 * @author		?? edit by Sascha Oedekoven (08/2015)
+	 **/
 	protected void draw_mode(int mode)
 	{
 		
@@ -1239,7 +1306,6 @@ public class NavitGraphics
 			no_mode = 2;
 		} else if(mode == draw_mode_cachebitmap) {
 			//will be called before post-drawing, to save the map without any buttons
-
 			drawThreadPool.draw_to_screen(mode);
 		}else if(mode == draw_mode_drawcache) { 
 			
@@ -1269,7 +1335,6 @@ public class NavitGraphics
 	
 	protected void draw_drag(int x, int y)
 	{
-		//Log.e("NavitGraphics","draw_drag");
 		pos_x = x;
 		pos_y = y;
 	}
@@ -1282,7 +1347,6 @@ public class NavitGraphics
 		if (overlay_disabled != disable) {
 			overlay_disabled = disable;
 			if (parent_graphics != null) {
-				//parent_graphics.view.invalidate(get_rect());
 				if(in_map && draw_in_thread)
 					drawThreadPool.draw_to_screen(2); 
 				else
@@ -1293,7 +1357,6 @@ public class NavitGraphics
 
 	protected void overlay_resize(int x, int y, int w, int h, int alpha, int wraparound)
 	{
-		//Log.e("NavitGraphics","overlay_resize");
 		draw_bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
 		bitmap_w = w;
 		bitmap_h = h;
@@ -1306,7 +1369,6 @@ public class NavitGraphics
 	public static String getLocalizedString(String text)
 	{
 		String ret = CallbackLocalizedString(text);
-		//Log.e("NavitGraphics", "callback_handler -> lozalized string=" + ret);
 		return ret;
 	}
 
@@ -1322,9 +1384,14 @@ public class NavitGraphics
 
 
 
-	/* sends the UI-Thread a Message to redraw */
-
-
+	/** Function sends the UI-Thread a Message to redraw the screen (view).
+	 *
+	 * The run() function will be queued into the messagequeue of the main thread.
+	 * It is important that always the main thread (ui-thread) calls the view.invalidate(),
+	 * because only the main thread is able to manipulate UI elements.
+	 * 
+	 * @author		Sascha Oedekoven (08/2015)
+	 **/
 	public void viewInvalidate() {
 
 		if(activity != null)
@@ -1344,24 +1411,5 @@ public class NavitGraphics
 		});
 
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

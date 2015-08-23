@@ -17,6 +17,15 @@
  * Boston, MA  02110-1301, USA.
  */
 
+
+/** @file
+ * 
+ * @brief Contains exported functions / structures for mapset.c
+ *
+ * This file contains code that works together with mapset.c and that is exported
+ * to other modules.
+ */
+
 #ifndef NAVIT_MAPSET_H
 #define NAVIT_MAPSET_H
 

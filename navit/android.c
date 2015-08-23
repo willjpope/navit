@@ -1,3 +1,34 @@
+/**
+ * Navit, a modular navigation system.
+ * Copyright (C) 2005-2008 Navit Team
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public License
+ * version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA  02110-1301, USA.
+ */
+
+/** @file
+ *
+ * @brief Contains code that makes navit able to call c functions from android via jni.
+ *
+ * This file contains the code that makes navit able to call c functions from android via java native interface (jni).
+ * 
+ */
+
+
+
+
+
 #include <stdlib.h>
 #include <string.h>
 #include <glib.h>
@@ -95,11 +126,8 @@ Java_org_navitproject_navit_Navit_NavitMain( JNIEnv* env, jobject thiz, jobject 
 	JNIEnv *jnienv;
 	jnienv=env;
 
-	//get javavm for the access to java functions from other threads
+	//get javavm to access to java functions from other threads
 	(*jnienv)->GetJavaVM(jnienv, &javavm);
-
-
-
 
 
 	android_activity = (*jnienv)->NewGlobalRef(jnienv, activity);
@@ -145,13 +173,6 @@ Java_org_navitproject_navit_NavitGraphics_ButtonCallback( JNIEnv* env, jobject t
 		callback_call_4((struct callback *)id,pressed,button,x,y);
 }
 
-JNIEXPORT void JNICALL
-Java_org_navitproject_navit_NavitManagerThread_ButtonCallback( JNIEnv* env, jobject thiz, int id, int pressed, int button, int x, int y)
-{
-	dbg(lvl_debug,"enter %p %d %d\n",(struct callback *)id,pressed,button);
-	if (id)
-		callback_call_4((struct callback *)id,pressed,button,x,y);
-}
 
 
 JNIEXPORT void JNICALL
@@ -162,13 +183,7 @@ Java_org_navitproject_navit_NavitGraphics_MotionCallback( JNIEnv* env, jobject t
 		callback_call_2((struct callback *)id,x,y);
 }
 
-JNIEXPORT void JNICALL
-Java_org_navitproject_navit_NavitManagerThread_MotionCallback( JNIEnv* env, jobject thiz, int id, int x, int y)
-{
-	dbg(lvl_debug,"enter %p %d %d\n",(struct callback *)id,x,y);
-	if (id)
-		callback_call_2((struct callback *)id,x,y);
-}
+
 
 JNIEXPORT void JNICALL
 Java_org_navitproject_navit_NavitGraphics_KeypressCallback( JNIEnv* env, jobject thiz, int id, jobject str)
@@ -182,13 +197,6 @@ Java_org_navitproject_navit_NavitGraphics_KeypressCallback( JNIEnv* env, jobject
 	(*env)->ReleaseStringUTFChars(env, str, s);
 }
 
-JNIEXPORT void JNICALL
-Java_org_navitproject_navit_NavitManagerThread_TimeoutCallback( JNIEnv* env, jobject thiz, int id)
-{
-	void (*event_handler)(void *) = *(void **)id;
-	dbg(lvl_debug,"enter %p %p\n",thiz, (void *)id);
-	event_handler((void*)id);
-}
 
 
 JNIEXPORT void JNICALL
@@ -275,15 +283,22 @@ Java_org_navitproject_navit_NavitGraphics_CallbackLocalizedString( JNIEnv* env, 
 
 
 
+
+/**
+ * @brief The function loads and draws the map specified with the map center and the zoom-factor.
+ *
+ * @param env		JNIEnv, this parameter is always the first when calling a c function from java. It is automatically set, no need for the user to set in java. Its a reference to a function-list of java.
+ * @param thiz		jobject, this parameter is always the second when calling a c function from java. It is automatically set, no need for the user to set in java. Its a reference to the object which called this function.
+ * @param factor	The zoom-factor which specifies the region which needs to be loaded and drawn.
+ *
+ * @author Sascha Oedekoven (06/2015)
+*/
 JNIEXPORT jint JNICALL
 Java_org_navitproject_navit_NavitGraphics_CallbackZoom( JNIEnv* env, jobject thiz, float factor)
 {
 	struct attr attr;
 	config_get_attr(config_get(), attr_navit, &attr, NULL);
 	
-	/*if(factor < 1.0f) {
-		factor = 1.0f / factor;
-	}*/
 	navit_zoomf(attr.u.navit, factor, NULL);
 
 

@@ -17,6 +17,14 @@
  * Boston, MA  02110-1301, USA.
  */
 
+/** @file
+ *
+ * @brief Contains coordinate handling functions
+ *
+ * This file contains coordinate handling functions.
+ * 
+ */
+
 #include <stdlib.h>
 #include <glib.h>
 #include <stdio.h>

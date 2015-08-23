@@ -17,6 +17,8 @@
  * Boston, MA  02110-1301, USA.
  */
 
+
+
 package org.navitproject.navit;
 
 import java.io.File;
@@ -65,6 +67,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/** 
+ *
+ * @brief Contains code that makes navit able to be used on android.
+ *
+ * This file contains code that starts the activity and loads the main navit lib.
+ * All the startup configuration will be done in this file.
+ *
+ */
 
 public class Navit extends Activity
 {
@@ -100,10 +110,6 @@ public class Navit extends Activity
 
 	public static Navit 			 navit;
 	
-
-	//public NavitManagerThread manThread = null;
-
-
 	public void removeFileIfExists(String source) {
 		File file = new File(source);
 
@@ -255,10 +261,6 @@ public class Navit extends Activity
 
 		dialogs = new NavitDialogs(this);
 
-		// this thread handles most of all tasks (Timeout, Draw, Route, ..)
-		//manThread = new NavitManagerThread();
-		//manThread.navit = this;
-
 		NavitResources = getResources();
 
 		// only take arguments here, onResume gets called all the time (e.g. when screenblanks, etc.)
@@ -386,9 +388,7 @@ public class Navit extends Activity
 		Navit.mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		
 		
-		
-
-		//manThread.start();
+	
 	}
 
 	@Override
@@ -531,6 +531,12 @@ public class Navit extends Activity
 	
 	private String target_address;
 
+
+	/**
+	
+	Job needs to be done in UI-Thread.
+	
+	*/
 	public void start_targetsearch_from_intent(String target_add)
 	{
 		target_address = target_add;
@@ -561,15 +567,7 @@ public class Navit extends Activity
 		
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+	
 		
 		
 	
@@ -601,7 +599,11 @@ public class Navit extends Activity
 				break;
 			case 3 :
 				// map download menu
-					
+					/**
+	
+					Job needs to be done in UI-Thread.
+	
+					*/	
 					this.runOnUiThread(new Runnable() {
 
 						public void run() {
@@ -627,7 +629,11 @@ public class Navit extends Activity
 
 				break;
 			case 6 :
-				
+				/**
+	
+				Job needs to be done in UI-Thread.
+
+				*/
 			   this.runOnUiThread(new Runnable() {
 
 				   
@@ -723,7 +729,7 @@ public class Navit extends Activity
 	
 	@Override
 	public boolean onSearchRequested() {
-		/* Launch the internal Search Activity */
+		/* Launch the internal Search Activity on UI-Thread */
 		
 		this.runOnUiThread(new Runnable() {
 
@@ -738,7 +744,11 @@ public class Navit extends Activity
 
 	public boolean setMapLocation() 
 	{ 
-		
+		/**
+	
+		Job needs to be done in UI-Thread.
+
+		*/
 		
 		this.runOnUiThread(new Runnable() {
 
