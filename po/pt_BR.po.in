@@ -24,8 +24,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: navit 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-07-19 04:00+0000\n"
-"Last-Translator: Helder Santana <helder.bs.santana@gmail.com>\n"
+"PO-Revision-Date: 2015-07-27 11:44+0000\n"
+"Last-Translator: Julio Alexander Sieg <julio.sieg@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -39,7 +39,7 @@ msgstr "Executando do diretório de origem\n"
 
 #, c-format
 msgid "setting '%s' to '%s'\n"
-msgstr "ajustando '%s' para '%s'\n"
+msgstr "ajustando de '%s' para '%s'\n"
 
 #. TRANSLATORS: the following counts refer to streets
 msgid "zeroth"
@@ -127,7 +127,7 @@ msgstr "%d.%d quilômetros"
 
 #, c-format
 msgid "in %d.%d kilometers"
-msgstr "em %d.%d quilôtros"
+msgstr "em %d.%d quilômetros"
 
 #, c-format
 msgid "one kilometer"
@@ -149,7 +149,7 @@ msgstr ""
 #. TRANSLATORS: Arguments: 1: Prefix (Space if required) 2: Street Name
 #, c-format
 msgid "%1$sonto %2$s"
-msgstr ""
+msgstr "%1$sno %2$s"
 
 #. TRANSLATORS: Arguments: 1: Prefix (Space if required) 2: Street Name. Masculine form. The stuff after | doesn't have to be included
 #, c-format

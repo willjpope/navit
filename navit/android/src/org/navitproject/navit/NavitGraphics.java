@@ -231,19 +231,14 @@ public class NavitGraphics
 			{
 				// assume we ARE in map view mode!
 				in_map = true;
-
-				Object overlays_array[];
-				overlays_array = overlays.toArray();
-				for (Object overlay : overlays_array)
+				for (NavitGraphics overlay : overlays)
 				{
-
-					NavitGraphics overlay_graphics = (NavitGraphics) overlay;
-					if (overlay_graphics.overlay_disabled == 0)
+					if (overlay.overlay_disabled == 0)
 					{
-						Rect r=overlay_graphics.get_rect();
-						canvas.drawBitmap(overlay_graphics.draw_bitmap, r.left, r.top, null);
+						Rect r=overlay.get_rect();
+						canvas.drawBitmap(overlay.draw_bitmap, r.left, r.top, null);
 					}
-				}
+				}				
 			}
 			else
 			{
@@ -261,7 +256,7 @@ public class NavitGraphics
 			
 			
 		}
-
+		
 		@Override
 		protected void onSizeChanged(int w, int h, int oldw, int oldh)
 		{
