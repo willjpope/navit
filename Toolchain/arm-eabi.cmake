@@ -1,8 +1,30 @@
 set(CMAKE_SYSTEM_NAME GNU)
 
 set(ANDROID TRUE)
-set(ANDROID_API_VERSION 21 CACHE STRING "Andriod API Version")
-set(ANDROID_NDK_API_VERSION ${ANDROID_API_VERSION} CACHE STRING "Andriod NDK API Version")
+
+# Handle environment backed variable:
+# Set variable varname, if it's unset, to the value of environment variable
+# with the same name. If that environment variable does not exist, use default
+# value.
+# Store this variable in the cache and in the environment to make it
+# available for child cmake processes, for example, spawned with 
+# try_compile ones.
+macro(env_backed_var varname default description)
+    set(env $ENV{${varname}})
+    if(${varname})
+        set(${var} ${${varname}} CACHE INTERNAL ${description})
+        set(ENV{${varname}} ${${varname}})
+    elseif( env )
+        set(${varname} ${env} CACHE INTERNAL ${description})
+    else()
+        set(${varname} ${default} CACHE INTERNAL ${description})
+        set(ENV{${varname}} ${default})
+    endif()
+endmacro()
+
+env_backed_var(ANDROID_API_VERSION 8 "Android API level")
+env_backed_var(ANDROID_NDK_API_VERSION ${ANDROID_API_VERSION} "Android NDK version")
+
 set(ANDROID_ARCH "armeabi" CACHE STRING "Android architecture")
 
 find_program(CMAKE_C_COMPILER NAMES arm-eabi-gcc arm-eabi-gcc.exe arm-linux-androideabi-gcc arm-linux-androideabi-gcc.exe)
