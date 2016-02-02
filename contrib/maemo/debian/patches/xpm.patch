@@ -1,0 +1,39 @@
+diff --git a/navit/xpm/CMakeLists.txt b/navit/xpm/CMakeLists.txt
+index a2ce9e4..a7ff8c0 100644
+--- a/navit/xpm/CMakeLists.txt
++++ b/navit/xpm/CMakeLists.txt
+@@ -68,8 +68,9 @@ endmacro()
+ 
+ install(FILES  desktop_icons/navit.desktop DESTINATION share/applications)
+ install(FILES  desktop_icons/22x22/navit.png DESTINATION share/icons/hicolor/22x22/apps)
++install(FILES  ${CMAKE_CURRENT_BINARY_DIR}/desktop_icons/48x48/navit.png DESTINATION share/icons/hicolor/64x64/apps)
++install(FILES  ${CMAKE_CURRENT_BINARY_DIR}/desktop_icons/64x64/navit.png DESTINATION share/icons/hicolor/64x64/apps)
+ install(FILES  desktop_icons/128x128/navit.png DESTINATION share/icons/hicolor/128x128/apps)
+-#install(FILES  bench.xpm DESTINATION )
+ 
+ if (USE_SVG OR SVG2PNG)
+    FILE(GLOB SVG_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.svg" "*.svgz")
+@@ -127,7 +128,22 @@ foreach (IMAGE_FILE ${IMAGES_TO_COPY})
+    list(APPEND IMAGE_TARGETS "${CMAKE_CURRENT_BINARY_DIR}/${IMAGE_FILE}")
+ endforeach()
+ 
+-add_custom_target(images ALL DEPENDS ${IMAGE_TARGETS})
++
++macro(create_app_icon SCALE)
++	set(ICON_FILE_PATH ${CMAKE_CURRENT_BINARY_DIR}/desktop_icons/${SCALE}x${SCALE})
++	set(ICON_FILE ${ICON_FILE_PATH}/navit.png )
++	convert_to_png(${CMAKE_CURRENT_SOURCE_DIR}/desktop_icons/navit.svg
++		${ICON_FILE} ${SCALE})
++	list(APPEND APP_ICON_FILE_PATHS ${ICON_FILE_PATH})
++	list(APPEND APP_ICON_TARGETS ${ICON_FILE})
++endmacro()
++
++create_app_icon(48)
++create_app_icon(64)
++file(MAKE_DIRECTORY ${APP_ICON_FILE_PATHS})
++
++add_custom_target(images ALL DEPENDS ${IMAGE_TARGETS} ${APP_ICON_TARGETS})
++
+ add_custom_target(images_resource COMMAND mkdir -p ../resources/share/navit/xpm COMMAND cp ${IMAGE_TARGETS} ../resources/share/navit/xpm)
+ add_dependencies(images_resource images)
+ 

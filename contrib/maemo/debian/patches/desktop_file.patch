@@ -1,0 +1,25 @@
+Index: navit/navit/xpm/desktop_icons/navit.desktop
+===================================================================
+--- navit.orig/navit/xpm/desktop_icons/navit.desktop	2010-01-23 14:31:06.324779308 +0100
++++ navit/navit/xpm/desktop_icons/navit.desktop	2010-01-23 20:04:46.779444054 +0100
+@@ -1,5 +1,7 @@
+ [Desktop Entry]
++Encoding=UTF-8
+ Version=1.0
++Type=Application
+ Name=Navit
+ Name[de]=Navit
+ Name[fr]=Navit
+@@ -8,9 +10,11 @@
+ Comment[fr]=Le logiciel opensource de navigation vectorielle
+ Exec=navit
+ Icon=navit
++X-Window-Icon=navit
++X-Osso-Type=application/x-executable
++X-Osso-Service=org.navit_project.navit
+ StartupNotify=true
+ Terminal=false
+-Type=Application
+ Categories=GTK;Utility;Geography;
+ GenericName=Navit
+ GenericName[de]=Navit

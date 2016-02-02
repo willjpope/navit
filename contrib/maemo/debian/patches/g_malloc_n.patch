@@ -1,0 +1,13 @@
+diff --git a/navit/graphics/gtk_drawing_area/graphics_gtk_drawing_area.c b/navit/graphics/gtk_drawing_area/graphics_gtk_drawing_area.c
+index 6ec67d1..7119c8a 100644
+--- a/navit/graphics/gtk_drawing_area/graphics_gtk_drawing_area.c
++++ b/navit/graphics/gtk_drawing_area/graphics_gtk_drawing_area.c
+@@ -145,7 +145,7 @@ gc_set_dashes(struct graphics_gc_priv *gc, int w, int offset, unsigned char *das
+ 	gc->ndashes=n;
+ 	gc->offset=offset;
+ 	if(n) {
+-		gc->dashes=g_malloc_n(n, sizeof(double));
++		gc->dashes=g_new(double, n);
+ 		for (i=0; i<n; i++) {
+ 			gc->dashes[i]=dash_list[i];
+ 		}

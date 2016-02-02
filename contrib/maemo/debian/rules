@@ -1,0 +1,115 @@
+#!/usr/bin/make -f
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+#include /usr/share/cdbs/1/class/autotools.mk
+include debian/cmake.mk
+include /usr/share/cdbs/1/rules/simple-patchsys.mk
+
+DEB_DESTDIR = $(CURDIR)/debian/tmp
+
+# This is to let dpkg-buildflags do its job with CFLAGS
+DEB_CMAKE_EXTRA_FLAGS = -DCMAKE_BUILD_TYPE=debian -DCMAKE_C_FLAGS_DEBIAN=""
+
+DEB_CMAKE_EXTRA_FLAGS += -DCMAKE_INSTALL_PREFIX=/opt/navit
+
+export CC=gcc
+export CXX=g++
+DEB_CMAKE_EXTRA_FLAGS += -DCMAKE_C_FLAGS_DEBIAN="$(shell dpkg-buildflags --get CFLAGS) $(shell dpkg-buildflags --get CPPFLAGS)" \
+	-DCMAKE_CXX_FLAGS_DEBIAN="$(shell dpkg-buildflags --get CXXFLAGS) $(shell dpkg-buildflags --get CPPFLAGS)"
+
+DEB_CMAKE_EXTRA_FLAGS += -DCMAKE_MODULE_LINKER_FLAGS="$(shell dpkg-buildflags --get LDFLAGS)"
+DEB_CMAKE_EXTRA_FLAGS += -DCMAKE_SHARED_LINKER_FLAGS="$(shell dpkg-buildflags --get LDFLAGS)"
+DEB_CMAKE_EXTRA_FLAGS += -DCMAKE_EXE_LINKER_FLAGS="$(shell dpkg-buildflags --get LDFLAGS)"
+
+# Native compiler (for navit/map/garmin/gentypes.c)
+DEB_CMAKE_EXTRA_FLAGS += -DNATIVE_CC=gcc
+
+# Fonts
+DEB_CMAKE_EXTRA_FLAGS += -Dfont/freetype=TRUE
+
+# svg2png is required to display country flags
+DEB_CMAKE_EXTRA_FLAGS += -Dsvg2png_scaling=16,24,32,48,64,72,96 -Dsvg2png_scaling_flag=16,24,32,48,64 -Dsvg2png_scaling_nav=16,32,48,64,72,96
+#DEB_CMAKE_EXTRA_FLAGS += -Dsvg2png_scaling=0,16 -Dsvg2png_scaling_flag=0,16 -Dsvg2png_scaling_nav=0,32
+
+# Force svg2png conversion using rsvg-convert since it is the most reliable
+# ATM
+DEB_CMAKE_EXTRA_FLAGS += -DIMAGE_CONVERTER_SVGZ=rsvg-convert
+
+# Enable GUIs we want
+DEB_CMAKE_EXTRA_FLAGS += -Dgui/internal=TRUE
+
+# Bindings
+#DEB_CMAKE_EXTRA_FLAGS += -Dbinding/dbus=TRUE
+# Pyrhon binding not available through cmake
+DEB_CMAKE_EXTRA_FLAGS += -Dbinding/python=FALSE
+
+# Wanted graphic backends
+#DEB_CMAKE_EXTRA_FLAGS += -Dgraphics/gtk_drawing_area=TRUE -Dgraphics/qt_qpainter=FALSE -Dgraphics/null=TRUE
+
+# Unwanted graphic backends (yet)
+# opengl and sdl backends aren't mature enough
+# gd backend segfaults
+DEB_CMAKE_EXTRA_FLAGS += -Dgraphics/qt_qpainter=FALSE -Dgraphics/android=FALSE -Dgraphics/gd=FALSE -Dgraphics/sdl=FALSE -Dgraphics/opengl=FALSE
+
+# don't build the samplemap - we don't want to download
+# stuff while building...
+DEB_CMAKE_EXTRA_FLAGS += -DSAMPLE_MAP=FALSE
+
+# Maps
+DEB_CMAKE_EXTRA_FLAGS += -Dmap/garmin=FALSE -Dmap/mg=TRUE -Dmap/binfile=TRUE -Dmap/csv=TRUE -Dmap/shapefile=TRUE
+
+# Vehicles
+DEB_CMAKE_EXTRA_FLAGS += -Dvehicle/null=TRUE -Dvehicle/demo=TRUE -Dvehicle/maemo=TRUE
+
+# Enable plugin pedestrian
+DEB_CMAKE_EXTRA_FLAGS += -Dplugin/pedestrian=TRUE
+
+# Enable support/shapefile
+DEB_CMAKE_EXTRA_FLAGS += -Dsupport/shapefile=TRUE
+
+# Enable libspeechd
+#DEB_CMAKE_EXTRA_FLAGS += -Dspeech/speech_dispatcher=TRUE
+
+# Avoid floating point calculation for armel
+ifeq ($(DEB_HOST_ARCH), armel)
+  DEB_CMAKE_EXTRA_FLAGS += -DAVOID_FLOAT=TRUE
+endif
+
+# Prevent installing into lib64 when arch is 64 bits
+DEB_CMAKE_EXTRA_FLAGS += -DLIBDIR=lib
+
+# Set maps cache size to 10M instead of default 1M.
+DEB_CMAKE_EXTRA_FLAGS += -DCACHE_SIZE=10485760
+
+CFLAGS += -Wall -g
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+        CFLAGS += -O0
+        else
+                CFLAGS += -O2
+                endif
+
+
+%:
+	echo RULES $@
+
+#clean::
+#	dh_clean
+
+#build:
+#	cmake $(DEB_CMAKE_EXTRA_FLAGS)
+#	make all
+#	dh_auto_build
+
+override_dh_auto_configure:
+	dh_auto_configure -- $(DEB_CMAKE_EXTRA_FLAGS)
+
+override_dh_auto_install:
+	dh_auto_install
+	# Generate icon for Debian menu
+#	mkdir -p $(CURDIR)/debian/tmp/usr/share/pixmaps
+#	convert $(CURDIR)/navit/xpm/desktop_icons/128x128/navit.png -resize 32x32 $(CURDIR)/debian/tmp/usr/share/pixmaps/navit.xpm
+
+	# Default navit configuration file moved into /etc
+	mkdir -p $(CURDIR)/debian/tmp/etc/navit
+	mv $(CURDIR)/debian/tmp/usr/share/navit/navit.xml \
+	   $(CURDIR)/debian/tmp/etc/navit/

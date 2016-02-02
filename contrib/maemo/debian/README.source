@@ -1,0 +1,170 @@
+This file is used to keep track of packaging choices, known issues and TO-DOs.
+
+==================================================
+1- HOW THE SOURCE PACKAGE IS HANDLED USING SVN/GIT
+==================================================
+
+The work on this package takes place on the alioth git repository.
+It requires an alioth account with grant to the collab-maint group.
+
+Cloning the repository:
+
+ $ git clone <my-alioth-login>@alioth.debian.org:/git/collab-maint/navit.git
+
+The repository has 3 remote branches:
+* origin/upstream-svn
+* origin/upstream
+* origin/master
+
+HEAD is binded to master. 
+master fetched localy by the clone:
+
+ $ git branch
+ * master
+
+A daily cronjob managed by bzed syncs origin/upstream-svn with upstream's SVN
+repository (<https://navit.svn.sourceforge.net/svnroot/navit/trunk/navit>).
+
+A packaging cycle starts by merging origin/upstream-svn with upstream. It
+requires having checked out origin/upstream localy (need to be done once):
+
+ $ git checkout -b upstream origin/upstream
+
+Then we can do the merge:
+
+ $ git merge origin/upstream-svn
+
+It can leads to conflicts since some parts of pristine upstream tree have
+been removed in our upstream branch. These removed parts are listed below:
+* navit/android*
+  - unused android port.
+* navit/fonts/*:
+  - ttf-liberation is in Debian
+* navit/map/poi_geodownload/libmdb/*:
+  - libmbdtools is available in Debian, no need to duplicate the code
+* navit/support/glib/*:
+* navit/support/espeak/*:
+  - embedded libespeak1; not used.
+* navit/support/ezxml/*:
+  - embedded glib; not used.
+* navit/support/libc/*:
+  - setenv, getenv. No copyright statement; not used.
+* navit/support/libpng
+  - embedded libpng; not used.
+* navit/support/zlib/*:
+  - embedded zlib; not used.
+* navit/support/wordexp/*:
+  - not used.
+* navit/support/Makefile.am
+  - unused makefile
+* navit/script/*:
+* navit/tools/*:
+  - not needed/used
+* navit/support/win32/*:
+* navit/gui/win32/*:
+* navit/graphics/win32/*:
+
+When the merge is completed and committed we then switch to the master branch
+to merge upstream:
+
+  $ git checkout master
+  $ git merge upstream
+
+Then we can work on the packaging, still in the master branch.
+
+See below how to patch upstream source code.
+
+The package is built using git-buildpackage. See
+<http://honk.sigxcpu.org/projects/git-buildpackage/manual-html/gbp.html>
+
+To build using cowbuilder consider using Russ Allberry's git-pbuilder
+<http://www.eyrie.org/~eagle/software/scripts/git-pbuilder.html>:
+
+$ DIST=sid git-buildpackage --git-builder=/usr/bin/git-pbuilder
+
+Warning: when modifying upstream branch (such as removing parts) you'll need
+to rm .orig.tar.gz before building the package again.
+
+====================================
+2- HOW TO PATCH UPSTREAM SOURCE CODE
+====================================
+
+This package uses quilt to manage all modifications to the upstream
+source.  Changes are stored in the source package as diffs in
+debian/patches and applied during the build.
+
+To configure quilt to use debian/patches instead of patches, you want
+either to export QUILT_PATCHES=debian/patches in your environment
+or use this snippet in your ~/.quiltrc:
+
+    for where in ./ ../ ../../ ../../../ ../../../../ ../../../../../; do
+        if [ -e ${where}debian/rules -a -d ${where}debian/patches ]; then
+                export QUILT_PATCHES=debian/patches
+        fi
+    done
+
+To get the fully patched source after unpacking the source package, cd to
+the root level of the source package and run:
+
+    quilt push -a
+
+The last patch listed in debian/patches/series will become the current
+patch.
+
+To add a new set of changes, first run quilt push -a, and then run:
+
+    quilt new <patch>
+
+where <patch> is a descriptive name for the patch, used as the filename in
+debian/patches.  Then, for every file that will be modified by this patch,
+run:
+
+    quilt add <file>
+
+before editing those files.  You must tell quilt with quilt add what files
+will be part of the patch before making changes or quilt will not work
+properly.  After editing the files, run:
+
+    quilt refresh
+
+to save the results as a patch.
+
+Alternately, if you already have an external patch and you just want to
+add it to the build system, run quilt push -a and then:
+
+    quilt import -P <patch> /path/to/patch
+    quilt push -a
+
+(add -p 0 to quilt import if needed). <patch> as above is the filename to
+use in debian/patches.  The last quilt push -a will apply the patch to
+make sure it works properly.
+
+To remove an existing patch from the list of patches that will be applied,
+run:
+
+    quilt delete <patch>
+
+You may need to run quilt pop -a to unapply patches first before running
+this command.
+
+
+========
+3- TO-DO
+========
+
+* Have gypsy packaged into debian?
+
+* Solve missing copyright statement issues
+
+* --enable-graphics-gd: currently broken + unclear status
+* --enable-graphics-sdl: currently broken
+
+
+=========
+4- ISSUES
+=========
+
+* Tons of gcc warnings
+
+* Missing copyright statements
+  + navit/font/freetype/*

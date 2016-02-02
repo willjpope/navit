@@ -1,0 +1,12 @@
+debian/tmp/opt/navit/lib/navit/autoload/*.so
+debian/tmp/opt/navit/lib/navit/map/*.so
+debian/tmp/opt/navit/lib/navit/osd/*.so
+debian/tmp/opt/navit/lib/navit/binding/*.so
+debian/tmp/opt/navit/lib/navit/speech/*.so
+debian/tmp/opt/navit/lib/navit/vehicle/*.so
+debian/tmp/opt/navit/lib/navit/font/*.so
+debian/tmp/opt/navit/lib/navit/graphics/libgraphics_null*.so
+debian/tmp/opt/navit/share/applications/navit.desktop usr/share/applications/hildon
+debian/tmp/opt/navit/share/dbus-1/services/org.navit_project.navit.service usr/share/dbus-1/services
+debian/tmp/opt/navit/bin/navit
+debian/tmp/opt/navit/share/navit/navit.xml etc/navit/

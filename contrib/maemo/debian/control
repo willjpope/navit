@@ -1,0 +1,249 @@
+Source: navit
+Section: user/navigation
+Priority: extra
+Maintainer: Rainer Dorsch <dev@bokomoko.de>
+XSBC-Original-Maintainer: Gilles Filippini <pini@debian.org>
+Build-Depends: debhelper (>= 5), cmake, libtool, quilt,
+ libdevil-dev, libhildon1-dev, libqt4-dev (>= 4.7),
+ libespeak-dev,
+ libimlib2-dev, libdbus-1-dev, libxml2-dev, libfribidi-dev, libpq-dev,
+ libfreetype6-dev, libfontconfig1-dev,
+ libdbus-glib-1-dev,
+ libgypsy-dev, liblocation-dev,
+ libosso-dev, librsvg2-bin
+Standards-Version: 3.8.3
+Homepage: http://wiki.navit-project.org/
+Vcs-Browser: http://git.debian.org/?p=collab-maint/navit.git;a=summary
+Vcs-Git: git://git.debian.org/git/collab-maint/navit.git
+
+Package: navit
+Section: user/navigation
+Architecture: armel i386
+Depends: ${shlibs:Depends}, ${misc:Depends}, navit-data (= ${source:Version}),
+ navit-gui-internal (= ${binary:Version}) |
+ navit-gui-gtk (= ${binary:Version}) |
+ navit-gui-qml (= ${binary:Version}),
+ libfreetype6 (>=2.3.9-1osso2+0m5.1) |
+ libfreetype6-navit
+Recommends: location-daemon
+Suggests: maptool
+Description: Car navigation system with routing engine
+ Navit is a car navigation system with routing engine.
+ .
+ Its modular design is capable of using vector maps of various formats for
+ routing and rendering of the displayed map. It's even possible to use multiple
+ maps at a time.
+ .
+ The GTK+ or SDL user interfaces are designed to work well with touch screen
+ displays. Points of Interest of various formats are displayed on the map.
+ .
+ The current vehicle position is either read from gpsd or directly from NMEA
+ GPS sensors.
+ .
+ The routing engine not only calculates an optimal route to your destination,
+ but also generates directions and even speaks to you using speech-dispatcher.
+XB-Maemo-Icon-26:
+ iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAIAAAAmKNuZAAAEOUlEQVRIic2V
+ zYtbVRjGn/fcc5PcO8kk00yS+dJOZ6xjp19CbbGWWqGIQqF+QFGkCxHEhXQj
+ uBQEd4IuFN0I3aggCoog1JYygpZiK5XWjp3a6kzns5NMJ7lJZnKTe885r4tk
+ Piy6sHbh+wf8zsPzPO95iZlx90bcRRYACeD4h295pRnLunOKMehI9734yhvy
+ i0/eHzn5aSaZ7+lG1KY7YCnNhVu4cinX1paiJ/Ymc5305GO0c5hc59/hmrY3
+ Ar42zt+d5bHfWboOhvqpv4dScQLAQBiCACIIASLQPz+hFAOICO7qxPYhmpxl
+ CUBKANAKAIIQP14KbYl0ijIdIhEnaf09j8HNVlgW3BjiLtCMgg1MCBMCgDDY
+ 3Ge9fdy/cCWs1ti2Ldex25N2Li1yHaarQ2dS6EhSwqWCxwcfkW6MmmwYXsEx
+ WINV69lUG730VLQ3a50+r/+o9HuZ/Qup3mnjRYvl2KLnoBg1JaoXl4v5B4fd
+ SKewIHQdQYPXqdPQqtVnCxi617KItKbgYnWiNKOTm4PM7iXlk6qRrlEtb4oX
+ E5UTpkGmQQCrsOXVGs7olrowxFReT+a5rmw7ItEIIR1q71uxDKYyJb3rD2yS
+ UUEcwhBYg80KDgzWUAHqAZeXML9oRi7ZI6OJfCOrN2y3dhwQmW0tlA4AUL0Y
+ uXVu16MmaoE1GGtqWt4ZjUqVRyf012f0qXOh7NmmBg4j9xC5nWtraDSXxhmA
+ v4jqdG82AkNGAYBRMKvqJufU2cs0NmXmamnqfxzPHtFuluiv68xGXHhXz5xh
+ t9fp7Lunx16omoWSySTIlmQUsKru5Hm/7O5U/QcpuxtOmqJJ0O1fA/3yUbZ+
+ PpYqe8tVk78+MKwBMVEwjm0lHRjd7AkkgO60XS8X6tU8coKc9O19DZZw81xi
+ 4fRz+0oRi8+O+uMF3Z2xASwucaMBY8Mo8Kq6HQP2oO/9Vvnp2qRQ/h7u2g1h
+ t1iNCi1elhNfHR6+eWCLtRRi3qMGKO4SgEBBqxZrLdmeDWIwx0PzM6d+XZyY
+ GS8yc3qYIgnWARXHnNkTW92fX9hvC4lCjZMpGhSiucjEYM2mRWQA1pZNsWyC
+ BrJix0ZxXzYsF27mR79vuBsRbefyjcj0t/fXT77+jB13xITH02UOgbjbctax
+ qTsuHIvqAW5VMb6wrsZkMJgRrx3Cw1fr73zzZjm5h/yFXdkbLx+SbpR+mFRL
+ QVPB2qSiJBlNdc3eWVs2xVxJ3e2UiIANCOhOWXs3k+8VdnZV9m0lFaWrJV1T
+ rezWz2C7SEgSTMs+5kqYKUPWfEwZbo9h2UdsJQBjxJ5B1sKwjWqdSVMUYAKt
+ 7BkBLlGtSnM1GOa5MkZnueaDPv/4vS8/+0CG8xvaYK87F4rRTH/10jGIwKu4
+ CJFNIEAbeDUEVtfTz78qjxw9Vq14//H0aI1UR9+Ro8fof31n/wQHkicSsEee
+ 1AAAAABJRU5ErkJggg==
+
+Package: navit-gui-gtk
+Architecture: any
+Section: misc
+Depends: ${shlibs:Depends}, ${misc:Depends},
+ navit-graphics-gtk-drawing-area (= ${binary:Version})
+Recommends: navit (= ${binary:Version})
+Description: Car navigation system with routing engine - GTK+ GUI
+ Navit is a car navigation system with routing engine.
+ .
+ Its modular design is capable of using vector maps of various formats for
+ routing and rendering of the displayed map. It's even possible to use multiple
+ maps at a time.
+ .
+ The GTK+ or SDL user interfaces are designed to work well with touch screen
+ displays. Points of Interest of various formats are displayed on the map.
+ .
+ The current vehicle position is either read from gpsd or directly from NMEA
+ GPS sensors.
+ .
+ The routing engine not only calculates an optimal route to your destination,
+ but also generates directions and even speaks to you using speech-dispatcher.
+ .
+ This package contains the GTK+ GUI plugin.
+
+Package: navit-gui-internal
+Architecture: any
+Section: misc
+Depends: ${shlibs:Depends}, ${misc:Depends},
+ navit-graphics-gtk-drawing-area (= ${binary:Version}) |
+ navit-graphics-qt-qpainter (= ${binary:Version})
+Recommends: navit (= ${binary:Version})
+Description: Car navigation system with routing engine - internal GUI
+ Navit is a car navigation system with routing engine.
+ .
+ Its modular design is capable of using vector maps of various formats for
+ routing and rendering of the displayed map. It's even possible to use multiple
+ maps at a time.
+ .
+ The GTK+ or SDL user interfaces are designed to work well with touch screen
+ displays. Points of Interest of various formats are displayed on the map.
+ .
+ The current vehicle position is either read from gpsd or directly from NMEA
+ GPS sensors.
+ .
+ The routing engine not only calculates an optimal route to your destination,
+ but also generates directions and even speaks to you using speech-dispatcher.
+ .
+ This package contains the internal GUI plugin.
+
+Package: navit-gui-qml
+Architecture: any
+Section: misc
+Depends: ${shlibs:Depends}, ${misc:Depends},
+ navit-graphics-qt-qpainter (= ${binary:Version})
+Recommends: navit (= ${binary:Version})
+Description: Car navigation system with routing engine - QML based GUI
+ Navit is a car navigation system with routing engine.
+ .
+ Its modular design is capable of using vector maps of various formats for
+ routing and rendering of the displayed map. It's even possible to use multiple
+ maps at a time.
+ .
+ The GTK+ or SDL user interfaces are designed to work well with touch screen
+ displays. Points of Interest of various formats are displayed on the map.
+ .
+ The current vehicle position is either read from gpsd or directly from NMEA
+ GPS sensors.
+ .
+ The routing engine not only calculates an optimal route to your destination,
+ but also generates directions and even speaks to you using speech-dispatcher.
+ .
+ This package contains the QML based GUI plugin.
+
+Package: navit-graphics-gtk-drawing-area
+Architecture: any
+Section: misc
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: navit (= ${binary:Version})
+Description: Car navigation system with routing engine - GTK+ graphic plugin
+ Navit is a car navigation system with routing engine.
+ .
+ Its modular design is capable of using vector maps of various formats for
+ routing and rendering of the displayed map. It's even possible to use multiple
+ maps at a time.
+ .
+ The GTK+ or SDL user interfaces are designed to work well with touch screen
+ displays. Points of Interest of various formats are displayed on the map.
+ .
+ The current vehicle position is either read from gpsd or directly from NMEA
+ GPS sensors.
+ .
+ The routing engine not only calculates an optimal route to your destination,
+ but also generates directions and even speaks to you using speech-dispatcher.
+ .
+ This package contains the graphic gtk-drawing-area plugin to use with GTK+
+ aware GUIs plugins.
+
+Package: navit-graphics-qt-qpainter
+Architecture: any
+Section: misc
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: navit (= ${binary:Version})
+Description: Car navigation system with routing engine - Qt graphic plugin
+ Navit is a car navigation system with routing engine.
+ .
+ Its modular design is capable of using vector maps of various formats for
+ routing and rendering of the displayed map. It's even possible to use multiple
+ maps at a time.
+ .
+ The GTK+ or SDL user interfaces are designed to work well with touch screen
+ displays. Points of Interest of various formats are displayed on the map.
+ .
+ The current vehicle position is either read from gpsd or directly from NMEA
+ GPS sensors.
+ .
+ The routing engine not only calculates an optimal route to your destination,
+ but also generates directions and even speaks to you using speech-dispatcher.
+ .
+ This package contains the graphic qt-qpainter plugin to use with Qt aware GUIs
+ plugins.
+
+Package: navit-data
+Architecture: all
+Section: misc
+Recommends: navit
+Description: Car navigation system with routing engine - data files
+ Navit is a car navigation system with routing engine.
+ .
+ Its modular design is capable of using vector maps of various formats for
+ routing and rendering of the displayed map. It's even possible to use multiple
+ maps at a time.
+ .
+ The GTK+ or SDL user interfaces are designed to work well with touch screen
+ displays. Points of Interest of various formats are displayed on the map.
+ .
+ The current vehicle position is either read from gpsd or directly from NMEA
+ GPS sensors.
+ .
+ The routing engine not only calculates an optimal route to your destination,
+ but also generates directions and even speaks to you using speech-dispatcher.
+ .
+ This package contains the data files for navit.
+
+Package: maptool
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Suggests: navit
+Description: Converts OpenStreetMap maps to Navit
+ Navit is a car navigation system with routing engine.
+ .
+ Its modular design is capable of using vector maps of various formats for
+ routing and rendering of the displayed map. It's even possible to use multiple
+ maps at a time.
+ .
+ This package contains maptool, a tool to convert OpenStreetMap maps to the
+ Navit format.
+
+Package: navit-dbg
+Architecture: armel i386
+Depends: navit
+Description: Car navigation system with routing engine
+ Navit is a car navigation system with routing engine.
+ .
+ Its modular design is capable of using vector maps of various formats for
+ routing and rendering of the displayed map. It's even possible to use multiple
+ maps at a time.
+ .
+ The GTK+ or SDL user interfaces are designed to work well with touch screen
+ displays. Points of Interest of various formats are displayed on the map.
+ .
+ The current vehicle position is either read from gpsd or directly from NMEA
+ GPS sensors.
+ .
+ The routing engine not only calculates an optimal route to your destination,
+ but also generates directions and even speaks to you using speech-dispatcher.
+ .
+ This package contains the debug symbols.

@@ -1,0 +1,1071 @@
+navit (0.5.0+dfsg.1-1maemo1~6534) unstable; urgency=low
+
+  * new upstrean release 6534
+
+ -- tryagain <tryagain@navit-project.org>  Sat, 16 Jan 2016 13:16:15 -0500 
+
+navit (0.5.0+dfsg.1-1maemo1~6024) unstable; urgency=low
+
+  * new upstream release 6024. locally built 
+
+ -- Gianko <erfabbri@gmail.com>  Mon, 09 Mar 2015 14:06:06 +0100
+
+navit (0.5.0+dfsg.1-1maemo1~6010) unstable; urgency=low
+
+  * new upstream release. locally built
+
+ -- Gianko <erfabbri@gmail.com>  Sat, 31 Jan 2015 02:36:48 +0100
+
+navit (0.5.0+dfsg.1-1maemo1~5890) unstable; urgency=low
+
+  * new upstream release
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sun,  7 Sep 2014 22:49:23 +0200
+
+navit (0.5.0+dfsg.1-1maemo1~5799) unstable; urgency=low
+
+  * new upstream release
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sat,  5 Jul 2014 22:51:05 +0200
+
+navit (0.5.0+dfsg.1-1maemo1~5760) unstable; urgency=low
+
+  * new upstream release
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Thu, 27 Mar 2014 14:05:06 +0100
+
+navit (0.5.0+dfsg.1-1maemo1~5738) unstable; urgency=low
+
+  * new upstream release
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Fri,  3 Jan 2014 14:25:09 +0100
+
+navit (0.5.0+dfsg.1-1maemo1~5708) unstable; urgency=low
+
+  * new upstream release
+  * many updated translations
+  * a few bugfixed  
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Thu, 31 Oct 2013 22:29:29 +0100
+
+navit (0.5.0+dfsg.1-1maemo1~5633) unstable; urgency=low
+
+  * new upstream release
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sat,  7 Sep 2013 18:07:51 +0200
+
+navit (0.5.0+dfsg.1-1maemo1~5560.6) unstable; urgency=low
+
+  * 6th iteration
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Wed,  7 Aug 2013 22:58:39 +0200
+
+navit (0.5.0+dfsg.1-1maemo1~5560.5) unstable; urgency=low
+
+  * fifth iteration
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Wed,  7 Aug 2013 22:56:03 +0200
+
+navit (0.5.0+dfsg.1-1maemo1~5560.4) unstable; urgency=low
+
+  * fourth iteration
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Wed,  7 Aug 2013 22:46:26 +0200
+
+navit (0.5.0+dfsg.1-1maemo1~5560.3) unstable; urgency=low
+
+  * third iteration
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Wed,  7 Aug 2013 22:40:15 +0200
+
+navit (0.5.0+dfsg.1-1maemo1~5560.2) unstable; urgency=low
+
+  * second iteration
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Wed,  7 Aug 2013 22:32:56 +0200
+
+navit (0.5.0+dfsg.1-1maemo1~5560) unstable; urgency=low
+
+  * new upstream release
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sun,  4 Aug 2013 22:23:34 +0200
+
+navit (0.5.0+dfsg.1-1maemo1~5524) unstable; urgency=low
+
+  * new upstream release 
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sat,  1 Jun 2013 13:07:20 +0200
+
+navit (0.5.0+dfsg.1-1maemo1~5477) unstable; urgency=low
+
+  * new upstream release
+  * might have seen some improvements in house number search
+  * updated finally version number to 0.5.0 as upstream did long time back
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sun,  5 May 2013 10:26:15 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~5463) unstable; urgency=low
+
+  * new upstream releases
+  * mainly enhancements in street search
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Wed,  1 May 2013 17:41:46 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~5427) unstable; urgency=low
+
+  * new upstream release
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Thu,  4 Apr 2013 17:27:42 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~5395) unstable; urgency=low
+
+  * new upstream release
+  * mainly improvements in search function
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sat,  2 Mar 2013 09:13:06 +0100
+
+navit (0.2.0+dfsg.1-1maemo1~5365) unstable; urgency=low
+
+  * new upstream release
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sun,  3 Feb 2013 22:04:45 +0100
+
+navit (0.2.0+dfsg.1-1maemo1~5337) unstable; urgency=low
+
+  * New upstream release
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sat,  5 Jan 2013 10:53:29 +0100
+
+navit (0.2.0+dfsg.1-1maemo1~5283) unstable; urgency=low
+
+  * New Upstream release
+  * Upstream fixed several bugs
+    * http://trac.navit-project.org/ticket/1053 (routing issue with waypoints)
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Tue,  4 Dec 2012 22:58:00 +0100
+
+navit (0.2.0+dfsg.1-1maemo1~5278.1) unstable; urgency=low
+
+  * Build with more icons
+    $ diff rules~ rules
+    25,27c25,27
+    < DEB_CONFIGURE_EXTRA_FLAGS += --enable-svg2png-scaling="16 24 32 48 64" \
+    <                              --enable-svg2png-scaling-flag="16 24 32" \
+    <                              --enable-svg2png-scaling-nav="16 32 48 64"
+    ---
+    > DEB_CONFIGURE_EXTRA_FLAGS += --enable-svg2png-scaling="16 24 32 48 64 72 96" \
+    >                              --enable-svg2png-scaling-flag="16 24 32 48 64" \
+    >                              --enable-svg2png-scaling-nav="16 32 48 64 72 96"
+    $ 
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sun,  2 Dec 2012 12:36:08 +0100
+
+navit (0.2.0+dfsg.1-1maemo1~5278) unstable; urgency=low
+
+  * new upstream release
+  * Upstream fixed several bugs 
+    * http://trac.navit-project.org/ticket/1081 (missing speedcams)
+    * http://trac.navit-project.org/ticket/1040 (better waypoint handling)
+    * http://trac.navit-project.org/ticket/985 (wrong scale)
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sat,  1 Dec 2012 13:50:09 +0100
+
+navit (0.2.0+dfsg.1-1maemo1~5255) unstable; urgency=low
+
+  * new upstream release
+  * Makefile.am for icons updated
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sun,  4 Nov 2012 17:02:04 +0100
+
+navit (0.2.0+dfsg.1-1maemo1~5246.4) unstable; urgency=low
+
+  * Build issue in previous iteration
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sun,  7 Oct 2012 23:21:59 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~5246.3) unstable; urgency=low
+
+  * added icons to Makefile.am in desktop_icon.patch
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sun,  7 Oct 2012 23:06:43 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~5246.2) unstable; urgency=low
+
+  * another fix in icon patches
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sun,  7 Oct 2012 22:49:14 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~5246.1) unstable; urgency=low
+
+  * fixed a few icons
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sun,  7 Oct 2012 20:50:24 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~5246) unstable; urgency=low
+
+  * new upstream release
+  * added icons for baker, butcher, cloths, toy
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sun,  7 Oct 2012 14:13:57 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~5240) unstable; urgency=low
+
+  * new upstream release
+  * added pmtb_scale patch 
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sat, 29 Sep 2012 17:28:34 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~5222) unstable; urgency=low
+
+  * new upstream release
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sat,  8 Sep 2012 01:28:39 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~5187) unstable; urgency=low
+
+  * new upstream release
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sun, 15 Jul 2012 10:13:35 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~5147) unstable; urgency=low
+
+  * new upstream release
+  * build against CSSU libraries (in particular QT) 
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sat, 16 Jun 2012 23:24:39 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~5047) unstable; urgency=low
+
+  * new upstream release
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Fri, 27 Apr 2012 22:51:08 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~5013) unstable; urgency=low
+
+  * new upstream release
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Mon,  9 Apr 2012 20:03:56 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~4937) unstable; urgency=low
+
+  * new upstream release
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Thu, 16 Feb 2012 22:57:31 +0100
+
+navit (0.2.0+dfsg.1-1maemo1~4936) unstable; urgency=low
+
+  * new upstream release
+
+ -- Rainerk Dorsch <dev@bokomoko.de>  Sun, 12 Feb 2012 10:22:43 +0100
+
+navit (0.2.0+dfsg.1-1maemo1~4880) unstable; urgency=low
+
+  * new upstream release
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sun,  1 Jan 2012 20:26:14 +0100
+
+navit (0.2.0+dfsg.1-1maemo1~4849) unstable; urgency=low
+
+  * new upstream release
+  * "Former Destinations" do not contain duplicates anymore
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Thu,  1 Dec 2011 21:25:41 +0100
+
+navit (0.2.0+dfsg.1-1maemo1~4841) unstable; urgency=low
+
+  * new upstream release
+  * "Former Destinations" enhancements in internal_gui
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Fri, 21 Oct 2011 20:38:27 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~4838) unstable; urgency=low
+
+  * new upstream release. Brings "Former Destinations" menu entry.
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Thu, 20 Oct 2011 21:43:57 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~4800.1) unstable; urgency=low
+
+  * Fix broken armel build
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Thu, 29 Sep 2011 23:24:40 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~4800) unstable; urgency=low
+
+  * new upstream version
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Thu, 29 Sep 2011 22:11:45 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~4791) unstable; urgency=low
+
+  * new upstream version
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Mon, 26 Sep 2011 00:25:52 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~4772) unstable; urgency=low
+
+  * new upstream version
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Thu,  8 Sep 2011 16:06:36 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~4675) unstable; urgency=low
+
+  * new upstream version
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sat,  6 Aug 2011 21:39:41 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~4616) unstable; urgency=low
+
+  * new upstream version
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sun, 10 Jul 2011 15:59:22 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~4538) unstable; urgency=low
+
+  * new upstream version
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sat, 25 Jun 2011 17:29:15 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~4503.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Had problem with server, start new upload.
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sat, 28 May 2011 11:41:31 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~4503) unstable; urgency=low
+
+  * new upstream version
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Fri, 27 May 2011 21:59:59 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~4494) unstable; urgency=low
+
+  * svn version bump: adds elevation support for N900
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Sat, 14 May 2011 17:16:22 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~4490) unstable; urgency=low
+
+  * svn version bump
+  * use fixed libfreetype-navit and rpath for find library
+
+ -- Rainer Dorsch <dev@bokomoko.de>  Fri, 13 May 2011 22:47:59 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~4347) unstable; urgency=low
+
+  * Svn version bump
+
+ -- Denis Chapligin <chollya@satgate.net>  Tue, 15 Mar 2011 15:03:51 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~3981) unstable; urgency=low
+
+  * Svn version bump
+
+ -- Denis Chapligin <chollya@satgate.net>  Fri, 14 Jan 2011 13:35:13 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~3684) unstable; urgency=low
+
+  * Svn version bump
+  * Built with Maemo PR1.3, qt4-experimental isn't needed anymore
+
+ -- Denis Chapligin <chollya@satgate.net>  Wed, 17 Nov 2010 10:26:23 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~3609) unstable; urgency=low
+
+  * Svn version bump
+
+ -- Denis Chapligin <chollya@satgate.net>  Mon, 18 Oct 2010 16:16:40 +0300
+
+navit (0.2.0+dfsg.1-1maemo1~3346) unstable; urgency=low
+
+  * Svn version bump
+
+ -- Denis Chapligin <chollya@satgate.net>  Tue, 08 Jun 2010 11:11:42 +0300
+
+navit (0.2.0+dfsg.1-1maemo1~3345) unstable; urgency=low
+
+  * Svn version bump
+
+ -- Denis Chapligin <chollya@satgate.net>  Mon, 07 Jun 2010 15:46:19 +0300
+
+navit (0.2.0+dfsg.1-1maemo1~3329) unstable; urgency=low
+
+  * Svn version bump
+  * Patch #282 in mainstream
+
+ -- Denis Chapligin <chollya@satgate.net>  Mon, 07 Jun 2010 10:39:27 +0300
+
+navit (0.2.0+dfsg.1-1maemo1~3328) unstable; urgency=low
+
+  * Svn version bump
+
+ -- Denis Chapligin <chollya@satgate.net>  Mon, 31 May 2010 16:53:49 +0300
+
+navit (0.2.0+dfsg.1-1maemo1~3313) unstable; urgency=low
+
+  * Svn version bump
+  * Screen unblanking made better
+
+ -- Denis Chapligin <chollya@satgate.net>  Fri, 28 May 2010 15:42:47 +0300
+
+navit (0.2.0+dfsg.1-1maemo1~3258) unstable; urgency=low
+
+  * Svn version bump
+  * QML gui should be more or less usable now
+
+ -- Denis Chapligin <chollya@satgate.net>  Mon, 17 May 2010 15:23:26 +0300
+
+navit (0.2.0+dfsg.1-1maemo1~3224) unstable; urgency=low
+
+  * Svn version bump
+  * Moved to Qt 4.7
+
+ -- Denis Chapligin <chollya@satgate.net>  Wed, 05 May 2010 17:55:49 +0300
+
+navit (0.2.0+dfsg.1-1maemo1~3211) unstable; urgency=low
+
+  * Svn version bump
+
+ -- Denis Chapligin <chollya@satgate.net>  Fri, 30 Apr 2010 11:44:26 +0300
+
+navit (0.2.0+dfsg.1-1maemo1~3209) unstable; urgency=low
+
+  * Svn version bump
+
+ -- Denis Chapligin <chollya@satgate.net>  Thu, 29 Apr 2010 16:58:46 +0300
+
+navit (0.2.0+dfsg.1-1maemo1~3175) unstable; urgency=low
+
+  * Svn version bump
+
+ -- Denis Chapligin <chollya@satgate.net>  Wed, 14 Apr 2010 17:24:01 +0300
+
+navit (0.2.0+dfsg.1-1maemo1~3165) unstable; urgency=low
+
+  * Svn version bump
+
+ -- Denis Chapligin <chollya@satgate.net>  Mon, 12 Apr 2010 17:33:41 +0300
+
+navit (0.2.0+dfsg.1-1maemo1~3140) unstable; urgency=low
+
+  * Svn version bump
+  * QML should be usable
+
+ -- Denis Chapligin <chollya@satgate.net>  Wed, 07 Apr 2010 16:51:48 +0300
+
+navit (0.2.0+dfsg.1-1maemo1~3135) unstable; urgency=low
+
+  * Svn version bump
+
+ -- Denis Chapligin <chollya@satgate.net>  Tue, 06 Apr 2010 13:01:22 +0300
+
+navit (0.2.0+dfsg.1-1maemo1~3134) unstable; urgency=low
+
+  * Svn version bump
+
+ -- Denis Chapligin <chollya@satgate.net>  Mon, 05 Apr 2010 11:27:30 +0300
+
+navit (0.2.0+dfsg.1-1maemo1~3110) unstable; urgency=low
+
+  * Svn version bump
+
+ -- Denis Chapligin <chollya@satgate.net>  Thu, 01 Apr 2010 17:53:47 +0300
+
+navit (0.2.0+dfsg.1-1maemo1~3109) unstable; urgency=low
+
+  * Svn version bump
+  * QML GUI included into build
+
+ -- Denis Chapligin <chollya@satgate.net>  Wed, 31 Mar 2010 17:36:52 +0300
+
+navit (0.2.0+dfsg.1-1maemo1~3081) unstable; urgency=low
+
+  * Svn version bump
+
+ -- Denis Chapligin <chollya@satgate.net>  Tue, 16 Mar 2010 13:28:11 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~3021) unstable; urgency=low
+
+  * Svn version bump
+
+ -- Denis Chapligin <chollya@satgate.net>  Tue, 16 Mar 2010 13:28:11 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~2935) unstable; urgency=low
+
+  * Svn version bump
+
+ -- Denis Chapligin <chollya@satgate.net>  Fri, 29 Jan 2010 18:12:17 +0200
+
+navit (0.2.0+dfsg.1-1maemo1~2935) unstable; urgency=low
+
+  * Svn version bump
+
+ -- Denis Chapligin <chollya@satgate.net>  Fri, 29 Jan 2010 13:14:07 +0200
+
+navit (0.2.0~svn2916+dfsg.1-1maemo1) unstable; urgency=low
+  
+  * first maemo version
+  * switch to cdbs makes rules file easier
+  * use atuomake-1.9
+  * adjust build dependencies
+  * optify it myself
+  * add conffiles for /etc/navit.xml
+  * remove navit-data.dirs and navit.dirs because they are useless
+  * use unblank- and fontcache-patches and ideas for packging from Denis Chapligin
+  * unblank.patch needs libosso-dev as dependency
+  * scale all gui icons
+  * add selfmade navit.svg to scale the desktop icons without imagemagick
+  * modify navit.desktop so it works on maemo5
+  * modify navit_shipped.xml which turns into navit.xml to better support n900
+  * start in fullscreen on n900
+  * thanks Petr Stehlik for hints for the gui configuration
+ 
+ -- Henning Heinold <h.heinold@tarent.de>  Mon, 21 Dec 2009 23:03:06 +0100
+
+navit (0.2.0~svn2865+dfsg.1-1) unstable; urgency=low
+
+  [ Gilles Filippini ]
+  * New upstream snapshot:
+    + Default GUI switched to gui_internal
+    + gui_internal:
+      - Configurable menus
+      - New "back" command
+      - Select bookmark by name
+      - Keyboard highlighting configurable
+      - Switch to numeric keyboard for house numbers
+      - Improved OSD keyboard
+    + binding/dbus: add GUI bindings
+    + New vehicle type gpsd_dbus
+    + Improved searching
+  * debian/control:
+    + Update Maintainer with my new address @debian.org
+    + Remove DM-Upload-Allowed (no more needed)
+  * Remove patch default_to_gui_internal (no more needed) 
+  * Update patches:
+    + remove-ttf-liberation 
+    + remove-support 
+  * New patches:
+    + mg-unhandled-attr: [MG] workaround unhandled attributes introduced
+      by svn2827 and svn2844.
+    + revert-part-of-svn2859: revert part of svn2859 which leads to a null
+      pointer error.
+
+  [ Bernd Zeimetz ]
+  * Add a patch to support the new libgps (>= 2.90)
+    - Also bump the build-dependency on libgps-dev for that.
+    - Closes: #560253
+
+ -- Gilles Filippini <pini@debian.org>  Fri, 18 Dec 2009 22:48:27 +0100
+
+navit (0.2.0~svn2755+dfsg.1-1) unstable; urgency=low
+
+  [ Gilles Filippini ]
+  * New upstream snapshot:
+    + Make osm2navit more modular and renamed to maptool
+    + Experimental support for Contraction Hierarchies routing
+    + New map type filter to filter other maps
+    + Map attributes are now setable
+    + New vehicle type: null
+    + Support for automatic day night switching
+    + gui_internal: new tool to show locale configuration
+    + Update python and dbus APIs
+    + navit.xml cleanup
+    + Translations update
+    + Bug fixes
+  * debian/control:
+    + Handle transition from osm2navit to maptool
+  * Rename and update debian/osm2navit.* to debian/maptool.*
+  * Remove patch mg-mmap (applied upstream)
+
+  [ Bernd Zeimetz ]
+  * Remove myself from uploaders. 
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Mon, 16 Nov 2009 16:13:00 +0100
+
+navit (0.2.0~svn2663+dfsg.1-1) unstable; urgency=low
+
+  * New upstream snapshot:
+    + Vehicle profile switch
+    + Better handling of turn restrictions
+    + Big endian patch
+    + Accented characters on internal keyboard
+    + Updated translations
+    + Bug fixes
+  * Remove new android port from upstream source
+  * Remove new embedded libpng from upstream source
+  * Remove new embedded libespeak from upstream source
+  * Remove patches (applied upstream):
+    + moc_location
+    + endianness 
+  * New patches:
+    + remove-libpng: adapt to embedded libpng removal
+    + remove-espeak: adapt to embedded libespeak removal
+    + remove-support: no more need for a Makefile in navit/support
+    + mg-mmap: fix a significant memory link in mmap handling leading to a
+      segfault
+  * Update patches:
+    + default_to_gui_internal
+    + distclean_graphics_qt_qpainter
+    + remove-ezxml
+    + remove-glib
+    + remove-libmdb.diff
+    + remove-mini-libc
+    + remove-win32
+    + remove-wordexp
+    + remove-zlib
+  * debian/rules:
+    + Closes: 542284:
+      - Drop support for map/poi_geodownload: while this plugin could still be
+        used for MG POI files, there isn't any instruction about how to
+        configure it. BTW it has been reported to be quite slow.
+      - Drop support for binding/python: there isn't any piece of information
+        about the status / usage of this plugin.
+      - Remove unused .la files from plugins.
+  * debian/control:
+    + Standards-Version: bump to 3.8.3 (no change needed)
+    + Build-Depends:
+      - replace deprecated glutg3-dev with freeglut3-dev
+        (Closes: #543699).
+      - drop mdbtools-dev
+      - drop python-dev
+  * debian/README.source:
+    + Acknowledge android port and libpng removals from upstream source
+    + Remove versionning issue since it isn't needed anymore
+    + Remove endianness from TO-DOs 
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Mon, 12 Oct 2009 23:00:14 +0200
+
+navit (0.1.1.0+dfsg.1-2) unstable; urgency=low
+
+  * debian/control: s/QT/Qt/g (Closes: 534783) 
+  * debian/patches/endianness: improve and test the patch on a Debian
+    sparc box with MG maps
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Sun, 28 Jun 2009 22:08:14 +0200
+
+navit (0.1.1.0+dfsg.1-1) unstable; urgency=low
+
+  [ Gilles Filippini ]
+  * New upstream release:
+    + Release 0.1.1 = upstream svn2349
+    + Routing optionally asynchronous
+    + Housenumber search
+    + Experimental support for turn restrictions
+    + Experimental support for traffic distortions
+    + Support for map editing
+    + Bug fixes
+  * Remove patches (applied upstream):
+    + gui_internal_no_gtk2
+  * Activate libgarmin support 
+  * debian/copyright:
+    + Add missing copyright statement for files navit/map/garmin/*
+  * New patch:
+    + default_to_gui_internal: configure gui-internal as the default in
+      navit.xml 
+  * debian/README.source: refresh 
+  * Change versionning from 0.1.1.~svn to 0.1.1.0~svn to ease tagging via
+    git-buildpackage 
+  * Add a generated 32x32 xpm icon for Debian menu (Closes: #532374)
+  * debian/control:
+    + Build-Depends on imagemagick to generate the aforementionned xpm icon
+    + Navit target architecture limited to little-endians since mg plugin
+      isn't big-endian compatible yet
+    + Bump Standards-Version to 3.8.2 (no change needed)
+  * debian/navit-data.menu:
+    + Move navit Debian menu into the navit-data package
+    + Quote the icon field
+  * Upload to unstable
+
+  [ Bernd Zeimetz ]
+  * Set DM-Upload-Allowed: yes for Gilles Filippini.
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Tue, 23 Jun 2009 13:30:05 +0200
+
+navit (0.1.1.~svn2246-1) experimental; urgency=low
+
+  [ Gilles Filippini ]
+  * New upstream snapshot: 
+    + Add horse and pedestrian vehicle profiles
+    + Enhance routing
+    + Remove deprecated graphics: cogl
+    + Fix typo in configure.in (Closes: #521815)
+    + Fix many compilation warnings
+  * debian/rules:
+    + Enable python binding
+    + --enable-avoid-float [armel] (Closes: #521809)
+    + Replace deprecated --disable-gypsy with --disable-vehicle-gypsy
+      (Closes: #521812)
+    + Force using rsvg-convert for svg2png conversions
+    + Remove unneeded ltmain.sh copy statement
+    + Remove no more needed navit/graphics/cogl cleansing
+  * debian/control:
+    + Build-Depends:
+      - python-dev 
+      - remove inkscape | kdebase-runtime | kdelibs4-dev to leave
+        librsvg2-bin only
+  * Refresh patches: mg-alignment, remove-* 
+  * Remove patches (applied upstream):
+    + clean_pngs
+    + mg-alignment
+  * New patches:
+    + endianness: to support big-endian architectures. 
+    + moc_location: force qt4 moc use when qt3 moc is in the way (thanks bzed).
+    + distclean_graphics_qt_qpainter: handle graphics_qt_qpainter.moc removal
+      during distclean.
+    + gui_internal_no_gtk2: remove gtk2 dependency to gui_internal.
+
+  [ Bernd Zeimetz ]
+  * debian/copyright:
+     -Adding missing copyright informations for files in navit/map/shapefile.
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Sun, 03 May 2009 10:30:39 +0200
+
+navit (0.1.1.~svn2111-1) experimental; urgency=low
+
+  * New upstream snapshot:
+    + Remove deprecated guis: clutter, cegui, directfb.
+    + Remove deprecated graphics: directfb.
+  * Removed patch:
+    + remove-ttf-dejavu (deprecated).
+  * debian/rules: remove deprecated configure flags.
+  * debian/README.source: remove deprecated notes.
+  * debian/control: bumped policy to 3.8.1 (no change needed). 
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Thu, 12 Mar 2009 23:04:19 +0100
+
+navit (0.1.1.~svn2086-1) experimental; urgency=low
+
+  * New upstream snapshot.
+  * Refresh patches.
+  * debian/copyright: remove copyrigths about removed files.
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Sun, 08 Mar 2009 22:37:45 +0100
+
+navit (0.1.1.~svn2077-1) experimental; urgency=low
+
+  [ Gilles Filippini ]
+  * New upstream snapshot, first upload to Debian (Closes: #451561).
+  * debian/control:
+    + Prevent recursive dependency. Plugin packages should recommend navit
+      instead of depend. 
+    + Solved lintian error not-binnmuable-any-depends-any
+  * Removed patch hyphen-used-as-minus-sign (applied upstream)
+  * debian/changelog: targeting experimental
+
+  [ Bernd Zeimetz ]
+  * debian/rules:
+    - Remove .deps and .libs directories in clean target.
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Wed, 04 Mar 2009 13:33:58 +0100
+
+navit (0.1.1.~svn2076-3) unstable; urgency=low
+
+  * Renamed graphics plugin packages: graphic -> graphics. 
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Mon, 02 Mar 2009 21:13:18 +0100
+
+navit (0.1.1.~svn2076-2) unstable; urgency=low
+
+  * Dropped graphic plugins gd and sdl: they are currently broken at run-time. 
+  * One binary package per gui and grphic plugin.
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Mon, 02 Mar 2009 14:30:06 +0100
+
+navit (0.1.1.~svn2076-1) unstable; urgency=low
+
+  * New upstream snapshot
+  * Reverted mg-alignment patch to the very strict minimum (tested on armel
+    with "echo 4 > proc/cpu/alignment").
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Sun, 01 Mar 2009 23:05:42 +0100
+
+navit (0.1.1.~svn2067-2) unstable; urgency=low
+
+  * New patch:
+    + mg-alignment: alignement fix for the MG plugin.
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Tue, 24 Feb 2009 00:43:20 +0100
+
+navit (0.1.1.~svn2067-1) unstable; urgency=low
+
+  * New upstream snapshot
+  * Lintian clean:
+    + debian/watch (new)
+    + debian/patches/*: added a comment header
+    + debian/control:
+      - Build-Depends: debhelper (>= 0.7)
+    + new patch hyphen-used-as-minus-sign to escape minus signs in
+      man/osm2navit.1
+    + debian/navit.docs: removed ChangeLog (not a real one)
+  * debian/README.source: updated
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Mon, 23 Feb 2009 15:12:10 +0100
+
+navit (0.1.1.~svn2062-2) unstable; urgency=low
+
+  * Removed navit init.d script which issued 'echo 2 > /proc/cpu/alignment'
+    at boot time on ARM processors: the code with broken alignment has to be
+    fixed.
+  * Moved osm2navit to its own binary package.
+  * Reworked debian/ files to let dh do its work when possible.
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Mon, 23 Feb 2009 01:18:27 +0100
+
+navit (0.1.1.~svn2062-1) unstable; urgency=low
+
+  [ Gilles Filippini ]
+  * Removed from upstream tree (not used):
+    + navit/graphics/win32/*
+    + navit/gui/cegui/datafiles/fonts/*
+    + navit/gui/win32/*
+    + navit/script/*
+    + navit/support/*
+    + navit/tools/*
+  * New patches:
+    + remove-ezxml
+    + remove-zlib
+    + remove-win32
+    + remove-wordexp
+    + remove-ttf-dejavu
+  * debian/copyright:
+    + Acknowledge bzed copyright for 2009
+  * debian/README.source
+    + Updated TO-DO and ISSUES accordingly
+    + Acknowledged navit trac ticket #303
+  * debian/rules:
+    + Backported part of my cdbs debian/rules file
+    + The menu file is handled by debhelper
+    + Fixed debian/rules to prevent ./configure running twice
+
+  [ Bernd Zeimetz ]
+  * New upstream snapshot
+  * removing non-existing files from debian/copyright
+  * Spliting -data package from the single one.
+  * Dropping CDBS in favor of a useful rules file. Switching back to my
+    original rules file, also including some (yet untested) lines to
+    move arch-indep. content into navit-data.
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Sun, 22 Feb 2009 15:34:42 +0100
+
+navit (0.1.1.~svn2051-4) unstable; urgency=low
+
+  * Removed glib from upstream (not needed).
+  * Removed mini libc from upstream (no copyright statement; not used).
+  * Enabled qt painter support
+  * Enabled libgd support
+  * Enabled postgresql support for osm2navit
+  * debian/README.source:
+    + ezxml license (MIT)
+    + glib removal
+    + mini libc removal
+    + updated TO-DOs
+  * debian/control:
+    + Depends: added libdbus-glib-1-dev, libgd2-xpm-dev, libqt4-dev, libpq-dev
+  * debian/rules:
+    + configure: --enable-graphics-gd --disable-binding-python (broken)
+  * New Patches:
+    + remove-glib
+    + remove-mini-libc
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Sat, 21 Feb 2009 22:31:33 +0100
+
+navit (0.1.1.~svn2051-3) unstable; urgency=low
+
+  * Removed navit/fonts from upstream branch since ttf-liberation is in
+    Debian.
+  * debian/control:
+    + Build-Depends:
+      - added cvs, automake, mdbtools-dev, libfreetype6-dev,
+        libfontconfig1-dev, ttf-liberation, libhildon-1-dev
+      - removed libgarmin-dev, libcegui-mk2-dev
+  * debian/README.source:
+    + Updated TO-DOs
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Fri, 20 Feb 2009 21:26:56 +0100
+
+navit (0.1.1.~svn2051-2) unstable; urgency=low
+
+  * debian/README.source:
+    + added a section do deal with svn/git handling of the source package.
+    + pasted the quilt README.source to explain how to modify the upstream
+      source code
+    + (required by policy 3.8.0, §4.14). 
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Wed, 18 Feb 2009 21:23:53 +0100
+
+navit (0.1.1.~svn2051-1) unstable; urgency=low
+
+  * New upstream snapshot.
+
+  * Moved the packaging on alioth and merged there with bzed's package:
+    + debian/copyright: added bzed
+    + debian/control:
+      - Section: moved to misc
+      - Depends:
+        . Removed librsvg2-common (unused)
+        . Moved gpsd to Recommends:
+      - Description:
+        . Merged short description with bzed's
+        . Typo: It's -> Its
+      - Added git related stanzas
+    + debian/rules:
+      - Merged configure flags with bzed's
+      - Removed get-orig-source (not needed anymore)
+      - Updated to run autogen.sh
+    + patches:
+      - Added remove-libmdb.diff from bzed
+      - Removed clean_pngs.autoreconf: not used anymore
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Tue, 17 Feb 2009 23:44:23 +0100
+
+navit (0.1.1.~svn2032-1) unstable; urgency=low
+
+  * New upstream release.
+
+  * debian/rules:
+    + Switched to CDBS
+  * debian/copyright:
+    + Reworked to conform to revision 437 of CopyrightFormat proposal
+      available at http://wiki.debian.org/Proposals/CopyrightFormat
+  * debian/README.source:
+    + New file to keep track of packaging related issues 
+  * debian/control:
+    + Set myself as the maintainer
+    + Bumped standard version to 3.8.0
+    + Depends:
+      - Added cdbs, quilt, libsdl-image1.2-dev
+      - Replaced kdelibs4-dev with (librsvg2-bin|inkscape|kdebase-runtime|
+        kdelibs4-dev) to provides at least one of the svg to png converter
+        looked for by ./configure.in
+  * debian/changelog:
+    + Temporary change of the versioning scheme since I started erromeously
+      with 0.1.1+svnNNNN instead of 0.1.1~svnNNNN. I've added an extra dot
+      (0.1.1.~svnNNNN) until 0.1.1 is released.
+  * debian/navit.pl: removed since unused
+  * debian/navit.init:
+    + issues 'echo 2 > /proc/cpu/alignment' at boot time
+  * Patches:
+    + clean_pngs: remove generated png files during distclean-local so that
+      the package can afford two builds in a row.
+    + clean_pngs.autoreconf: modified Makefile.in from clean_pngs patch
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Fri, 13 Feb 2009 01:50:54 +0100
+
+navit (0.1.1+svn2023-1) unstable; urgency=low
+
+  * New upstream snapshot
+  * debian/control: Depends: added libtool
+  * debian/rules:
+    + copy ltmain.sh from libtool
+    * tweak the targets so that several builds in a row succeed 
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Sat, 07 Feb 2009 12:07:03 +0100
+
+navit (0.1.1+svn1966-1) unstable; urgency=low
+
+  * New upstream snapshot 
+  * debian/rules: CFLAGS: removed -g 
+  * debian/control: Depends: added autotools-dev, cvs
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Sat, 24 Jan 2009 14:51:21 +0100
+
+navit (0.1.1+svn1873-1) unstable; urgency=low
+
+  * New upstream snapshot 
+  * debian/rules:
+    + Added configure option --enable-svg2png-scaling-flag="8 16 32 48 96" to
+      enable country flag icons.
+  * debian/control:
+    + Build-Depends: kdelibs4-dev to enable country flag SVGs conversion to
+      PNG files. 
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Tue, 30 Dec 2008 00:00:07 +0100
+
+navit (0.1.1+svn1865-1) unstable; urgency=low
+
+  * New upstream snapshot 
+  * Rearranged source package to match the standard with a orig.tar.gz
+    pristine source tree and a diff.gz debian patch. 
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Mon, 29 Dec 2008 11:12:02 +0100
+
+navit (0.1.1+svn1863-1) unstable; urgency=low
+
+  * New upstream snapshot 
+  * debian/control:
+    + Depends: librsvg2-common 
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Sun, 28 Dec 2008 21:52:39 +0100
+
+navit (0.1.0+svn1857-1) unstable; urgency=low
+
+  * New upstream snapshot 
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Sun, 28 Dec 2008 11:42:04 +0100
+
+navit (0.1.0+svn1843-1) unstable; urgency=low
+
+  * New upstream snapshot
+  * Removed the navit.pl wrapper script which is too specific for openmoko.
+  * debian/control:
+    + removed gdsd version reference to enable fso-gpsd 
+
+ -- Gilles Filippini <gilles.filippini@free.fr>  Tue, 23 Dec 2008 00:52:01 +0100
+
+navit (0.0.4+svn1229-3) unstable; urgency=low
+
+  * fixed a small bug in navit.pl: delete LC_ALL from the environment, instead
+    of only undefining it.
+
+ -- Carsten Wolff <carsten@yet-another-geek.org>  Sat, 25 Oct 2008 21:07:46 +0200
+
+navit (0.0.4+svn1229-2) unstable; urgency=low
+
+  * Added new startup script. This script will:
+    - check, if gpsd is running and try to start it
+    - if it fails, it will run dpkg-reconfigure gpsd
+    - check, if a navit.xml exists in the user's home
+    - if not, create one and download an osm map, the user selects from a list
+
+ -- Carsten Wolff <carsten@yet-another-geek.org>  Thu,  6 Sep 2008 18:30:23 +0200
+
+navit (0.0.4+svn1229-1) unstable; urgency=low
+
+  * New upstream snapshot
+
+ -- Carsten Wolff <carsten@yet-another-geek.org>  Thu, 24 Jul 2008 00:25:53 +0200
+
+navit (0.0.4+svn1205-1) unstable; urgency=low
+
+  * New upstream snapshot
+  * enabled garmin map support
+
+ -- Carsten Wolff <carsten@yet-another-geek.org>  Sat, 12 Jul 2008 17:43:36 +0200
+
+navit (0.0.4+cvs20080525-2) unstable; urgency=low
+
+  * put a wrapper in place of the navit binary to take care of setting the
+    right environment for navit
+
+ -- Carsten Wolff <carsten@yet-another-geek.org>  Mon, 26 May 2008 19:02:13 +0200
+
+navit (0.0.4+cvs20080525-1) unstable; urgency=low
+
+  * New cvs version
+
+ -- Carsten Wolff <carsten@yet-another-geek.org>  Mon, 26 May 2008 14:58:50 +0200
+
+navit (0.0.4+cvs20080419-1) unstable; urgency=low
+
+  * todays CVS version
+  * added some dependencies
+
+ -- Carsten Wolff <carsten@yet-another-geek.org>  Sat, 19 Apr 2008 18:37:24 +0200
+
+navit (0.0.4+cvs20080418-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Carsten Wolff <carsten@yet-another-geek.org>  Fri, 18 Apr 2008 23:28:24 +0200
+
