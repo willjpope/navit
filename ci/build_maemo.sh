@@ -31,4 +31,7 @@ dch -v 0.5.0+dfsg.1-1maemo1-$NAVIT_VERSION New upstream snapshot $NAVIT_VERSION 
 dpkg-buildpackage -S -uc -us || exit 1
 
 cp $BUILD_PATH/*.tar.gz $BUILD_PATH/*.dsc $BUILD_PATH/*.changes $CIRCLE_ARTIFACTS/maemo/ || exit 1
-
+tar czf $CIRCLE_ARTIFACTS/maemo/source-bundle.tgz $BUILD_PATH/*.tar.gz $BUILD_PATH/*.dsc $BUILD_PATH/*.changes || exit 1
+ls -l $BUILD_PATH/*.tar.gz
+md5sum $BUILD_PATH/*.tar.gz
+grep gz $BUILD_PATH/*.dsc
