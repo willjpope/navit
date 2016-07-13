@@ -63,10 +63,10 @@ void corelocation_exit(void) {
 - (id) init {
 	self = [super init];
 	if (self != nil) {
-		[self.locationManager requestAlwaysAuthorization]; // iOS >= 8 only !!
 		self.locationManager = [[[CLLocationManager alloc] init] autorelease];
 		self.locationManager.distanceFilter = kCLDistanceFilterNone; 
 		self.locationManager.delegate = self; // send loc updates to myself
+		[self.locationManager requestAlwaysAuthorization]; // iOS >= 8 only !!
 		self.pf_cb = NULL;
 		self.pv_arg = NULL;
 		self.eventDate = [NSDate date];
