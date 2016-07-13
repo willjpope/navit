@@ -36,5 +36,7 @@
 	<string></string>
 	<key>UIFileSharingEnabled</key>
 	<true/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>can Navit use location ?</string>
 </dict>
 </plist>
