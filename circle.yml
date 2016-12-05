@@ -29,7 +29,7 @@ test:
     - bash ci/build.sh:
         parallel: true
         files:
-          - ci/build_*.sh
+          - ci/build_ios.sh
   post:
     - sed -i -e 's@name="Local GPS" profilename="car" enabled="yes" active="1"@name="Local GPS" profilename="car" enabled="no" active="0"@' navit.xml:
         pwd: bin/navit/
