@@ -1281,15 +1281,6 @@ navit_object_unref(struct navit_object *obj)
 {
 	if (obj && obj->refcount>0) {
 		obj->refcount--;
-//* <<<<<<< HEAD
-		//dbg(lvl_debug,"refcount %s %p %d\n",attr_to_name(obj->func->type),obj,obj->refcount);
-//*/
-/*=======*/
-/*
-		// dbg(lvl_error, "refcount %s\n", attr_to_name(obj->func->type));
-		// dbg(lvl_debug,"refcount %s %p %d\n",attr_to_name(obj->func->type),obj,obj->refcount);
-//*/
-//>>>>>>> audio_framework
 		if (obj->refcount <= 0 && obj->func && obj->func->destroy)
 			obj->func->destroy(obj);
 	}
