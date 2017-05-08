@@ -40,11 +40,12 @@
 #include "spotify.h"
 
 struct arg_struct {
-    audio_fifo_t *af;
-    char * audio_playback_pcm;
+	audio_fifo_t *af;
+	char *audio_playback_pcm;
 };
 
-static snd_pcm_t *alsa_open(char *dev, int rate, int channels)
+static snd_pcm_t *
+alsa_open(char *dev, int rate, int channels)
 {
 	snd_pcm_hw_params_t *hwp;
 	snd_pcm_sw_params_t *swp;
@@ -67,7 +68,8 @@ static snd_pcm_t *alsa_open(char *dev, int rate, int channels)
 	memset(hwp, 0, snd_pcm_hw_params_sizeof());
 	snd_pcm_hw_params_any(h, hwp);
 
-	snd_pcm_hw_params_set_access(h, hwp, SND_PCM_ACCESS_RW_INTERLEAVED);
+	snd_pcm_hw_params_set_access(h, hwp,
+				     SND_PCM_ACCESS_RW_INTERLEAVED);
 	snd_pcm_hw_params_set_format(h, hwp, SND_PCM_FORMAT_S16_LE);
 	snd_pcm_hw_params_set_rate(h, hwp, rate, 0);
 	snd_pcm_hw_params_set_channels(h, hwp, channels);
@@ -82,11 +84,13 @@ static snd_pcm_t *alsa_open(char *dev, int rate, int channels)
 	period_size = 1024;
 
 	dir = 0;
-	r = snd_pcm_hw_params_set_period_size_near(h, hwp, &period_size, &dir);
+	r = snd_pcm_hw_params_set_period_size_near(h, hwp, &period_size,
+						   &dir);
 
 	if (r < 0) {
-		dbg(lvl_error, "audio: Unable to set period size %lu (%s)\n",
-		        period_size, snd_strerror(r));
+		dbg(lvl_error,
+		    "audio: Unable to set period size %lu (%s)\n",
+		    period_size, snd_strerror(r));
 		snd_pcm_close(h);
 		return NULL;
 	}
@@ -96,7 +100,7 @@ static snd_pcm_t *alsa_open(char *dev, int rate, int channels)
 
 	if (r < 0) {
 		dbg(lvl_error, "audio: Unable to get period size (%s)\n",
-		        snd_strerror(r));
+		    snd_strerror(r));
 		snd_pcm_close(h);
 		return NULL;
 	}
@@ -111,8 +115,9 @@ static snd_pcm_t *alsa_open(char *dev, int rate, int channels)
 	r = snd_pcm_hw_params_set_buffer_size_near(h, hwp, &buffer_size);
 
 	if (r < 0) {
-		dbg(lvl_error, "audio: Unable to set buffer size %lu (%s)\n",
-		        buffer_size, snd_strerror(r));
+		dbg(lvl_error,
+		    "audio: Unable to set buffer size %lu (%s)\n",
+		    buffer_size, snd_strerror(r));
 		snd_pcm_close(h);
 		return NULL;
 	}
@@ -121,7 +126,7 @@ static snd_pcm_t *alsa_open(char *dev, int rate, int channels)
 
 	if (r < 0) {
 		dbg(lvl_error, "audio: Unable to get buffer size (%s)\n",
-		        snd_strerror(r));
+		    snd_strerror(r));
 		snd_pcm_close(h);
 		return NULL;
 	}
@@ -130,8 +135,9 @@ static snd_pcm_t *alsa_open(char *dev, int rate, int channels)
 	r = snd_pcm_hw_params(h, hwp);
 
 	if (r < 0) {
-		dbg(lvl_error, "audio: Unable to configure hardware parameters (%s)\n",
-		        snd_strerror(r));
+		dbg(lvl_error,
+		    "audio: Unable to configure hardware parameters (%s)\n",
+		    snd_strerror(r));
 		snd_pcm_close(h);
 		return NULL;
 	}
@@ -147,8 +153,9 @@ static snd_pcm_t *alsa_open(char *dev, int rate, int channels)
 	r = snd_pcm_sw_params_set_avail_min(h, swp, period_size);
 
 	if (r < 0) {
-		dbg(lvl_error, "audio: Unable to configure wakeup threshold (%s)\n",
-		        snd_strerror(r));
+		dbg(lvl_error,
+		    "audio: Unable to configure wakeup threshold (%s)\n",
+		    snd_strerror(r));
 		snd_pcm_close(h);
 		return NULL;
 	}
@@ -156,8 +163,9 @@ static snd_pcm_t *alsa_open(char *dev, int rate, int channels)
 	snd_pcm_sw_params_set_start_threshold(h, swp, 0);
 
 	if (r < 0) {
-		dbg(lvl_error, "audio: Unable to configure start threshold (%s)\n",
-		        snd_strerror(r));
+		dbg(lvl_error,
+		    "audio: Unable to configure start threshold (%s)\n",
+		    snd_strerror(r));
 		snd_pcm_close(h);
 		return NULL;
 	}
@@ -166,15 +174,16 @@ static snd_pcm_t *alsa_open(char *dev, int rate, int channels)
 
 	if (r < 0) {
 		dbg(lvl_error, "audio: Cannot set soft parameters (%s)\n",
-		snd_strerror(r));
+		    snd_strerror(r));
 		snd_pcm_close(h);
 		return NULL;
 	}
 
 	r = snd_pcm_prepare(h);
 	if (r < 0) {
-		dbg(lvl_error, "audio: Cannot prepare audio for playback (%s)\n",
-		snd_strerror(r));
+		dbg(lvl_error,
+		    "audio: Cannot prepare audio for playback (%s)\n",
+		    snd_strerror(r));
 		snd_pcm_close(h);
 		return NULL;
 	}
@@ -182,15 +191,17 @@ static snd_pcm_t *alsa_open(char *dev, int rate, int channels)
 	return h;
 }
 
-static void* alsa_audio_start(void *arguments)
+static void *
+alsa_audio_start(void *arguments)
 {
 	struct arg_struct *args = arguments;
-        char * audio_playback_pcm;
+	char *audio_playback_pcm;
 	audio_playback_pcm = malloc(256);
-	strcpy(audio_playback_pcm, args -> audio_playback_pcm);
-	dbg(lvl_info, "will use audio_playback_pcm : %s\n", audio_playback_pcm);
+	strcpy(audio_playback_pcm, args->audio_playback_pcm);
+	dbg(lvl_info, "will use audio_playback_pcm : %s\n",
+	    audio_playback_pcm);
 
-	audio_fifo_t *af = args -> af;
+	audio_fifo_t *af = args->af;
 	snd_pcm_t *h = NULL;
 	int c;
 	int cur_channels = 0;
@@ -199,21 +210,28 @@ static void* alsa_audio_start(void *arguments)
 	audio_fifo_data_t *afd;
 	for (;;) {
 		afd = audio_get(af);
-		if (!h || cur_rate != afd->rate || cur_channels != afd->channels) {
-			if (h) snd_pcm_close(h);
+		if (!h || cur_rate != afd->rate
+		    || cur_channels != afd->channels) {
+			if (h)
+				snd_pcm_close(h);
 
 			cur_rate = afd->rate;
 			cur_channels = afd->channels;
 
-			h = alsa_open(audio_playback_pcm, cur_rate, cur_channels);
+			h = alsa_open(audio_playback_pcm, cur_rate,
+				      cur_channels);
 
 			if (!h) {
-				dbg(lvl_error, "Unable to open ALSA device (%d channels, %d Hz), can't continue\n", cur_channels, cur_rate);
-                		return NULL;
+				dbg(lvl_error,
+				    "Unable to open ALSA device (%d channels, %d Hz), can't continue\n",
+				    cur_channels, cur_rate);
+				return NULL;
 			} else {
-			    dbg(lvl_info, "ALSA device (%d channels, %d Hz), ok\n", cur_channels, cur_rate);
-            		}
-       		}
+				dbg(lvl_info,
+				    "ALSA device (%d channels, %d Hz), ok\n",
+				    cur_channels, cur_rate);
+			}
+		}
 
 		c = snd_pcm_wait(h, 1000);
 
@@ -226,10 +244,11 @@ static void* alsa_audio_start(void *arguments)
 		snd_pcm_writei(h, afd->samples, afd->nsamples);
 		free(afd);
 	}
-	dbg(lvl_debug,"spotify alsa_audio_start done\n");
+	dbg(lvl_debug, "spotify alsa_audio_start done\n");
 }
 
-void audio_init(audio_fifo_t *af, char * audio_playback_pcm)
+void
+audio_init(audio_fifo_t * af, char *audio_playback_pcm)
 {
 	pthread_t tid;
 
@@ -239,13 +258,12 @@ void audio_init(audio_fifo_t *af, char * audio_playback_pcm)
 	pthread_mutex_init(&af->mutex, NULL);
 	pthread_cond_init(&af->cond, NULL);
 
-        struct arg_struct args;
-        args.af = af;
-        args.audio_playback_pcm= g_strdup(audio_playback_pcm);
+	struct arg_struct args;
+	args.af = af;
+	args.audio_playback_pcm = g_strdup(audio_playback_pcm);
 
 	pthread_create(&tid, NULL, alsa_audio_start, (void *) &args);
 	// The sleep ensures that the audio is initialized asynchronously before returning.
 	// We probably need to find a better way to do this
 	sleep(1);
 }
-
