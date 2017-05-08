@@ -58,9 +58,6 @@
 #include <navit/callback.h>
 #include <navit/event.h>
 #include <navit/audio.h>
-#include "graphics.h"
-#include "color.h"
-#include "stub.h"
 
 #define max(x, y) (((x) > (y)) ? (x) : (y))
 #define min(x, y) (((x) < (y)) ? (x) : (y))
@@ -70,7 +67,6 @@
 /// Index to the next track
 static int g_track_index;
 
-static audio_fifo_t g_audiofifo;
 char str[25]; // this string is just for visualisation of the functions
 char track[64];
 
