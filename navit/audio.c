@@ -95,72 +95,12 @@ audio_set_attr(struct audio *this_, struct attr *attr)
  * an output plugin will support setting up the volume, and
  * a playback plugin should not need to care about the volume.
  *
- * @param attr *parent the parent attribute object
- * @param attr *attrs the currents attributes object
  * 
- * @return the audio object if initialization was successful
- * /
-
-struct audio *
-audio_new(struct attr *parent, struct attr **attrs)
-{
-	dbg(lvl_info,"Initializing audio plugin\n");
-	struct audio *this_;
-	struct attr *attr;
-	struct audio_priv *(*audiotype_new)(struct audio_methods *meth, struct attr **attrs, struct attr *parent);
-
-        attr=attr_search(attrs, NULL, attr_type);
-        if (! attr) {
-                dbg(lvl_error,"type missing\n");
-                return NULL;
-        }
-        dbg(lvl_debug,"type='%s'\n", attr->u.str);
-        audiotype_new=plugin_get_audio_type(attr->u.str);
-        dbg(lvl_debug,"new=%p\n", audio_new);
-        if (! audiotype_new) {
-                dbg(lvl_error,"wrong type '%s'\n", attr->u.str);
-                return NULL;
-        }
-        this_=g_new0(struct audio, 1);
-	this_->priv = audiotype_new(&this_->meth, attrs, parent);
-	if (!this_->priv) {
-		dbg(lvl_error, "audio_new failed\n");
-		g_free(this_);
-		return NULL;
-	}
-	if (this_->meth.volume) {
-		dbg(lvl_info, "%s.volume=%p\n", attr->u.str, this_->meth.volume);
-	} else {
-		dbg(lvl_info, "The plugin %s cannot manage the volume\n", attr->u.str);
-	}
-	if (this_->meth.playback) {
-		dbg(lvl_info, "%s.playback=%p\n", attr->u.str, this_->meth.playback);
-	} else {
-		dbg(lvl_info, "The plugin %s cannot handle playback\n", attr->u.str);
-	}
-	if (this_->meth.tracks) {
-		dbg(lvl_info, "%s.tracks=%p\n", attr->u.str, this_->meth.tracks);
-	} else {
-		dbg(lvl_info, "The plugin %s cannot handle tracks\n", attr->u.str);
-	}
-	if (this_->meth.playlists) {
-		dbg(lvl_info, "%s.playlists=%p\n", attr->u.str, this_->meth.playlists);
-	} else {
-		dbg(lvl_info, "The plugin %s cannot handle playlists\n", attr->u.str);
-	}
-        dbg(lvl_debug,"return %p\n", this_);
-
-        return this_;
-}
-
-/**
-* @brief Creates a new audio plugin instance
-* 
-* @param parent The parent attribute
-* @param attrs a list of attributes from navit.xml
-* 
-* @return The created audio plugin instance
-*/
+ * @param parent The parent attribute
+ * @param attrs a list of attributes from navit.xml
+ * 
+ * @return The created audio plugin instance
+ */
 struct audio *
 audio_new(struct attr *parent, struct attr **attrs)
 {
@@ -172,7 +112,7 @@ audio_new(struct attr *parent, struct attr **attrs)
 						struct attr **attrs,
 						struct attr *parent
 	);
-	/*struct audio_methods *meth, struct callback_list * cbl, struct attr **attrs, struct attr *parent*/
+
 	attr=attr_search(attrs, NULL, attr_type);
 	if (! attr) {
 			dbg(lvl_error,"type missing\n");
@@ -208,16 +148,8 @@ audio_new(struct attr *parent, struct attr **attrs)
 		return NULL;
 	}
 	dbg(lvl_error, "Attrs: %p\n", attrs);
-	/*
-	if(attrs != NULL){
-		dbg(lvl_error, "*Attrs: %p\n", *attrs);
-		if(*attrs != NULL){
-			this_->attrs=attr_list_dup(attrs);
-		}
-	}
-	//*/
 	dbg(lvl_error, "Attrs: %p\n", this_->attrs);
-	//*
+
 	if (this_->meth.volume) {
 		dbg(lvl_info, "%s.volume=%p\n", this_->name, this_->meth.volume);
 	} else {
@@ -248,7 +180,7 @@ audio_new(struct attr *parent, struct attr **attrs)
 	} else {
 		dbg(lvl_error, "The plugin %s cannot handle actions\n", this_->name);
 	}
-	//*/
+
 	dbg(lvl_error,"return %p\n", this_);
 	
     return this_;
