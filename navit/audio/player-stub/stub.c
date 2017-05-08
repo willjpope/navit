@@ -900,7 +900,7 @@ stub_stub_idle (struct audio_priv *stub)
 	 * here you might get the current track and other information from
 	 * your player api or lib
 	 */ 
-	dbg(lvl_info, "In Stubs Idle Loop\n"); 
+	dbg(lvl_debug, "In Stubs Idle Loop\n"); 
 	 
 	/* List all attached attrs.
 	struct attr** attrs = stub->attrs;
