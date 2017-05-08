@@ -9,8 +9,8 @@
 void enumerate_devices();
 
 typedef enum {
-    AUDIO_VOLUME_SET,
-    AUDIO_VOLUME_GET,
+	AUDIO_VOLUME_SET,
+	AUDIO_VOLUME_GET,
 } audio_volume_action;
 
 #endif
