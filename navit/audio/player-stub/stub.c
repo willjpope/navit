@@ -1527,7 +1527,6 @@ player_stub_new(struct audio_methods *meth, struct callback_list * cbl, struct a
 		dbg (lvl_info, "found music directory: %s\n", stub->musicdir);
 	}
    
-	audio_init (&g_audiofifo);
 	/**
 	 * place init code for your player implementation here
 	 */
