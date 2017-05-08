@@ -104,7 +104,7 @@ audio_set_attr(struct audio *this_, struct attr *attr)
 struct audio *
 audio_new(struct attr *parent, struct attr **attrs)
 {
-	dbg(lvl_error,"Initializing audio plugin\nParent: %p, Attrs: %p\n", parent, attrs);
+	dbg(lvl_debug,"Initializing audio plugin\nParent: %p, Attrs: %p\n", parent, attrs);
 	struct audio *this_;
 	struct attr *attr;
 	struct audio_priv *(*audiotype_new)(struct audio_methods *meth,
@@ -118,9 +118,9 @@ audio_new(struct attr *parent, struct attr **attrs)
 			dbg(lvl_error,"type missing\n");
 			return NULL;
 	}
-	dbg(lvl_error,"type='%s'\n", attr->u.str);
+	dbg(lvl_debug,"type='%s'\n", attr->u.str);
 	audiotype_new=plugin_get_category_audio(attr->u.str);
-	dbg(lvl_error,"new=%p\n", audio_new);
+	dbg(lvl_debug,"new=%p\n", audio_new);
 	if (! audiotype_new) {
 			dbg(lvl_error,"wrong type '%s'\n", attr->u.str);
 			return NULL;
@@ -135,7 +135,7 @@ audio_new(struct attr *parent, struct attr **attrs)
 	if(attr){
 		
 		this_->name = g_strdup(attr->u.str);
-		dbg(lvl_error, "audio name: %s \n", this_->name);
+		dbg(lvl_debug, "audio name: %s \n", this_->name);
 	}
 	
 	this_->cbl=callback_list_new();
@@ -147,41 +147,41 @@ audio_new(struct attr *parent, struct attr **attrs)
 		g_free(this_);
 		return NULL;
 	}
-	dbg(lvl_error, "Attrs: %p\n", attrs);
-	dbg(lvl_error, "Attrs: %p\n", this_->attrs);
+	dbg(lvl_debug, "Attrs: %p\n", attrs);
+	dbg(lvl_debug, "Attrs: %p\n", this_->attrs);
 
 	if (this_->meth.volume) {
-		dbg(lvl_info, "%s.volume=%p\n", this_->name, this_->meth.volume);
+		dbg(lvl_debug, "%s.volume=%p\n", this_->name, this_->meth.volume);
 	} else {
-		dbg(lvl_error, "The plugin %s cannot manage the volume\n", this_->name);
+		dbg(lvl_debug, "The plugin %s cannot manage the volume\n", this_->name);
 	}
 	if (this_->meth.playback) {
-		dbg(lvl_info, "%s.playback=%p\n", this_->name, this_->meth.playback);
+		dbg(lvl_debug, "%s.playback=%p\n", this_->name, this_->meth.playback);
 	} else {
-		dbg(lvl_error, "The plugin %s cannot handle playback\n", this_->name);
+		dbg(lvl_debug, "The plugin %s cannot handle playback\n", this_->name);
 	}
 	if (this_->meth.action_do) {
-		dbg(lvl_info, "%s.action_do=%p\n", this_->name, this_->meth.playback);
+		dbg(lvl_debug, "%s.action_do=%p\n", this_->name, this_->meth.playback);
 	} else {
-		dbg(lvl_error, "The plugin %s cannot handle action_do's\n", this_->name);
+		dbg(lvl_debug, "The plugin %s cannot handle action_do's\n", this_->name);
 	}
 	if (this_->meth.tracks) {
-		dbg(lvl_info, "%s.tracks=%p\n", this_->name, this_->meth.tracks);
+		dbg(lvl_debug, "%s.tracks=%p\n", this_->name, this_->meth.tracks);
 	} else {
-		dbg(lvl_error, "The plugin %s cannot handle tracks\n", this_->name);
+		dbg(lvl_debug, "The plugin %s cannot handle tracks\n", this_->name);
 	}
 	if (this_->meth.playlists) {
-		dbg(lvl_info, "%s.playlists=%p\n", this_->name, this_->meth.playlists);
+		dbg(lvl_debug, "%s.playlists=%p\n", this_->name, this_->meth.playlists);
 	} else {
-		dbg(lvl_error, "The plugin %s cannot handle playlists\n", this_->name);
+		dbg(lvl_debug, "The plugin %s cannot handle playlists\n", this_->name);
 	}
      if (this_->meth.actions) {
-		dbg(lvl_info, "%s.actions=%p\n", this_->name, this_->meth.playlists);
+		dbg(lvl_debug, "%s.actions=%p\n", this_->name, this_->meth.playlists);
 	} else {
-		dbg(lvl_error, "The plugin %s cannot handle actions\n", this_->name);
+		dbg(lvl_debug, "The plugin %s cannot handle actions\n", this_->name);
 	}
 
-	dbg(lvl_error,"return %p\n", this_);
+	dbg(lvl_debug,"return %p\n", this_);
 	
     return this_;
 }
