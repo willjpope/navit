@@ -12,8 +12,8 @@ struct object_func audio_func;
 struct audio_priv;
 
 // FIXME : we can't name it active because it conflicts with speech.active. Odd!
-struct attr audio_active=ATTR_INT(active, 0);
-struct attr *audio_default_attrs[]={
+struct attr audio_active = ATTR_INT(active, 0);
+struct attr *audio_default_attrs[] = {
 	&audio_active,
 	NULL,
 };
@@ -24,10 +24,11 @@ struct attr *audio_default_attrs[]={
  * @return the name of the audio plugin instance
  * 
  */
-char* audio_player_get_name (void)
+char *
+audio_player_get_name(void)
 {
-		dbg(lvl_error,"//fixme: get the name of the music player... where is the name set?\n");
-        return "Music Player";
+	dbg(lvl_error, "//fixme: get the name of the music player... where is the name set?\n");
+	return "Music Player";
 }
 
 /**
@@ -42,11 +43,11 @@ char* audio_player_get_name (void)
 int
 audio_get_attr(struct audio *this_, enum attr_type type, struct attr *attr, struct attr_iter *iter)
 {
-	int ret=1;
+	int ret = 1;
 	dbg(lvl_debug, "Get attr: %p (%s), attrs: %p\n", attr, attr_to_name(type), this_->attrs);
-	
-	ret=this_->meth.attr_get(this_->priv, type, attr);
-	if(ret)	
+
+	ret = this_->meth.attr_get(this_->priv, type, attr);
+	if (ret)
 		return ret;
 	return attr_generic_get_attr(this_->attrs, NULL, type, attr, iter);
 }
@@ -61,7 +62,7 @@ audio_get_attr(struct audio *this_, enum attr_type type, struct attr *attr, stru
 int
 audio_set_attr(struct audio *this_, struct attr *attr)
 {
-	int ret=1;
+	int ret = 1;
 	dbg(lvl_debug, "Set attr: %p (%s), attrs: %p\n", attr, attr_to_name(attr->type), this_->attrs);
 
 	switch (attr->type) {
@@ -71,13 +72,13 @@ audio_set_attr(struct audio *this_, struct attr *attr)
 	case attr_playing:
 	case attr_shuffle:
 	case attr_repeat:
-		ret=this_->meth.attr_set(this_->priv, attr);
+		ret = this_->meth.attr_set(this_->priv, attr);
 		break;
 	default:
 		break;
 	}
 	if (ret == 1 && attr->type != attr_navit)
-		this_->attrs=attr_generic_set_attr(this_->attrs, attr);
+		this_->attrs = attr_generic_set_attr(this_->attrs, attr);
 	return ret != 0;
 }
 
@@ -104,43 +105,40 @@ audio_set_attr(struct audio *this_, struct attr *attr)
 struct audio *
 audio_new(struct attr *parent, struct attr **attrs)
 {
-	dbg(lvl_debug,"Initializing audio plugin\nParent: %p, Attrs: %p\n", parent, attrs);
+	dbg(lvl_debug, "Initializing audio plugin\nParent: %p, Attrs: %p\n", parent, attrs);
 	struct audio *this_;
 	struct attr *attr;
-	struct audio_priv *(*audiotype_new)(struct audio_methods *meth,
-						struct callback_list * cbl,
-						struct attr **attrs,
-						struct attr *parent
-	);
+	struct audio_priv *(*audiotype_new) (struct audio_methods * meth,
+					     struct callback_list * cbl, struct attr ** attrs, struct attr * parent);
 
-	attr=attr_search(attrs, NULL, attr_type);
-	if (! attr) {
-			dbg(lvl_error,"type missing\n");
-			return NULL;
+	attr = attr_search(attrs, NULL, attr_type);
+	if (!attr) {
+		dbg(lvl_error, "type missing\n");
+		return NULL;
 	}
-	dbg(lvl_debug,"type='%s'\n", attr->u.str);
-	audiotype_new=plugin_get_category_audio(attr->u.str);
-	dbg(lvl_debug,"new=%p\n", audio_new);
-	if (! audiotype_new) {
-			dbg(lvl_error,"wrong type '%s'\n", attr->u.str);
-			return NULL;
+	dbg(lvl_debug, "type='%s'\n", attr->u.str);
+	audiotype_new = plugin_get_category_audio(attr->u.str);
+	dbg(lvl_debug, "new=%p\n", audio_new);
+	if (!audiotype_new) {
+		dbg(lvl_error, "wrong type '%s'\n", attr->u.str);
+		return NULL;
 	}
-	
-	this_=g_new0(struct audio, 1);
-	this_->func=&audio_func;
 
-	navit_object_ref((struct navit_object *)this_);
-	
-	attr=attr_search(attrs, NULL, attr_name);
-	if(attr){
-		
+	this_ = g_new0(struct audio, 1);
+	this_->func = &audio_func;
+
+	navit_object_ref((struct navit_object *) this_);
+
+	attr = attr_search(attrs, NULL, attr_name);
+	if (attr) {
+
 		this_->name = g_strdup(attr->u.str);
 		dbg(lvl_debug, "audio name: %s \n", this_->name);
 	}
-	
-	this_->cbl=callback_list_new();
+
+	this_->cbl = callback_list_new();
 	this_->priv = audiotype_new(&this_->meth, this_->cbl, attrs, parent);
-	
+
 	if (!this_->priv) {
 		dbg(lvl_error, "audio_new failed\n");
 		callback_list_destroy(this_->cbl);
@@ -175,15 +173,15 @@ audio_new(struct attr *parent, struct attr **attrs)
 	} else {
 		dbg(lvl_debug, "The plugin %s cannot handle playlists\n", this_->name);
 	}
-     if (this_->meth.actions) {
+	if (this_->meth.actions) {
 		dbg(lvl_debug, "%s.actions=%p\n", this_->name, this_->meth.playlists);
 	} else {
 		dbg(lvl_debug, "The plugin %s cannot handle actions\n", this_->name);
 	}
 
-	dbg(lvl_debug,"return %p\n", this_);
-	
-    return this_;
+	dbg(lvl_debug, "return %p\n", this_);
+
+	return this_;
 }
 
 
@@ -193,7 +191,7 @@ audio_new(struct attr *parent, struct attr **attrs)
 struct attr_iter *
 audio_attr_iter_new(void)
 {
-	return (struct attr_iter *)g_new0(void *,1);
+	return (struct attr_iter *) g_new0(void *, 1);
 }
 
 /**
@@ -220,17 +218,19 @@ int
 audio_add_attr(struct audio *this_, struct attr *attr)
 {
 	dbg(lvl_debug, "Add attr: %p (%s), attrs: %p\n", attr, attr_to_name(attr->type), this_->attrs);
-	int ret=1;
+	int ret = 1;
 	switch (attr->type) {
 	case attr_callback:
-		dbg(lvl_debug, "Add attr: %p (%s), attrs: %p, to cbl: %p\n", attr, attr_to_name(attr->type), this_->attrs, this_->cbl);
+		dbg(lvl_debug,
+		    "Add attr: %p (%s), attrs: %p, to cbl: %p\n", attr,
+		    attr_to_name(attr->type), this_->attrs, this_->cbl);
 		callback_list_add(this_->cbl, attr->u.callback);
 		break;
 	default:
 		break;
 	}
 	if (ret)
-		this_->attrs=attr_generic_add_attr(this_->attrs, attr);
+		this_->attrs = attr_generic_add_attr(this_->attrs, attr);
 	return ret;
 }
 
@@ -251,7 +251,7 @@ audio_remove_attr(struct audio *this_, struct attr *attr)
 		callback_list_remove(this_->cbl, attr->u.callback);
 		break;
 	default:
-		this_->attrs=attr_generic_remove_attr(this_->attrs, attr);
+		this_->attrs = attr_generic_remove_attr(this_->attrs, attr);
 		return 0;
 	}
 	return 1;
@@ -260,16 +260,16 @@ audio_remove_attr(struct audio *this_, struct attr *attr)
 
 struct object_func audio_func = {
 	attr_audio,
-        (object_func_new)			audio_new,
-        (object_func_get_attr)		audio_get_attr,
-        (object_func_iter_new)		audio_attr_iter_new,
-        (object_func_iter_destroy)	audio_attr_iter_destroy,
-        (object_func_set_attr)		audio_set_attr,
-        (object_func_add_attr)		audio_add_attr,
-        (object_func_remove_attr)	audio_remove_attr,
-        (object_func_init)			NULL,
-        (object_func_destroy)		NULL,
-        (object_func_dup)			NULL,
-        (object_func_ref)			navit_object_ref,
-        (object_func_unref)			navit_object_unref,
+	(object_func_new) audio_new,
+	(object_func_get_attr) audio_get_attr,
+	(object_func_iter_new) audio_attr_iter_new,
+	(object_func_iter_destroy) audio_attr_iter_destroy,
+	(object_func_set_attr) audio_set_attr,
+	(object_func_add_attr) audio_add_attr,
+	(object_func_remove_attr) audio_remove_attr,
+	(object_func_init) NULL,
+	(object_func_destroy) NULL,
+	(object_func_dup) NULL,
+	(object_func_ref) navit_object_ref,
+	(object_func_unref) navit_object_unref,
 };
