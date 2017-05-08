@@ -31,7 +31,6 @@
 
 audio_fifo_data_t* audio_get(audio_fifo_t *af)
 {
-    printf("audio_fifo_data\n");
     audio_fifo_data_t *afd;
     pthread_mutex_lock(&af->mutex);
   
@@ -47,7 +46,6 @@ audio_fifo_data_t* audio_get(audio_fifo_t *af)
 
 void audio_fifo_flush(audio_fifo_t *af)
 {
-    printf("audio_fifo_flush\n");
     audio_fifo_data_t *afd;
 
 
