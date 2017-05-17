@@ -2341,7 +2341,7 @@ binmap_search_get_item(struct map_search_priv *map_search)
 			case attr_street_name:
 				if (map_search->mode == 1) {
 					if (binfile_attr_get(it->priv_data, attr_street_name_match, &at) || binfile_attr_get(it->priv_data, attr_street_name, &at)) {
-						if (!linguistics_compare(at.u.str, map_search->search.u.str, mode) && !duplicate(map_search, it, attr_street_name,0)) {
+						if (!linguistics_compare(at.u.str, map_search->search.u.str, mode) && !duplicate(map_search, it, attr_street_name, attr_town_postal )) {
 							return it;
 						}
 					}
