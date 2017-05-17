@@ -2327,13 +2327,13 @@ binmap_search_get_item(struct map_search_priv *map_search)
 				}
 				if (map_search->mr->tile_depth > 1 && item_is_town(*it) && map_search->search.type != attr_district_name) {
 					if (binfile_attr_get(it->priv_data, attr_town_name_match, &at) || binfile_attr_get(it->priv_data, attr_town_name, &at)) {
-						if (!linguistics_compare(at.u.str, map_search->search.u.str, mode) && !duplicate(map_search, it, attr_town_name,0))
+						if (!linguistics_compare(at.u.str, map_search->search.u.str, mode) && !duplicate(map_search, it, attr_town_name, attr_town_postal))
 							return it;
 					}
 				}
 				if (map_search->mr->tile_depth > 1 && item_is_district(*it) && map_search->search.type != attr_town_name) {
 					if (binfile_attr_get(it->priv_data, attr_district_name_match, &at) || binfile_attr_get(it->priv_data, attr_district_name, &at)) {
-						if (!linguistics_compare(at.u.str, map_search->search.u.str, mode) && !duplicate(map_search, it, attr_town_name,0))
+						if (!linguistics_compare(at.u.str, map_search->search.u.str, mode) && !duplicate(map_search, it, attr_town_name,attr_town_postal))
 							return it;
 					}
 				}
