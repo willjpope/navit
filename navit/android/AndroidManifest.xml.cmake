@@ -8,7 +8,7 @@
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="@ANDROID_API_VERSION@"/>
     <uses-feature android:name="android.hardware.location.network" android:required="false"/>
     <uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
-    <supports-screens android:smallScreens="true" android:normalScreens="true" android:largeScreens="true" android:resizeable="true" android:anyDensity="true"/>
+    <supports-screens android:smallScreens="true" android:normalScreens="true" android:largeScreens="true" android:xlargeScreens="true" android:resizeable="true" android:anyDensity="true"/>
     @ANDROID_PERMISSIONS@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
