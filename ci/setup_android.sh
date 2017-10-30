@@ -1,34 +1,30 @@
 apt-get update && apt-get install -y software-properties-common
 add-apt-repository -y ppa:openjdk-r/ppa
-apt-get update && apt-get install -y openjdk-8-jdk wget expect git curl libsaxonb-java ant
+apt-get update && apt-get install -y openjdk-8-jdk wget expect git libsaxonb-java ant unzip libc6-dev
 apt-get remove -y openjdk-7-jre-headless
 
-export ANDROID_SDK_HOME=/opt/android-sdk-linux
 export ANDROID_HOME=/opt/android-sdk-linux
+export ANDROID_SDK_HOME=/opt/android-sdk-linux
+export ANDROID_SDK_ROOT=/opt/android-sdk-linux
 
-cd /opt && wget -q https://dl.google.com/android/android-sdk_r24.4.1-linux.tgz -O android-sdk.tgz
-cd /opt && tar -xvzf android-sdk.tgz
-cd /opt && rm -f android-sdk.tgz
+cd /opt
+wget -q https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip -O android-sdk.zip
+unzip android-sdk.zip -d ${ANDROID_HOME}/ && rm -f android-sdk.zip
 
-export PATH=${PATH}:${ANDROID_SDK_HOME}/tools:${ANDROID_SDK_HOME}/platform-tools:/opt/tools
+export PATH=${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/tools:${PATH}
 
-echo y | android update sdk --no-ui --all --filter platform-tools | grep 'package installed'
-#RUN echo y | android update sdk --no-ui --all --filter extra-android-support | grep 'package installed'
+mkdir -p ${ANDROID_HOME}/.android
+touch ${ANDROID_HOME}/.android/repositories.cfg
+echo "y" | sdkmanager --update
+echo "y" | sdkmanager "platform-tools"
 
-echo y | android update sdk --no-ui --all --filter android-25 | grep 'package installed'
-echo y | android update sdk --no-ui --all --filter android-24 | grep 'package installed'
-echo y | android update sdk --no-ui --all --filter android-23 | grep 'package installed'
-echo y | android update sdk --no-ui --all --filter android-18 | grep 'package installed'
-echo y | android update sdk --no-ui --all --filter android-16 | grep 'package installed'
+for ANDROID_VERSION in 25 24 23 18 16
+do
+  echo "y" | sdkmanager "system-images;android-${ANDROID_VERSION};google_apis;armeabi-v7a"
+  echo "y" | sdkmanager "system-images;android-${ANDROID_VERSION};google_apis;x86"
+done
 
-echo y | android update sdk --no-ui --all --filter build-tools-25.0.3 | grep 'package installed'
-echo y | android update sdk --no-ui --all --filter build-tools-25.0.2 | grep 'package installed'
-echo y | android update sdk --no-ui --all --filter build-tools-25.0.1 | grep 'package installed'
-echo y | android update sdk --no-ui --all --filter build-tools-25.0.0 | grep 'package installed'
-echo y | android update sdk --no-ui --all --filter build-tools-24.0.3 | grep 'package installed'
-echo y | android update sdk --no-ui --all --filter build-tools-24.0.2 | grep 'package installed'
-echo y | android update sdk --no-ui --all --filter build-tools-24.0.1 | grep 'package installed'
-echo y | android update sdk --no-ui --all --filter build-tools-23.0.3 | grep 'package installed'
-echo y | android update sdk --no-ui --all --filter build-tools-23.0.2 | grep 'package installed'
-echo y | android update sdk --no-ui --all --filter build-tools-23.0.1 | grep 'package installed'
-
+for ANDROID_VERSION in 25.0.3 25.0.2 25.0.1 25.0.0 24.0.3 24.0.2 24.0.1 23.0.3 23.0.2 23.0.1
+do
+  echo "y" | sdkmanager "build-tools;${ANDROID_VERSION}"
+done

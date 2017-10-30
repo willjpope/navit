@@ -688,7 +688,7 @@ if (HAS_IFADDRS)
 endif(HAS_IFADDRS)
 
 if(ANDROID)
-   find_program(ANDROID_LOCATION NAMES android android.bat)
+   find_program(ANDROID_LOCATION NAMES sdkmanager avdmanager)
    find_program(ANT_LOCATION NAMES ant)
    if (NOT ANT_LOCATION)
       message_error("Could not find ant. Please install ant and add it to the search path.")

@@ -19,7 +19,7 @@ set(CMAKE_FIND_ROOT_PATH ${NDK_ARCH_DIR})
 set(CMAKE_REQUIRED_FLAGS "-ldl --sysroot=${NDK_ARCH_DIR} ${EXTRA_COMPILER_FLAGS}")
 set(CMAKE_REQUIRED_INCLUDES "${NDK_ARCH_DIR}/usr/include")
 
-set(NAVIT_COMPILE_FLAGS "-I${NDK_ARCH_DIR}/usr/include -g -D_GNU_SOURCE -DANDROID -fno-short-enums ${CMAKE_REQUIRED_FLAGS}")
+set(NAVIT_COMPILE_FLAGS "-I/usr/include -I/usr/include/x86_64-linux-gnu -I${NDK_ARCH_DIR}/usr/include -g -D_GNU_SOURCE -DANDROID -fno-short-enums ${CMAKE_REQUIRED_FLAGS}")
 
 set(CMAKE_SHARED_LINKER_FLAGS_INIT "${CMAKE_REQUIRED_FLAGS} -Wl,--no-undefined -Wl,-rpath,/system/lib")
 set(CMAKE_EXE_LINKER_FLAGS_INIT "${CMAKE_REQUIRED_FLAGS} -Wl,--no-undefined")
