@@ -42,7 +42,7 @@ gui_internal_search_town(struct gui_priv *this, struct widget *wm, void *data)
 static void
 gui_internal_search_street(struct gui_priv *this, struct widget *widget, void *data)
 {
-	search_list_select(this->sl, attr_town_or_district_name, 0, 0);
+	search_list_select(this->sl, attr_town_or_district_name_all, 0, 0);
 	gui_internal_search(this,_("Street"),"Street",0);
 }
 
@@ -547,7 +547,7 @@ gui_internal_search(struct gui_priv *this, const char *what, const char *type, i
 	we=gui_internal_box_new(this, gravity_left_center|orientation_horizontal|flags_fill);
 	gui_internal_widget_append(wr, we);
 	if (!strcmp(type,"Country")) {
-		wnext=gui_internal_image_new(this, image_new_xs(this, "gui_select_town"));
+		wnext=gui_internal_image_new(this, image_new_xs(this, "gui_select_street"));
 		wnext->func=gui_internal_search_town;
 	} else if (!strcmp(type,"Town")) {
 		if (this->country_iso2) {
@@ -570,7 +570,7 @@ gui_internal_search(struct gui_priv *this, const char *what, const char *type, i
 		wnext->func=gui_internal_search_street;
 		g_free(country);
 	} else if (!strcmp(type,"Street")) {
-		gui_internal_widget_append(we, wb=gui_internal_image_new(this, image_new_xs(this, "gui_select_town")));
+		gui_internal_widget_append(we, wb=gui_internal_image_new(this, image_new_xs(this, "gui_select_street")));
 		wb->state |= STATE_SENSITIVE;
 		wb->func = gui_internal_back;
 		wnext=gui_internal_image_new(this, image_new_xs(this, "gui_select_house_number"));
@@ -614,8 +614,8 @@ void
 gui_internal_search_street_in_town(struct gui_priv *this, struct widget *widget, void *data)
 {
 	dbg(lvl_info,"id %d\n", widget->selection_id);
-	search_list_select(this->sl, attr_town_or_district_name, 0, 0);
-	search_list_select(this->sl, attr_town_or_district_name, widget->selection_id, 1);
+	search_list_select(this->sl, attr_town_or_district_name_all, 0, 0);
+	search_list_select(this->sl, attr_town_or_district_name_all, widget->selection_id, 1);
 	gui_internal_search(this,_("Street"),"Street",0);
 }
 
